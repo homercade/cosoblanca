@@ -1,0 +1,301 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Personnel
+    link(rel='icon', href='../../img/icon.png')
+    link(href='../../vendor/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    link(href='../../vendor/metisMenu/metisMenu.min.css', rel='stylesheet')
+    link(href='../../dist/css/sb-admin-2.css', rel='stylesheet')
+    link(href='../../vendor/morrisjs/morris.css', rel='stylesheet')
+    link(href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+    link(href='../../vendor/jquery/jquery.js', rel='stylesheet')
+    script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js")
+    script(src="https://code.jquery.com/jquery-2.2.4.min.js")
+    link(rel='stylesheet', type='text/css', href='../../contform/css/main.css')
+    link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous")
+
+  body
+    #wrapper
+      // Navigation
+      nav.navbar.navbar-default.navbar-static-top(role='navigation', style='margin-bottom: 0')
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='index.html') COSO
+        // /.navbar-header
+        .navbar-default.sidebar(role='navigation')
+          .sidebar-nav.navbar-collapse
+            ul#side-menu.nav
+              li
+                a(href='dashboard')
+                  i.fa.fa-tachometer-alt.fa-fw
+                  |  Dashboard
+              li
+                a(href='#')
+                  i.fa.fa-cogs.fa-fw
+                  |  Maintenance
+                  span.fa.arrow
+                ul.nav.nav-second-level
+                  li
+                    a(href='brand')
+                      i.fa.fa-store-alt.fa-fw
+                      |  Brand
+                  li
+                    a(href='unittype')
+                      i.fa.fa-print.fa-fw
+                      |  Unit
+                  li
+                    a(href='model')
+                      i.fa.fa-desktop.fa-fw
+                      |  Model
+                  li
+                    a(href='department')
+                      i.fa.fa-building.fa-fw
+                      |  Department
+                  li
+                    a(href='employee')
+                      i.fa.fa-user-tie.fa-fw
+                      |  Employee
+                  li
+                    a(href='accounts')
+                      i.fa.fa-user-shield.fa-fw
+                      |  Accounts Setup
+                  li
+                    a(href='storage')
+                      i.fa.fa-archive.fa-fw
+                      |  Storage
+                  li
+                    a(href='price')
+                      i.fa.fa-tag.fa-fw
+                      |  Price
+                  li
+                    a(href='status')
+                      i.fa.fa-heart.fa-fw
+                      |  Status
+                // /.nav-second-level
+              li
+                a(href='#')
+                  i.fa.fa-project-diagram.fa-fw
+                  |  Transactions
+                  span.fa.arrow
+                ul.nav.nav-second-level
+                  li
+                    a(href='equipment')
+                      i.fa.fa-hands-helping.fa-fw
+                      |  Equipment Assignment
+                  li
+                    a(href='network')
+                      i.fa.fa-network-wired.fa-fw
+                      |  Network Assignment
+              li
+                a(href='#')
+                  i.fa.fa-chart-area.fa-fw
+                  |  Reports
+                  span.fa.arrow
+                ul.nav.nav-second-level
+                  li
+                    a(href='slip')
+                      i.fa.fa-file-invoice-dollar.fa-fw
+                      |  Individual Slip
+                  li
+                    a(href='invreport')
+                      i.fa.fa-warehouse.fa-fw
+                      |  Inventory Report
+                  li
+                    a(href='active')
+                      i.fa.fa-snowboarding.fa-fw
+                      |  Active Accounts
+              li
+                a(href='contact')
+                  i.fa.fa-mail-bulk.fa-fw
+                  |  Contact
+          // /.sidebar-collapse
+          // /.navbar-static-side
+      #page-wrapper
+        .row
+          .col-lg-12
+            h1.page-header
+              | Personnel
+              button.btn.btn-primary.btn-success.btn-lg.pull-right(type='button', data-toggle="modal", data-target="#addModal")
+                i.fa.fa-plus-circle.fa-fw
+                |  Add Personnel
+          .col-lg-12
+            .panel.panel-default
+              .panel-body
+                .table-responsive
+                  table.table.table-hover
+                    thead
+                      tr
+                        th Personnel Name
+                        th Action
+                    tbody
+                      each tc in technicians
+                        tr
+                          td #{tc.strTechnicianFName} #{tc.strTechnicianLName}
+                          td
+                            button.btn.btn-primary.btn-circle(type='button', title='Edit technician', data-toggle="modal", data-target="#editModal", data-id=tc.intTechnicianID, data-fname=tc.strTechnicianFName, data-lname=tc.strTechnicianLName)
+                              i.fa.fa-wrench
+                            button.btn.btn-danger.btn-circle(type='button', title='Delete technician', data-toggle="modal", data-target="#deleteModal", data-id=tc.intTechnicianID)
+                              i.fa.fa-trash
+
+    #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h4#myModalLabel.modal-title Add Personnel
+          form(action='/technician', method='post')
+            .modal-body
+              .container-fluid
+                .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
+                  input.hidden#id(type='text' name='id')
+                  .row
+                    .col-md-12
+                      .form-group
+                        label.control-label Personnel's First Name
+                        input#techFName.form-control(type='text' name='techFName' placeholder="Ralph" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-12
+                      .form-group
+                        label.control-label Personnel's Last Name
+                        input#techLName.form-control(type='text' name='techLName' placeholder="Stilton" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+              button.btn.btn-primary(type='submit') Save
+
+    #editModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h4#myModalLabel.modal-title Edit Personnel
+          form(action='/technician/update', method='post')
+            .modal-body
+              .container-fluid
+                .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
+                  input.hidden#id(type='text' name='id')
+                  .row
+                    .col-md-12
+                      .form-group
+                        label.control-label Personnel's First Name
+                        input.techFName.form-control(type='text' name='techFName' onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-12
+                      .form-group
+                        label.control-label Personnel's Last Name
+                        input.techLName.form-control(type='text' name='techLName' onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+              button.btn.btn-primary(type='submit') Save
+
+
+    #deleteModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h4#myModalLabel.modal-title Remove Personnel
+          form(action='/technician/delete', method='post')
+            .modal-body
+              .container-fluid
+                .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
+                  input.hidden#id(type='text' name='id')
+                  .row
+                    .col-md-12
+                      .form-group
+                        h4 Delete this personnel?
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+              button.btn.btn-default(type='submit') Delete
+                // /.table-responsive
+                // /.panel-body
+                // /#page-wrapper
+                // /#wrapper
+                // jQuery
+                script(src='../vendor/jquery/jquery.min.js')
+                // Bootstrap Core JavaScript
+                script(src='../vendor/bootstrap/js/bootstrap.min.js')
+                // Metis Menu Plugin JavaScript
+                script(src='../vendor/metisMenu/metisMenu.min.js')
+                // DataTables JavaScript
+                script(src='../vendor/datatables/js/jquery.dataTables.min.js')
+                script(src='../vendor/datatables-plugins/dataTables.bootstrap.min.js')
+                script(src='../vendor/datatables-responsive/dataTables.responsive.js')
+                // Custom Theme JavaScript
+                script(src='../dist/js/sb-admin-2.js')
+                // Page-Level Demo Scripts - Tables - Use for reference
+                script.
+                  $(document).ready(function() {
+                  $('#dataTables-example').DataTable({
+                  responsive: true
+                  });
+                  });
+                // /.table-responsive
+                // /.panel-body
+                // /#page-wrapper
+                // /#wrapper
+                // jQuery
+                script(src='../vendor/jquery/jquery.min.js')
+                // Bootstrap Core JavaScript
+                script(src='../vendor/bootstrap/js/bootstrap.min.js')
+                // Metis Menu Plugin JavaScript
+                script(src='../vendor/metisMenu/metisMenu.min.js')
+                // DataTables JavaScript
+                script(src='../vendor/datatables/js/jquery.dataTables.min.js')
+                script(src='../vendor/datatables-plugins/dataTables.bootstrap.min.js')
+                script(src='../vendor/datatables-responsive/dataTables.responsive.js')
+                // Custom Theme JavaScript
+                script(src='../dist/js/sb-admin-2.js')
+                // Page-Level Demo Scripts - Tables - Use for reference
+                script.
+                  $(document).ready(function() {
+                  $('#dataTables-example').DataTable({
+                  responsive: true
+                  });
+                  });
+
+    script.
+      $('#deleteModal').on('show.bs.modal', function(event){
+        var button = $(event.relatedTarget)      
+        var id = button.data('id')
+        let modal = $(this)     
+        modal.find('.modal-body #id').val(` ${id}`)
+      });
+
+    script.
+      $('#editModal').on('show.bs.modal', function(event){
+      var button = $(event.relatedTarget)      
+      var id = button.data('id')      
+      var fname = button.data('fname')      
+      var lname = button.data('lname')
+      let modal = $(this);     
+      modal.find('.modal-body #id').val(`${id}`)
+      modal.find('.modal-body .techFName').val(`${fname}`)
+      modal.find('.modal-body .techLName').val(`${lname}`)
+      });
+    script.
+      var alphaNumOnly = /^[a-zA-Z0-9]+$/i;
+
+      function restrictCharacters(myfield, e, restrictionType) {
+          if (!e) var e = window.event
+          if (e.keyCode) code = e.keyCode;
+          else if (e.which) code = e.which;
+          var character = String.fromCharCode(code);
+          // if they pressed esc... remove focus from field...
+          if (code==27) { this.blur(); return false; }
+          // ignore if they are press other keys
+          // strange because code: 39 is the down key AND ' key...
+          // and DEL also equals .
+          if (!e.ctrlKey && code!=9 && code!=8 && (code!=39 || (code==39 && character=="'"))) {
+              if (character.match(restrictionType)) {
+                  return true;
+              } else {
+                  return false;
+              }
+          }
+      };
+

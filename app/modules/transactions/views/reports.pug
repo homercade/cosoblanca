@@ -1,0 +1,75 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Reports
+    link(rel='icon', href='../../img/icon.png')
+    link(href='../../vendor/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    link(href='../../vendor/metisMenu/metisMenu.min.css', rel='stylesheet')
+    link(href='../../dist/css/sb-admin-2.css', rel='stylesheet')
+    link(href='../../vendor/morrisjs/morris.css', rel='stylesheet')
+    link(href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+    link(href='../../vendor/jquery/jquery.js', rel='stylesheet')
+    script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js")
+    script(src="https://code.jquery.com/jquery-2.2.4.min.js")
+    link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous")
+    link(rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css")
+    script(rel="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js")
+  body
+    #wrapper
+      .col-lg-12
+        h1.page-header
+          | Reports
+      .col-lg-12
+        .panel.panel-default
+          .panel-body
+            .table-responsive
+              table.table.table-hover
+                thead
+                  tr
+                    th Employee ID
+                    th Employee Name
+                    th Equipment
+                    th Property No.
+                    th Serial No.
+                    th Department
+                    th Value
+                tbody
+                  tr
+                    td 000001
+                    td Homer Cadena
+                    td Dell
+                    td 1023(18)
+                    td CPPY132
+                    td COSDD
+                    td 56,000
+                    
+      // /#page-wrapper
+      // /#wrapper
+      // jQuery
+      script(src='../vendor/jquery/jquery.min.js')
+      // Bootstrap Core JavaScript
+      script(src='../vendor/bootstrap/js/bootstrap.min.js')
+      // Metis Menu Plugin JavaScript
+      script(src='../vendor/metisMenu/metisMenu.min.js')
+      // Morris Charts JavaScript
+      script(src='../vendor/raphael/raphael.min.js')
+      script(src='../vendor/morrisjs/morris.min.js')
+      script(src='../data/morris-data.js')
+      // Flot Charts JavaScript
+      script(src='../vendor/flot/excanvas.min.js')
+      script(src='../vendor/flot/jquery.flot.js')
+      script(src='../vendor/flot/jquery.flot.pie.js')
+      script(src='../vendor/flot/jquery.flot.resize.js')
+      script(src='../vendor/flot/jquery.flot.time.js')
+      script(src='../vendor/flot-tooltip/jquery.flot.tooltip.min.js')
+      script(src='../data/flot-data.js')
+      // Custom Theme JavaScript
+      script(src='../dist/js/sb-admin-2.js')
+
+    script.
+      $(document).ready( function () {
+        $('.myTable').DataTable();
+      } );
