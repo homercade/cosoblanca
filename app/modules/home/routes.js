@@ -4,109 +4,6 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
-// const passport = require('passport');
-// const localStrategy = require('passport-local').Strategy;
-
-//******************************************************* */
-//                      PASSPORT STUFF
-//******************************************************* */
-
-// app.use(passport.initialize());
-// app.use(passport.session()); 
-
-// app.get('/success', (req, res) => res.redirect('/dashboard'));
-// app.get('/error', (req, res) => res.send("error logging in"));
-
-// passport.serializeUser(function(user, cb) {
-//   cb(null, user.id);
-// });
-
-// passport.deserializeUser(function(id, cb) {
-//   User.findById(id, function(err, user) {
-//     cb(err, user);
-//   });
-// });
-
-// passport.use(new LocalStrategy(
-//   function(username, password, done) {
-//       UserDetails.findOne({
-//         username: username
-//       }, function(err, user) {
-//         if (err) {
-//           return done(err);
-//         }
-
-//         if (!user) {
-//           return done(null, false);
-//         }
-
-//         if (user.password != password) {
-//           return done(null, false);
-//         }
-//         return done(null, user);
-//       });
-//   }
-// ));
-
-// app.post('/',
-//   passport.authenticate('local', { failureRedirect: '/error' }),
-//   function(req, res) {
-//     res.redirect('/dashboard');
-//   });
-
-// router.get('/', (req, res) => {
-
-//     if (typeof process.env.ENABLE_DATABASE !== 'undefined' && process.env.ENABLE_DATABASE === 'false') {
-//         return render([]);
-//     }
-
-//     db.query('SELECT * FROM users', function (err, results, fields) {
-//         if (err) return res.send(err);
-//         render(results);
-//     });
-
-//     function render(users) {
-//         res.render('home/views/landing', { users: users });
-//     }
-// });
-
-
-
-// var session;
-
-// router.post('/submit', function(req, res, next){
-//     req.check('username', 'Invalid username').isLength({min: 4}).equals(req.body.)
-// });
-
-
-
-// function getAuth(req, res, next){
-//   if(req.body.username === 'admin' && req.body.password === 'admin'){
-//     req.session.uniqueID = req.body.username;
-//     req.session.uniquePass = req.body.password;
-//     verifyAuth(req, res);
-//     return(next);
-//   }
-//   if(req.session.){
-//     verifyAuth(req, res);
-//     console.log('hehehe');
-//   }
-//   verifyAuth(req, res);
-// };
-
-// function verifyAuth(req, res){
-//   session = req.session;
-//   if(session.uniqueID && session.uniquePass)
-//   {
-//     console.log('here');
-//     console.log(session.uniqueID);
-//     res.redirect('/login');
-//   } 
-//   else{
-//     console.log('he comes');
-//     res.redirect('/dashboard');
-//   }
-// };
 
 router.get('/dashboard', (req, res) => {
   db.query('SELECT * FROM cosdd.tblstorage WHERE intPresence=1', function(err, results, fields){
@@ -414,12 +311,13 @@ router.post('/price', (req, res) => {
 });
 
 // READ PRICE
-router.get('/price', stoEquipment, (req, res) => {
+router.get('/price', (req, res) => {
     db.query('SELECT * FROM cosdd.tblprice WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
             res.render('maintenance/views/price', { pricey: results,
-                                                    equipy: req.equipy });
+                                                    equips: req.equips,
+                                                    equiper: req.equiper });
         }
     });
 });
@@ -499,7 +397,7 @@ router.post('/employee/delete', (req, res) => {
 
 // CREATE STORAGE
 router.post('/storage', (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblstorage (txtStorageEquip, strBrand, strMod, strUnit, intStorageQty, intPresence) VALUES (?, ?, ?, ?, ?, 1)`, [req.body.stoBrand + ' ' + req.body.stoModel + ' - ' + req.body.stoUnit, req.body.stoBrand, req.body.stoModel, req.body.stoUnit, req.body.strgQty], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tblstorage (txtStorageEquip, strBrand, strMod, strUnit, intStorageQty, fltPrice, intPresence) VALUES (?, ?, ?, ?, ?, ?, 1)`, [req.body.stoBrand + ' ' + req.body.stoModel + ' - ' + req.body.stoUnit, req.body.stoBrand, req.body.stoModel, req.body.stoUnit, req.body.strgQty, req.body.stoVal], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -522,16 +420,17 @@ router.get('/storage', priBrandQuery, priModelQuery, priUnitTypeQuery, (req, res
 });
 
 // UPDATE STORAGE
-router.post('/storage/update', priBrandQuery, priModelQuery, priUnitTypeQuery, (req, res) => {
-  db.query(`UPDATE cosdd.tblstorage SET txtStorageEquip=?, intStorageQty=? WHERE intStorageID=?`, [req.body.stoBrand + ' ' + req.body.stoModel + ' - ' + req.body.stoUnit, req.body.strgQty, req.body.id], (err, results, fields) => {
+router.post('/storage/update', (req, res) => {
+  db.query(`UPDATE cosdd.tblstorage SET txtStorageEquip=?, intStorageQty=?, fltPrice=? WHERE intStorageID=?`, [req.body.stoBrand + ' ' + req.body.stoModel + ' - ' + req.body.stoUnit, req.body.strgQty, req.body.stoVal, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
-        res.render('maintenance/views/storage', { storeg: results, 
-                                                  brandy: req.brandy,
-                                                  modely: req.modely,
-                                                  unity:  req.unity });
+        res.redirect('/storage');
     }
+    console.log(req.body.stoBrand);
+    console.log(req.body.stoModel);
+    console.log(req.body.stoUnit);
+    console.log(req.body.strgQty);
   });
 });
 
@@ -599,48 +498,48 @@ router.post('/accounts/delete', (req, res) => {
 //******************************************************* */
 
 // READ INVENTORY RECORDS
-router.get('/equipment', eqaEmployees, stoEquipment, (req, res) => {
-  db.query('SELECT * FROM cosdd.tblownership WHERE intPresence=1;', function(err, results, fields){
+router.get('/equipment', eqaEmployees, stoEquipment, eqaDept, (req, res) => {
+  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtSerialNumber FROM tblownership  INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID WHERE tblownership.intPresence=1 AND tblemployee.intPresence=1;', function(err, results, fields){
       if (err) throw (err)
       else {
           res.render('transactions/views/equipment', { equipments: results,
                                                        employ: req.employ,
-                                                       sequi: req.equipy });
+                                                       sequi: req.equipy,
+                                                       depty: req.depty });
       }
   });
 });
 
 // CREATE INVENTORY RECORDS
-router.post('/equipment/create', queryStatus, queryPersonnel, queryDepartment,  (req, res) => {   
-db.query(`INSERT INTO cosdd.tblequipment (strPropertyNo, strSerialNo, strUnit, strDept, strPersonnel, strStatus, dtmDateReceived, intPresence) VALUES (?, ?, ?, ?, ?, ?, NOW(), 1)`, [req.body.invProp, req.body.invSerial, req.body.invUnit, req.body.invDept, req.body.invPers, req.body.invStat], (err, results, fields) => {
-  if (err)
-    console.log(err);
-  else {
-          res.redirect('/equipment');
-  }
-});
+router.post('/equipment/create', (req, res) => {   
+db.query(`INSERT INTO cosdd.tblownership (strOwnerDept, txtPropertyNumber, txtSerialNumber, intOwnedBy, dtmMRDate, intPriceFlagID, intPresence) VALUES (?,?,?,?,?,?,1);`, [req.body.equDept, req.body.equProp, req.body.equSer, req.body.equName, req.body.equDat, req.body.equDesc], (err, results, fields) => {
+  db.query(`UPDATE tblownership a INNER JOIN tblstorage b ON a.intPriceFlagID=b.intStorageID SET txtActualEquipment = txtStorageEquip`, (err, results, fields) => {
+    if (err)
+        console.log(err);
+    else {
+        res.redirect('/equipment');
+      }
+    });
+  });
 });
 
 // UPDATE INVENTORY RECORDS
-router.post('/equipment/update', queryStatus, queryPersonnel, queryDepartment, (req, res) => {
-db.query(`UPDATE cosdd.tblequipment SET strPropertyNo=?, strSerialNo=?, strUnit=?, strDept=?, strPersonnel=?, strStatus=? WHERE intInvID=?`, [req.body.invProp, req.body.invSerial, req.body.invUnit, req.body.invDept, req.body.invPers, req.body.invStat, req.body.id], (err, results, fields) => {
+router.post('/equipment/update', (req, res) => {
+db.query(`UPDATE cosdd.tblownership SET strOwnerName=?, strOwnerDept=?, txtActualEquipment=?, txtPropertyNumber=?, txtSerialNumber=? WHERE intOwnershipID=?`, [req.body.equName, req.body.equDept, req.body.equDesc, req.body.equProp, req.body.equSer, req.body.id], (err, results, fields) => {
   if (err)
     console.log(err);
   else {
-    res.redirect('/equipment', {  het2: req.statusQuery,
-                                  tec2: req.personQuery,
-                                  depts2: req.deptQuery });
+    res.redirect('/equipment');
   }
 });
 });
 
 // SOFT DELETE INVENTORY RECORDS
 router.post('/equipment/delete', (req, res) => {
-db.query(`UPDATE cosdd.tblequipment SET intPresence=0 WHERE intInvID=?`, [req.body.id], (err, results, fields) => {
+db.query(`UPDATE cosdd.tblownership SET intPresence=0 WHERE intOwnershipID=?`, [req.body.id], (err, results, fields) => {
   if (err)
     console.log(err);
   else {
-    console.log(req.body.id);
     res.redirect('/equipment');
   }
 });
@@ -651,17 +550,91 @@ db.query(`UPDATE cosdd.tblequipment SET intPresence=0 WHERE intInvID=?`, [req.bo
 //               NETWORK ASSIGNMENT CRUD
 //******************************************************* */
 
-// CREATE ACCOUNTS
-router.post('/accounts', (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblaccounts (txtAccountType, strAccEmail, strAccPassword, intPresence) VALUES (?, ?, ?, 1)`, [req.body.accTyp, req.body.accEma, req.body.accPass], (err, results, fields) => {
+// READ NETWORK ASSIGN
+router.get('/network', eqaEmployees, uniDevEquipment, accAll, (req, res) => {
+    db.query('SELECT * FROM cosdd.tblnetwork WHERE intPresence=1', function(err, results, fields){
+        if (err) throw (err)
+        else {
+            res.render('transactions/views/network', {  networks: results,   
+                                                        employ: req.employ,
+                                                        devvy: req.devvy,  
+                                                        accy: req.accy });
+        }
+    });
+});
+
+// CREATE NETWORK ASSIGN
+router.post('/network/create', (req, res) => {   
+  db.query(`INSERT INTO cosdd.tblnetwork (strOwnerName, strDeviceName, strDeviceID, strNetworkAddress, intPresence) VALUES (?, ?, ?, ?, 1)`, [req.body.netName, req.body.netDevName, req.body.netDev, req.body.netAdd, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
-        res.redirect('/accounts');
+        res.redirect('/network');
     }
   });
 });
 
+// UPDATE NETWORK ASSIGN
+router.post('/network/update', (req, res) => {
+  db.query(`UPDATE cosdd.tblnetwork SET strOwnerName=?, strDeviceID=?, strDeviceName=?, strNetworkAddress=? WHERE intNetworkID=?`, [req.body.netName, req.body.netDev, req.body.netDevName, req.body.netAdd, req.body.id], (err, results, fields) => {
+    if (err)
+      console.log(err);
+    else {
+      res.redirect('/network');
+    }
+  });
+});
+
+//DELETE NETWORK ASSIGN
+router.post('/network/delete', (req, res) => {
+  db.query(`UPDATE cosdd.tblnetwork SET intPresence=0 WHERE intNetworkID=?`, [req.body.id], (err, results, fields) => {
+    if (err)
+      console.log(err);
+    else {
+      res.redirect('/network');
+    }
+  });
+});
+
+//******************************************************* */
+//                    INDIVIDUAL SLIP
+//******************************************************* */
+
+// READ INDIVIDUAL SLIP
+router.get('/slip', (req, res) => {
+    db.query('SELECT * FROM cosdd.tblemployee WHERE intPresence=1', function(err, results, fields){
+        if (err) throw (err)
+        else {
+            res.render('reports/views/slip', {  emplist: results });
+        }
+    });
+});
+
+// SLIP PAGE PER INDIVIDUAL
+router.get('/slip/:maya', (req, res) => {
+  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtSerialNumber, DATE_FORMAT(tblownership.dtmMRDate, "%M %e, %Y") AS MRDate, fltPrice FROM tblownership INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID INNER JOIN tblstorage ON tblownership.intPriceFlagID=tblstorage.intStorageID WHERE tblownership.intPresence=1 AND intOwnedBy=?;', [req.params.maya], function(err, results, fields){
+    if (err) throw (err)
+    else {
+      console.log(results);
+      res.render('reports/views/slip-report', { person: results,  
+                                                maya: req.params.maya });
+    }
+  });
+
+});
+
+//******************************************************* */
+//                     FINAL REPORT
+//******************************************************* */
+// READ INDIVIDUAL SLIP
+router.get('/invreport', (req, res) => {
+    db.query('SELECT *, DATE_FORMAT(dtmMRDate, "%M %e, %Y") AS MRDate FROM tblownership A INNER JOIN tblemployee B ON A.intOwnedBy = B.intZFEmpID INNER JOIN tblstorage C ON A.intPriceFlagID = C.intStorageID;', function(err, results, fields){
+        if (err) throw (err)
+        else {
+            res.render('reports/views/invreport', {  reports: results });
+        }
+    });
+});
 
 //******************************************************* */
 //                FUNCTIONS are NOT FUN
@@ -792,7 +765,41 @@ function stoEquipment(req, res, next){
     return next();
   });  
 }
+// //- IF HINDI PA NA-LABEL (ADD PRICE)
+// function stoEquipmentLabeled(req, res, next){
+//   db.query('SELECT * FROM tblstorage WHERE intPresence=1 AND intPriceFlag=0', function(err, results, fields){
+//     if(err) throw(err)
+//     else
+//       req.equips = results;
+//     return next();
+//   });  
+// }
+// //- IF NA-LABELAN NA (EDIT PRICE)
+// function stoEquipmentLabeled2(req, res, next){
+//   db.query('SELECT * FROM tblstorage WHERE intPresence=1 AND intPriceFlag=1', function(err, results, fields){
+//     if(err) throw(err)
+//     else
+//       req.equiper = results;
+//     return next();
+//   });  
+// }
 
+function accAll(req, res, next){
+  db.query('SELECT * FROM tblaccounts WHERE intPresence=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.accy = results;
+    return next();
+  });  
+}
+function uniDevEquipment(req, res, next){
+  db.query('SELECT strUnitTypeDesc FROM tblunittype WHERE intPresence=1 AND intCompBool=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.devvy = results;
+    return next();
+  });  
+}
 function eqaEmployees(req, res, next){
   db.query('SELECT * FROM tblemployee WHERE intPresence=1', function(err, results, fields){
     if(err) throw(err)
@@ -801,7 +808,22 @@ function eqaEmployees(req, res, next){
     return next();
   });  
 }
-
+function eqaEmployees2(req, res, next){
+  db.query('SELECT * FROM tblemployee WHERE intPresence=1 AND intZFEmpID=?', [req.body.maya], function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.employ2 = results;
+    return next();
+  });  
+}
+function eqaDept(req, res, next){
+  db.query('SELECT * FROM tbldept WHERE intPresence=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.depty = results;
+    return next();
+  });  
+}
 //******************************************************* */
 //                     MAINTENANCE
 //******************************************************* */
@@ -845,6 +867,9 @@ function cont(req, res){
 function sto(req, res){
     res.render('maintenance/views/storage', priBrandQuery, priModelQuery, priUnitTypeQuery);
 }
+function sliRep(req, res){
+    res.render('reports/views/slip-report');
+}
 
 function queryInv(req, res, next){
   db.query('SELECT txtInvEquipment, strInvPropNo, strInvSerialNo, DATE_FORMAT(dtmDateReceived, "%M %e, %Y") AS neuteredDate FROM tblinventory WHERE intPresence=1;'), function(err, results){
@@ -869,6 +894,7 @@ router.get('/employee', emp);
 router.get('/accounts', acc);
 router.get('/contact', cont);
 router.get('/storage', sto);
+router.get('/slip/:maya', sliRep);
 
 function inv(req, res){
     res.render('transactions/views/inventory');

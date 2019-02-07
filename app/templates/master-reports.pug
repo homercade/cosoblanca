@@ -1,0 +1,24 @@
+doctype html
+html(lang='en')
+  block vars
+  head
+    title #{title}
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='icon', href='../../img/icon.png')
+    link(href='../../vendor/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    link(href='../../dist/css/sb-admin-2.css', rel='stylesheet')
+    link(href='../../vendor/jquery/jquery.js', rel='stylesheet')
+    script(src="https://code.jquery.com/jquery-2.2.4.min.js")
+    link(rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css")
+    script(rel="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js")
+
+    block unique-content
+
+    script.
+      $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+          responsive: true
+        });
+      });

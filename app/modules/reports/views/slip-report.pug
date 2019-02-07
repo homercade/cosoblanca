@@ -1,0 +1,31 @@
+extends ../../../templates/master-reports.pug 
+block vars
+  - var title = 'EMP' + maya
+block unique-content
+  body
+    #wrapper
+      .col-lg-12
+        h1.page-header
+          each pes in person
+            | #{pes.strFirstName} #{pes.strLastName}
+            - break
+      .col-lg-12
+        .panel.panel-default
+          .panel-body
+            .table-responsive
+              table.table.table-hover
+                thead
+                  tr
+                    th Equipment
+                    th Property Number
+                    th Serial Number
+                    th MR Date
+                    th Value
+                tbody
+                each pes in person
+                  tr
+                    td #{pes.txtActualEquipment}
+                    td #{pes.txtPropertyNumber}
+                    td #{pes.txtSerialNumber}
+                    td #{pes.MRDate}
+                    td ₱ #{pes.fltPrice}

@@ -34,42 +34,17 @@ html(lang='en')
                     th Equipment
                     th Property No.
                     th Serial No.
+                    th MR Date
                     th Department
                     th Value
                 tbody
-                  tr
-                    td 000001
-                    td Homer Cadena
-                    td Dell
-                    td 1023(18)
-                    td CPPY132
-                    td COSDD
-                    td 56,000
-                    
-      // /#page-wrapper
-      // /#wrapper
-      // jQuery
-      script(src='../vendor/jquery/jquery.min.js')
-      // Bootstrap Core JavaScript
-      script(src='../vendor/bootstrap/js/bootstrap.min.js')
-      // Metis Menu Plugin JavaScript
-      script(src='../vendor/metisMenu/metisMenu.min.js')
-      // Morris Charts JavaScript
-      script(src='../vendor/raphael/raphael.min.js')
-      script(src='../vendor/morrisjs/morris.min.js')
-      script(src='../data/morris-data.js')
-      // Flot Charts JavaScript
-      script(src='../vendor/flot/excanvas.min.js')
-      script(src='../vendor/flot/jquery.flot.js')
-      script(src='../vendor/flot/jquery.flot.pie.js')
-      script(src='../vendor/flot/jquery.flot.resize.js')
-      script(src='../vendor/flot/jquery.flot.time.js')
-      script(src='../vendor/flot-tooltip/jquery.flot.tooltip.min.js')
-      script(src='../data/flot-data.js')
-      // Custom Theme JavaScript
-      script(src='../dist/js/sb-admin-2.js')
-
-    script.
-      $(document).ready( function () {
-        $('.myTable').DataTable();
-      } );
+                    each rep in reports
+                      tr
+                        td EMP#{rep.intZFEmpID}
+                        td #{rep.strFirstName} #{rep.strLastName}
+                        td #{rep.txtActualEquipment}
+                        td #{rep.txtPropertyNumber}
+                        td #{rep.txtSerialNumber}
+                        td #{rep.MRDate}
+                        td #{rep.strOwnerDept}
+                        td ₱ #{rep.fltPrice}

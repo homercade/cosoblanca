@@ -1,0 +1,36 @@
+doctype html
+html(lang='en')
+  block vars
+  head
+    title #{title}
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    link(rel='icon', href='../../img/icon.png')
+    link(href='../vendor/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+    link(href='../vendor/metisMenu/metisMenu.min.css', rel='stylesheet')
+    link(href='../dist/css/sb-admin-2.css', rel='stylesheet')
+    link(href='../vendor/morrisjs/morris.css', rel='stylesheet')
+    link(href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+    link(href='../vendor/jquery/jquery.js', rel='stylesheet')
+    script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js")
+    script(src="https://code.jquery.com/jquery-2.2.4.min.js")
+    link(rel='stylesheet', type='text/css', href='../contform/css/main.css')
+    link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous")
+
+    script(src='../../vendor/jquery/jquery.min.js')
+    script(src='../../vendor/bootstrap/js/bootstrap.min.js')
+    script(src='../../vendor/metisMenu/metisMenu.min.js')
+    script(src='../../vendor/datatables/js/jquery.dataTables.min.js')
+    script(src='../../vendor/datatables-plugins/dataTables.bootstrap.min.js')
+    script(src='../../vendor/datatables-responsive/dataTables.responsive.js')
+    script(src='../../dist/js/sb-admin-2.js')
+    
+    block unique-content
+
+    script.
+      $(document).ready(function() {
+        $('#dataTables-example').DataTable({
+          responsive: true
+        });
+      });

@@ -1,68 +1,131 @@
 doctype html
 html(lang='en')
+  block vars
   head
+    title #{title}
     meta(charset='utf-8')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
-    meta(name='description', content='')
-    meta(name='author', content='')
-    title Technician
     link(rel='icon', href='../../img/icon.png')
-    // Bootstrap Core CSS
     link(href='../vendor/bootstrap/css/bootstrap.min.css', rel='stylesheet')
-    // MetisMenu CSS
     link(href='../vendor/metisMenu/metisMenu.min.css', rel='stylesheet')
-    // Custom CSS
     link(href='../dist/css/sb-admin-2.css', rel='stylesheet')
-    // Morris Charts CSS
     link(href='../vendor/morrisjs/morris.css', rel='stylesheet')
-    // Custom Fonts
-    link(href='../vendor/font-awesome/css/font-awesome.min.css', rel='stylesheet', type='text/css')
-    // HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries
-    // WARNING: Respond.js doesn't work if you view the page via file://
-    //if lt IE 9
-      script(src='https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js')
-      script(src='https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js')
-    link(href='../../vendor/jquery/jquery.js', rel='stylesheet')
+    link(href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
+    link(href='../vendor/jquery/jquery.js', rel='stylesheet')
+    link(rel='stylesheet', type='text/css', href='../contform/css/main.css')
+    link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous")
+    link(href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css")
+    link(href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" type='text/css')
+
+    script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" type='text/javascript')
+    script(src="https://code.jquery.com/jquery-2.2.4.min.js" type='text/javascript')
+    script(src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous" type='text/javascript')
+    script(src='../../vendor/jquery/jquery.min.js' type='text/javascript')
+    script(src='../../vendor/bootstrap/js/bootstrap.min.js')
+    script(src='../../vendor/metisMenu/metisMenu.min.js')
+    script(src='../../vendor/datatables/js/jquery.dataTables.min.js')
+    script(src='../../vendor/datatables-plugins/dataTables.bootstrap.min.js')
+    script(src='../../vendor/datatables-responsive/dataTables.responsive.js')
+    script(src='../../dist/js/sb-admin-2.js')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.js') 
+    link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css')
+
+
+  body
+    #wrapper
+      nav.navbar.navbar-default.navbar-static-top(role='navigation', style='margin-bottom: 0')
+        .navbar-header
+          button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='dashboard') COSOBLANCA 
+        a.nav.navbar-brand.navbar-top-links.navbar-right(href='/' title='Logout') 
+          i.fa.fa-sign-out-alt.fa-fw
+          | Logout
+        // /.navbar-header
+        .navbar-default.sidebar(role='navigation')
+          .sidebar-nav.navbar-collapse
+            ul#side-menu.nav
+              li
+                a(href='dashboard')
+                  i.fa.fa-tachometer-alt.fa-fw
+                  |  Dashboard
+              li
+                a(href='#')
+                  i.fa.fa-cogs.fa-fw
+                  |  Maintenance
+                  span.fa.arrow
+                ul.nav.nav-second-level
+                  li
+                    a(href='employee')
+                      i.fa.fa-user-tie.fa-fw
+                      |  Employee
+                  li
+                    a(href='unittype')
+                      i.fa.fa-print.fa-fw
+                      |  Unit
+                  li
+                    a(href='department')
+                      i.fa.fa-building.fa-fw
+                      |  Department
+                  li
+                    a(href='storage')
+                      i.fa.fa-archive.fa-fw
+                      |  Storage
+                  li
+                    a(href='accounts')
+                      i.fa.fa-user-shield.fa-fw
+                      |  Accounts Setup
+                // /.nav-second-level
+              li
+                a(href='#')
+                  i.fa.fa-project-diagram.fa-fw
+                  |  Transactions
+                  span.fa.arrow
+                ul.nav.nav-second-level
+                  li
+                    a(href='equipment')
+                      i.fa.fa-hands-helping.fa-fw
+                      |  Equipment Assignment
+                  li
+                    a(href='network')
+                      i.fa.fa-network-wired.fa-fw
+                      |  Network Assignment
+              li
+                a(href='#')
+                  i.fa.fa-chart-area.fa-fw
+                  |  Reports
+                  span.fa.arrow
+                ul.nav.nav-second-level
+                  li
+                    a(href='slip')
+                      i.fa.fa-file-invoice-dollar.fa-fw
+                      |  Individual Slip
+                  li
+                    a(href='invreport' target='_blank')
+                      i.fa.fa-warehouse.fa-fw
+                      |  Inventory Report
+                  li
+                    a(href='active' target='_blank')
+                      i.fa.fa-snowboarding.fa-fw
+                      |  Active Accounts
+              li
+                a(href='contact')
+                  i.fa.fa-mail-bulk.fa-fw
+                  |  Contact
     
-    script(src='../vendor/jquery/jquery.min.js')
-    // Bootstrap Core JavaScript
-    script(src='../vendor/bootstrap/js/bootstrap.min.js')
-    // Metis Menu Plugin JavaScript
-    script(src='../vendor/metisMenu/metisMenu.min.js')
-    // DataTables JavaScript
-    script(src='../vendor/datatables/js/jquery.dataTables.min.js')
-    script(src='../vendor/datatables-plugins/dataTables.bootstrap.min.js')
-    script(src='../vendor/datatables-responsive/dataTables.responsive.js')
-    // Custom Theme JavaScript
-    script(src='../dist/js/sb-admin-2.js')
-    // Page-Level Demo Scripts - Tables - Use for reference
+    block unique-content
+
     script.
       $(document).ready(function() {
-      $('#dataTables-example').DataTable({
-      responsive: true
+        $('#dataTables-example').DataTable({
+          responsive: true
+        });
       });
-      });
-    // /.table-responsive
-    // /.panel-body
-    // /#page-wrapper
-    // /#wrapper
-    // jQuery
-    script(src='../vendor/jquery/jquery.min.js')
-    // Bootstrap Core JavaScript
-    script(src='../vendor/bootstrap/js/bootstrap.min.js')
-    // Metis Menu Plugin JavaScript
-    script(src='../vendor/metisMenu/metisMenu.min.js')
-    // DataTables JavaScript
-    script(src='../vendor/datatables/js/jquery.dataTables.min.js')
-    script(src='../vendor/datatables-plugins/dataTables.bootstrap.min.js')
-    script(src='../vendor/datatables-responsive/dataTables.responsive.js')
-    // Custom Theme JavaScript
-    script(src='../dist/js/sb-admin-2.js')
-    // Page-Level Demo Scripts - Tables - Use for reference
     script.
-      $(document).ready(function() {
-      $('#dataTables-example').DataTable({
-      responsive: true
-      });
+      $(function(){
+        $(".datepicker").datepicker();
       });
