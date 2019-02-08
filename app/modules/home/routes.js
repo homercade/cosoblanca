@@ -4,6 +4,37 @@
 var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
+var session = require('express-session');
+
+var auth = function(req, res, next){
+  if(req.session && req.session.user === 'amy' && req.session.admin)
+    return next();
+  else
+    res.redirect('/');
+}
+router.use(session({
+  secret: 'AU832hrui4yryw8413JH3',
+  resave: true,
+  saveUninitialized: true
+}));
+
+router.get('/login', function(req, res) {
+  if(!req.query.username || !req.query.password){
+    res.redirect('/');
+  }
+  else if(req.query.username === 'root' && req.query.password === 'pass'){
+    req.session.user = 'amy';
+    req.session.admin = true;
+    res.redirect('/dashboard');
+  }
+  else
+    res.redirect('/');
+});
+
+router.get('/logout', function(req, res){
+  req.session.destroy();
+  res.redirect('/');
+});
 
 router.get('/dashboard', (req, res) => {
   db.query('SELECT * FROM cosdd.tblstorage WHERE intPresence=1', function(err, results, fields){
@@ -921,6 +952,11 @@ function login(req, res){
 function notFound(req, res){
   res.render('authorization/views/404');
 }
+
+
+router.get('/login?incorrect', function(req, res) {
+  res.redirect('/');
+});
 
 //-ROUTERS
 router.get('/', login);
