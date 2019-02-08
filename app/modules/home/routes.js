@@ -765,24 +765,6 @@ function stoEquipment(req, res, next){
     return next();
   });  
 }
-// //- IF HINDI PA NA-LABEL (ADD PRICE)
-// function stoEquipmentLabeled(req, res, next){
-//   db.query('SELECT * FROM tblstorage WHERE intPresence=1 AND intPriceFlag=0', function(err, results, fields){
-//     if(err) throw(err)
-//     else
-//       req.equips = results;
-//     return next();
-//   });  
-// }
-// //- IF NA-LABELAN NA (EDIT PRICE)
-// function stoEquipmentLabeled2(req, res, next){
-//   db.query('SELECT * FROM tblstorage WHERE intPresence=1 AND intPriceFlag=1', function(err, results, fields){
-//     if(err) throw(err)
-//     else
-//       req.equiper = results;
-//     return next();
-//   });  
-// }
 
 function accAll(req, res, next){
   db.query('SELECT * FROM tblaccounts WHERE intPresence=1', function(err, results, fields){
