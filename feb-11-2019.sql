@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.6.24, for Win32 (x86)
 --
--- Host: 127.0.0.1    Database: cosdd2
+-- Host: 127.0.0.1    Database: cosdd
 -- ------------------------------------------------------
 -- Server version	5.7.25
 
@@ -25,14 +25,19 @@ DROP TABLE IF EXISTS `tblaccounts`;
 CREATE TABLE `tblaccounts` (
   `intAccountID` int(6) unsigned zerofill NOT NULL AUTO_INCREMENT,
   `strDevice` varchar(45) NOT NULL,
-  `strDeviceAccount` longtext NOT NULL,
-  `strEmailAccount` longtext NOT NULL,
+  `strDeviceAccount` longtext,
+  `strEmailAccount` longtext,
+  `strEmailPass` varchar(45) DEFAULT NULL,
   `strIDAccount` longtext NOT NULL,
-  `strPassword` varchar(45) NOT NULL,
+  `strIDAccPassword` varchar(45) NOT NULL,
   `strNetworkAddress` longtext NOT NULL,
+  `strWifiAddress` longtext,
   `intPresence` tinyint(1) NOT NULL,
-  PRIMARY KEY (`intAccountID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+  `intStoClaim` int(6) unsigned DEFAULT NULL,
+  PRIMARY KEY (`intAccountID`),
+  KEY `intStoClaim` (`intStoClaim`),
+  CONSTRAINT `intStoClaim` FOREIGN KEY (`intStoClaim`) REFERENCES `tblemployee` (`intZFEmpID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,6 +46,7 @@ CREATE TABLE `tblaccounts` (
 
 LOCK TABLES `tblaccounts` WRITE;
 /*!40000 ALTER TABLE `tblaccounts` DISABLE KEYS */;
+INSERT INTO `tblaccounts` VALUES (000001,'MacBook Pro','NHA_COSDD001','nh@_cosdd001',NULL,'nha_cosdd001@icloud.com','nhacosdd001','F0:18:98:4F:A3:BE',NULL,1,NULL),(000004,'MacBook Pro','NHB_2003','homer.keid@gmail.com','alot','homer.keid@icloud.com','alot','10:10:10:10:10:10','10-10-10-10-10-10',1,NULL);
 /*!40000 ALTER TABLE `tblaccounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -65,6 +71,7 @@ CREATE TABLE `tblbrand` (
 
 LOCK TABLES `tblbrand` WRITE;
 /*!40000 ALTER TABLE `tblbrand` DISABLE KEYS */;
+INSERT INTO `tblbrand` VALUES (1,'Apple',1),(2,'Dell',0),(3,'Bear Brand',0),(4,'LG',0),(5,'Lenovo',0),(6,'HP',0),(7,'hey',0),(8,'Letter Q',0),(9,'Lenovo',1),(10,'EPSON',1),(11,'Printer',0),(12,'HP',1),(13,'Huawei',1);
 /*!40000 ALTER TABLE `tblbrand` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,6 +97,7 @@ CREATE TABLE `tbldept` (
 
 LOCK TABLES `tbldept` WRITE;
 /*!40000 ALTER TABLE `tbldept` DISABLE KEYS */;
+INSERT INTO `tbldept` VALUES (1,'None','No department assigned yet',1),(2,'OGM','Office of the General Manager',1),(3,'HR','Human Resource',1),(4,'AGM','Assisstant of the General Manager',1),(5,'ACCO','Secretariat',1),(8,'COSDD','Corporate Services and System Development Department',1);
 /*!40000 ALTER TABLE `tbldept` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -116,6 +124,7 @@ CREATE TABLE `tblemployee` (
 
 LOCK TABLES `tblemployee` WRITE;
 /*!40000 ALTER TABLE `tblemployee` DISABLE KEYS */;
+INSERT INTO `tblemployee` VALUES (000001,'Homer','Cadena','COSDD',1),(000002,'Diane','Nguyen','OGM',1),(000003,'Arya','Stark',NULL,1),(000004,'Jodel','Ebrada',NULL,0),(000005,'Jeffry','Pagu',NULL,0),(000006,'Jeffry','Paguia',NULL,1),(000007,'Richel','Natividad',NULL,1);
 /*!40000 ALTER TABLE `tblemployee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -146,6 +155,7 @@ CREATE TABLE `tblinventory` (
 
 LOCK TABLES `tblinventory` WRITE;
 /*!40000 ALTER TABLE `tblinventory` DISABLE KEYS */;
+INSERT INTO `tblinventory` VALUES (1,'Dell Something','100000','100000','2019-01-17',1,000001),(2,'Another Dell or Something','600000','700000','2019-02-08',1,000002);
 /*!40000 ALTER TABLE `tblinventory` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -170,6 +180,7 @@ CREATE TABLE `tblmodel` (
 
 LOCK TABLES `tblmodel` WRITE;
 /*!40000 ALTER TABLE `tblmodel` DISABLE KEYS */;
+INSERT INTO `tblmodel` VALUES (1,'MacBook Pro',1),(6,'Think Pad',1),(7,'Inkjet',1),(8,'Tower',1);
 /*!40000 ALTER TABLE `tblmodel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -185,10 +196,14 @@ CREATE TABLE `tblnetwork` (
   `strOwnerName` varchar(45) NOT NULL,
   `strDeviceID` varchar(45) NOT NULL,
   `strDeviceName` varchar(45) NOT NULL,
-  `strNetworkAddress` varchar(45) NOT NULL,
+  `strNetworkAddress` longtext NOT NULL,
+  `strWifiAddress` longtext,
   `intPresence` tinyint(1) NOT NULL,
-  PRIMARY KEY (`intNetworkID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  `intAccConf` int(6) unsigned zerofill DEFAULT NULL,
+  PRIMARY KEY (`intNetworkID`),
+  KEY `intAccConf` (`intAccConf`),
+  CONSTRAINT `intAccConf` FOREIGN KEY (`intAccConf`) REFERENCES `tblaccounts` (`intAccountID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,6 +212,7 @@ CREATE TABLE `tblnetwork` (
 
 LOCK TABLES `tblnetwork` WRITE;
 /*!40000 ALTER TABLE `tblnetwork` DISABLE KEYS */;
+INSERT INTO `tblnetwork` VALUES (3,'Diane Nguyen','NHA_COSDD001','Laptop','A0:B0:C0:D0:E0:F0','00-11-22-33-44-55',1,000001);
 /*!40000 ALTER TABLE `tblnetwork` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,6 +247,7 @@ CREATE TABLE `tblownership` (
 
 LOCK TABLES `tblownership` WRITE;
 /*!40000 ALTER TABLE `tblownership` DISABLE KEYS */;
+INSERT INTO `tblownership` VALUES (3,'COSDD','Apple MacBook Pro - Laptop','COSO001','ABCD132','2019-01-17',1,000001,2),(11,'OGM','Lenovo ThinkPad - Monitor','OGM371','ABCE132','2019-02-02',1,000002,1),(12,'COSDD','Apple MacBook Pro - Laptop','COSO002','ADGE132','2019-01-23',1,000001,2),(13,'Secretariat','EPSON L120 - Printer','HATDOG','S4NDW1CH','2019-04-01',1,000003,10),(21,'OGM','Huawei D Series - Document Reader','OGM002','ATTP13','2019-05-08',1,000003,11),(22,'COSDD','Lenovo ThinkPad - Monitor','COSO003','BNHA132','2019-02-01',1,000001,1),(23,'OGM','Huawei D Series - Document Reader','OGM004','PRNH132','2019-02-18',1,000003,11),(24,'COSDD','Apple MacBook Pro - Laptop','COSO0001','ABCD666','2019-02-07',1,000004,2),(25,'COSDD','Apple MacBook Pro - Laptop','COSO00069','JGHT132','2019-02-07',1,000006,2),(26,'COSDD','Apple MacBook Pro - Laptop','COSO0011','ABCD111','2019-02-07',1,000007,2);
 /*!40000 ALTER TABLE `tblownership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -259,6 +276,7 @@ CREATE TABLE `tblprice` (
 
 LOCK TABLES `tblprice` WRITE;
 /*!40000 ALTER TABLE `tblprice` DISABLE KEYS */;
+INSERT INTO `tblprice` VALUES (2,'Apple MacBook Pro - Laptop',71000,1,2);
 /*!40000 ALTER TABLE `tblprice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,6 +301,7 @@ CREATE TABLE `tblstatus` (
 
 LOCK TABLES `tblstatus` WRITE;
 /*!40000 ALTER TABLE `tblstatus` DISABLE KEYS */;
+INSERT INTO `tblstatus` VALUES (1,'Unchecked','The unit\'s status is still unknown.'),(2,'Working','The unit is working and and functional.'),(3,'Defective','The unit received is not working properly.');
 /*!40000 ALTER TABLE `tblstatus` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,6 +331,7 @@ CREATE TABLE `tblstorage` (
 
 LOCK TABLES `tblstorage` WRITE;
 /*!40000 ALTER TABLE `tblstorage` DISABLE KEYS */;
+INSERT INTO `tblstorage` VALUES (1,'Lenovo ThinkPad - Monitor','Lenovo','ThinkPad','Monitor',200,3250,1),(2,'Apple MacBook Pro - Laptop','Apple','MacBook Pro','Laptop',5,71000,1),(10,'EPSON L120 - Printer','EPSON','L120','Printer',9,13500,1),(11,'Huawei D Series - Document Reader','Huawei','D Series','Document Reader',6,1975,1);
 /*!40000 ALTER TABLE `tblstorage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -337,6 +357,7 @@ CREATE TABLE `tbltechnician` (
 
 LOCK TABLES `tbltechnician` WRITE;
 /*!40000 ALTER TABLE `tbltechnician` DISABLE KEYS */;
+INSERT INTO `tbltechnician` VALUES (10,'Richel','Natividad',1),(11,'John Kenneth','Clemente',1),(12,'Jan Arvee','Pineda',1);
 /*!40000 ALTER TABLE `tbltechnician` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -362,6 +383,7 @@ CREATE TABLE `tblunittype` (
 
 LOCK TABLES `tblunittype` WRITE;
 /*!40000 ALTER TABLE `tblunittype` DISABLE KEYS */;
+INSERT INTO `tblunittype` VALUES (1,'Laptop',1,1),(2,'Desktop',1,1),(3,'Printer',1,0),(4,'Keyboard',0,0),(5,'UPS',1,0),(6,'Monitor',0,0),(7,'Document Reader',1,NULL);
 /*!40000 ALTER TABLE `tblunittype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -423,4 +445,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-10 22:58:05
+-- Dump completed on 2019-02-11  1:49:59

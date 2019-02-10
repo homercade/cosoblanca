@@ -61,7 +61,7 @@ router.post('/department', (req, res) => {
 
 // READ DEPARTMENTS
 router.get('/department', (req, res) => {
-    db.query('SELECT * FROM cosdd.tbldept WHERE intPresence=1', function(err, results, fields){
+    db.query('SELECT * FROM cosdd.tbldept WHERE intPresence=1 ORDER BY intDeptID ASC', function(err, results, fields){
         if (err) throw (err)
         else {
             res.render('maintenance/views/department', { depart: results });
@@ -482,7 +482,7 @@ router.post('/storage/delete', (req, res) => {
 
 // CREATE ACCOUNTS
 router.post('/accounts', (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblaccounts (strDevice, strDeviceAccount, strEmailAccount, strIDAccount, strPassword, strNetworkAddress, intPresence) VALUES (?, ?, ?, ?, ?, ?, 1)`, [req.body.accDev, req.body.accDevAcc, req.body.accEma, req.body.accIDAcc, req.body.accPass, req.body.accNetAdd], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tblaccounts (strDevice, strDeviceAccount, strEmailAccount, strEmailPass, strIDAccount, strIDAccPassword, strNetworkAddress, strWifiAddress, intPresence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`, [req.body.accDev, req.body.accDevAcc, req.body.accEma, req.body.accEmaPass, req.body.accIDAcc, req.body.accIDAccPass, req.body.accNetAdd, req.body.accWifi], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -665,6 +665,19 @@ router.get('/invreport', (req, res) => {
             res.render('reports/views/invreport', {  reports: results });
         }
     });
+});
+
+//******************************************************* */
+//                     ACTIVE ACCOUNTS
+//******************************************************* */
+// READ INDIVIDUAL SLIP
+router.get('/active', (req, res) => {
+  db.query('SELECT *, DATE_FORMAT(dtmMRDate, "%M %e, %Y") AS MRDate FROM tblownership A INNER JOIN tblemployee B ON A.intOwnedBy = B.intZFEmpID INNER JOIN tblstorage C ON A.intPriceFlagID = C.intStorageID;', function(err, results, fields){
+      if (err) throw (err)
+      else {
+          res.render('reports/views/invreport', {  reports: results });
+      }
+  });
 });
 
 //******************************************************* */

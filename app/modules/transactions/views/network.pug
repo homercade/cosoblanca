@@ -10,7 +10,7 @@ block unique-content
           | Network Assignment
           button.btn.btn-primary.btn-success.btn-lg.pull-right(type='button', data-toggle="modal", data-target="#addModal")
             i.fa.fa-plus-circle.fa-fw
-            |  Assign Equipment
+            |  Assign Address
       .col-lg-12
         .panel.panel-default
           .panel-body
@@ -22,6 +22,7 @@ block unique-content
                       th Device
                       th Device Account
                       th Network Address
+                      th WiFi Address
                       th Actions
                 tbody
                   each netty in networks
@@ -30,10 +31,11 @@ block unique-content
                       td #{netty.strDeviceName} 
                       td #{netty.strDeviceID} 
                       td #{netty.strNetworkAddress}  
+                      td
                       td 
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit storage input', data-toggle="modal", data-target="#editModal", data-id=netty.intNetworkID)
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=netty.intNetworkID)
                             i.fa.fa-wrench
-                        button.btn.btn-danger.btn-circle(type='button', title='Delete storage data', data-toggle="modal", data-target="#deleteModal", data-id=netty.intNetworkID)
+                        button.btn.btn-danger.btn-circle(type='button', title='Remove data', data-toggle="modal", data-target="#deleteModal", data-id=netty.intNetworkID)
                             i.fa.fa-trash 
 
     #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
@@ -41,7 +43,7 @@ block unique-content
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-            h4#myModalLabel.modal-title Add Stock
+            h4#myModalLabel.modal-title Add Address
           form(action='/network/create', method='post')
             .modal-body
               .container-fluid
@@ -69,7 +71,11 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Network Address
-                        input.netAdd.form-control(type='text' name='netAdd' placeholder="AAAA-000" required)
+                        input.netAdd.form-control(type='text' name='netAdd' placeholder="A0:B1:C2:D3:E4:F5" required)
+                    .col-md-12
+                      .form-group
+                        label.control-label WiFi Address
+                        input.netAdd.form-control(type='text' name='netWifi' placeholder="00-14-22-01-23-45" required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -79,7 +85,7 @@ block unique-content
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-            h4#myModalLabel.modal-title Add Stock
+            h4#myModalLabel.modal-title Edit Details
           form(action='/network/update', method='post')
             .modal-body
               .container-fluid
@@ -118,7 +124,7 @@ block unique-content
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-            h4#myModalLabel.modal-title Remove Stock
+            h4#myModalLabel.modal-title Remove Record
           form(action='/network/delete', method='post')
             .modal-body
               .container-fluid
