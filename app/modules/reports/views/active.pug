@@ -37,11 +37,12 @@ html(lang='en')
                     th Network Address
                     th WiFi Address
                 tbody
+                each act in actres
                   tr
-                    td Diane Nguyen
-                    td COSO
-                    td MacBook Pro
-                    td dianeisasadsadgirl@icloud.com
-                    td dianeguyen@gmail.com
-                    td 45:AE:3G:7C:11
-                    td 45:AE:3G:7C:17
+                    td #{act.strFirstName} #{act.strLastName}
+                    td #{act.strEmpDept}
+                    td #{act.strDevice}
+                    td #{act.strEmailAccount}
+                    td #{act.strIDAccount}
+                    td #{act.strNetworkAddress}
+                    td #{act.strWifiAddress}

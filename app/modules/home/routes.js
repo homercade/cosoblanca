@@ -669,13 +669,13 @@ router.get('/invreport', (req, res) => {
 
 //******************************************************* */
 //                     ACTIVE ACCOUNTS
-//******************************************************* */
+//******************************************************* */ 
 // READ INDIVIDUAL SLIP
 router.get('/active', (req, res) => {
-  db.query('SELECT *, DATE_FORMAT(dtmMRDate, "%M %e, %Y") AS MRDate FROM tblownership A INNER JOIN tblemployee B ON A.intOwnedBy = B.intZFEmpID INNER JOIN tblstorage C ON A.intPriceFlagID = C.intStorageID;', function(err, results, fields){
+  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblemployee.strEmpDept, tblaccounts.strDevice, tblaccounts.strEmailAccount, tblaccounts.strIDAccount, tblnetwork.strNetworkAddress, tblnetwork.strWifiAddress FROM tblemployee INNER JOIN tblaccounts ON tblemployee.intZFEmpID=tblaccounts.intStoClaim INNER JOIN tblnetwork ON tblaccounts.intAccountID = tblnetwork.intAccConf WHERE tblemployee.intPresence=1 AND tblaccounts.intPresence=1 AND tblnetwork.intPresence=1;', function(err, results, fields){
       if (err) throw (err)
       else {
-          res.render('reports/views/invreport', {  reports: results });
+          res.render('reports/views/active', {  actres: results });
       }
   });
 });
