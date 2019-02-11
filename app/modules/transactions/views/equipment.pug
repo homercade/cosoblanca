@@ -22,6 +22,7 @@ block unique-content
                       th Dept./Proj.
                       th Equipment
                       th Property Number
+                      th PAR Number
                       th Serial Number
                       th Actions
                 tbody
@@ -31,9 +32,10 @@ block unique-content
                       td #{equi.strOwnerDept}
                       td #{equi.txtActualEquipment}
                       td #{equi.txtPropertyNumber}
+                      td #{equi.txtPARNumber}
                       td #{equi.txtSerialNumber}
                       td 
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit storage input', data-toggle="modal", data-target="#editModal", data-id=equi.intOwnershipID, data-prop=equi.txtPropertyNumber, data-ser=equi.txtSerialNumber, data-dat=equi.dtmMRDate)
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit storage input', data-toggle="modal", data-target="#editModal", data-id=equi.intOwnershipID, data-prop=equi.txtPropertyNumber, data-ser=equi.txtSerialNumber, data-dat=equi.dtmMRDate, data-par=equi.txtPARNumber)
                             i.fa.fa-wrench
                         button.btn.btn-danger.btn-circle(type='button', title='Delete storage data', data-toggle="modal", data-target="#deleteModal", data-id=equi.intOwnershipID)
                             i.fa.fa-trash 
@@ -76,7 +78,11 @@ block unique-content
                       .form-group
                         label.control-label Serial Number
                         input.equSer.form-control(type='text' name='equSer' placeholder="00AA132" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-12
+                    .col-md-6
+                      .form-group
+                        label.control-label PAR Number
+                        input.equPAR.form-control(type='text' name='equPAR' placeholder="00-00-00" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-6
                       .form-group
                         label.control-label MR Date
                         input.equDat.datepicker.form-control(type='text' name='equDat' placeholder="MM-DD-YYYY")
@@ -122,10 +128,14 @@ block unique-content
                       .form-group
                         label.control-label Serial Number
                         input.equSer.form-control(type='text' name='equSer' placeholder="00AA132" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-12
+                    .col-md-6
+                      .form-group
+                        label.control-label PAR Number
+                        input.equPAR.form-control(type='text' name='equPAR' placeholder="00-00-00" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-6
                       .form-group
                         label.control-label MR Date
-                        input.equDat.datepicker.form-control(type='text' name='equDat' placeholder="MM-DD-YYYY" required)
+                        input.equDat.datepicker.form-control(type='text' name='equDat' placeholder="MM-DD-YYYY")
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -164,15 +174,17 @@ block unique-content
       var prop = button.data('prop')
       var ser = button.data('ser')
       var dat = button.data('dat') 
+      var par = button.data('par')
       let modal = $(this);     
       modal.find('.modal-body .id').val(`${id}`)
       modal.find('.modal-body .equProp').val(`${prop}`)
       modal.find('.modal-body .equSer').val(`${ser}`)
       modal.find('.modal-body .equDat').val(`${dat}`)
+      modal.find('.modal-body .equPAR').val(`${par}`)
       });
     
     script.
-      var alphaNumOnly = /^[a-zA-Z0-9]+$/i;
+      var alphaNumOnly = /^[a-zA-Z0-9 -]+$/i;
 
       function restrictCharacters(myfield, e, restrictionType) {
           if (!e) var e = window.event
@@ -193,8 +205,3 @@ block unique-content
           }
       };
 
-    script.
-      $(function() {
-          $(".datepicker").datepicker({ 
-            format: "yyyy-mm-dd" })
-       });

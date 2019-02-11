@@ -40,14 +40,16 @@ html(lang='en')
     script.
       $(document).ready(function() {
         $('.datatables').DataTable({
-          responsive: true
+          responsive: true,
+          "order": []
         });
       });
       
     script.
-      $(function(){
-        $(".datepicker").datepicker();
-      });
+      $(function() {
+          $(".datepicker").datepicker({ 
+            format: "yyyy-mm-dd" })
+       });
 
   body
     #wrapper

@@ -20,7 +20,6 @@ block unique-content
                     tr
                       th Owner
                       th Device
-                      th Device Account
                       th Network Address
                       th WiFi Address
                       th Actions
@@ -29,11 +28,10 @@ block unique-content
                     tr
                       td #{netty.strOwnerName} 
                       td #{netty.strDeviceName} 
-                      td #{netty.strDeviceID} 
                       td #{netty.strNetworkAddress}  
-                      td
+                      td #{netty.strWifiAddress}
                       td 
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=netty.intNetworkID)
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=netty.intNetworkID, data-netadd=netty.strNetworkAddress, data-wifiadd=netty.strWifiAddress)
                             i.fa.fa-wrench
                         button.btn.btn-danger.btn-circle(type='button', title='Remove data', data-toggle="modal", data-target="#deleteModal", data-id=netty.intNetworkID)
                             i.fa.fa-trash 
@@ -50,24 +48,18 @@ block unique-content
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   input.hidden#id(type='text' name='id')
                   .row
-                    .col-md-12
+                    .col-md-6
                       .form-group
                         label.control-label Owned By
-                        select#netName.form-control(name='netName')
+                        select.netName.form-control(name='netName')
                           each emp in employ
                             option.netName(value=emp.strFirstName+' '+emp.strLastName) #{emp.strFirstName} #{emp.strLastName}
                     .col-md-6
                       .form-group
-                        label.control-label Device Name
-                        select#netDevName.form-control(name='netDevName')
+                        label.control-label Device
+                        select.netDevName.form-control(name='netDevName')
                           each dev in devvy
                             option.netDevName(value=dev.strUnitTypeDesc) #{dev.strUnitTypeDesc}
-                    .col-md-6
-                      .form-group
-                        label.control-label Device ID
-                        select#netDev.form-control(name='netDev')
-                          each acc in accy
-                            option.netDev(value=acc.strDeviceAccount) #{acc.strDeviceAccount}
                     .col-md-12
                       .form-group
                         label.control-label Network Address
@@ -75,7 +67,7 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label WiFi Address
-                        input.netAdd.form-control(type='text' name='netWifi' placeholder="00-14-22-01-23-45" required)
+                        input.wifiAdd.form-control(type='text' name='wifiAdd' placeholder="00-14-22-01-23-45" required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -92,28 +84,26 @@ block unique-content
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   input.hidden.id(type='text' name='id')
                   .row
-                    .col-md-12
+                    .col-md-6
                       .form-group
                         label.control-label Owned By
-                        select#netName.form-control(name='netName')
+                        select.netName.form-control(name='netName')
                           each emp in employ
                             option.netName(value=emp.strFirstName+' '+emp.strLastName) #{emp.strFirstName} #{emp.strLastName}
                     .col-md-6
                       .form-group
-                        label.control-label Device Name
-                        select#netDevName.form-control(name='netDevName')
+                        label.control-label Device
+                        select.netDevName.form-control(name='netDevName')
                           each dev in devvy
                             option.netDevName(value=dev.strUnitTypeDesc) #{dev.strUnitTypeDesc}
-                    .col-md-6
-                      .form-group
-                        label.control-label Device ID
-                        select#netDev.form-control(name='netDev')
-                          each acc in accy
-                            option.netDev(value=acc.strDeviceAccount) #{acc.strDeviceAccount}
                     .col-md-12
                       .form-group
                         label.control-label Network Address
-                        input.netAdd.form-control(type='text' name='netAdd' placeholder="AAAA-000" required)
+                        input.netAdd.form-control(type='text' name='netAdd' placeholder="A0:B1:C2:D3:E4:F5" required)
+                    .col-md-12
+                      .form-group
+                        label.control-label WiFi Address
+                        input.wifiAdd.form-control(type='text' name='wifiAdd' placeholder="00-14-22-01-23-45" required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -157,12 +147,12 @@ block unique-content
       $('#editModal').on('show.bs.modal', function(event){
       var button = $(event.relatedTarget)      
       var id = button.data('id')
-      var equip = button.data('equip')
-      var qty = button.data('qty')
+      var netadd = button.data('netadd')
+      var wifiadd = button.data('wifiadd')
       let modal = $(this);     
       modal.find('.modal-body .id').val(`${id}`)
-      modal.find('.modal-body .strgName').val(`${equip}`)
-      modal.find('.modal-body .strgQty').val(`${qty}`)
+      modal.find('.modal-body .netAdd').val(`${netadd}`)
+      modal.find('.modal-body .wifiAdd').val(`${wifiadd}`)
       });
       
     script.

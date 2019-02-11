@@ -17,10 +17,10 @@ block unique-content
                 each eqs in storeg
                   - sum += eqs.intStorageQty
                 .huge= sum
-                div New Equipment
+                div Total Equipment
           div
             .panel-footer
-              span.pull-left Arrival of new equipment this week.
+              span.pull-left Total equipment arrived and stored in this inventory
               span.pull-right
               .clearfix
       .col-lg-3.col-md-6
@@ -30,11 +30,12 @@ block unique-content
               .col-xs-3
                 i.fa.fa-wrench.fa-5x
               .col-xs-9.text-right
-                .huge 0
-                div Repaired Equipment
+                each emp in employee
+                  .huge #{emp.totalEmployees}
+                div Employees
           div
             .panel-footer
-              span.pull-left Repaired equipment this week.
+              span.pull-left Currently registered to this system
               span.pull-right
               .clearfix
       .col-lg-3.col-md-6
@@ -44,11 +45,12 @@ block unique-content
               .col-xs-3
                 i.fa.fa-book.fa-5x
               .col-xs-9.text-right
-                .huge 0
-                div Logged Requests
+                each oww in owners
+                  .huge #{oww.totals}
+                div Assigned Equipments
           div
             .panel-footer
-              span.pull-left Logged transactions this week.
+              span.pull-left Current transactions that are deduced from the database
               span.pull-right
               .clearfix
       .col-lg-3.col-md-6
@@ -58,10 +60,11 @@ block unique-content
               .col-xs-3
                 i.fa.fa-unlink.fa-5x
               .col-xs-9.text-right
-                .huge 0
-                div Def. Equipment
+                each depp in depts
+                  .huge #{depp.deptTotal}
+                div Departments
           div
             .panel-footer
-              span.pull-left Defective equipment are seen this week.
+              span.pull-left Departments that currently withdrew and had their equipment distributed
               span.pull-right
               .clearfix

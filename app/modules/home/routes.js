@@ -36,11 +36,14 @@ router.get('/logout', function(req, res){
   res.redirect('/');
 });
 
-router.get('/dashboard', (req, res) => {
+router.get('/dashboard', auth, countEmp, countOwn, countDept, (req, res) => {
   db.query('SELECT * FROM cosdd.tblstorage WHERE intPresence=1', function(err, results, fields){
     if (err) throw (err)
     else {
-        res.render('home/views/dashboard', { storeg: results });
+        res.render('home/views/dashboard', { storeg: results,
+                                             employee: req.countEm,
+                                             owners: req.countOwner,
+                                             depts: req.countDep });
     }
   });
 })
@@ -49,7 +52,7 @@ router.get('/dashboard', (req, res) => {
 //                      DEPARTMENT
 //******************************************************* */
 // CREATE DEPARTMENTS
-router.post('/department', (req, res) => {   
+router.post('/department', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tbldept (strDeptCode, txtDeptNamen intPresence) VALUES (?, ?, 1)`, [req.body.deptCode, req.body.deptName], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -60,7 +63,7 @@ router.post('/department', (req, res) => {
 });
 
 // READ DEPARTMENTS
-router.get('/department', (req, res) => {
+router.get('/department', auth, (req, res) => {
     db.query('SELECT * FROM cosdd.tbldept WHERE intPresence=1 ORDER BY intDeptID ASC', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -81,7 +84,7 @@ router.post('/department/update', (req, res) => {
 });
 
 //DELETE DEPARTMENTS
-router.post('/department/delete', (req, res) => {
+router.post('/department/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tbldept SET intPresence=0 WHERE intDeptID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -96,7 +99,7 @@ router.post('/department/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE MODEL
-router.post('/model', (req, res) => {   
+router.post('/model', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tblmodel (strModelName, intPresence) VALUES (?, 1)`, [req.body.unitModel], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -107,7 +110,7 @@ router.post('/model', (req, res) => {
 });
 
 // READ MODEL
-router.get('/model', (req, res) => {
+router.get('/model', auth,  (req, res) => {
     db.query('SELECT * FROM cosdd.tblmodel WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -117,7 +120,7 @@ router.get('/model', (req, res) => {
 });
 
 // UPDATE MODEL
-router.post('/model/update', (req, res) => {
+router.post('/model/update', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblmodel SET strModelName=? WHERE intModelID=?`, [req.body.unitModel, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -129,7 +132,7 @@ router.post('/model/update', (req, res) => {
 });
 
 //DELETE MODEL
-router.post('/model/delete', (req, res) => {
+router.post('/model/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblmodel SET intPresence=0 WHERE intModelID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -144,7 +147,7 @@ router.post('/model/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE BRAND
-router.post('/brand', (req, res) => {   
+router.post('/brand', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tblbrand (strUnitBrand, intPresence) VALUES (?, 1)`, [req.body.unitBrand], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -155,7 +158,7 @@ router.post('/brand', (req, res) => {
 });
 
 // READ BRAND
-router.get('/brand', (req, res) => {
+router.get('/brand', auth, (req, res) => {
     db.query('SELECT * FROM cosdd.tblbrand WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -165,7 +168,7 @@ router.get('/brand', (req, res) => {
 });
 
 // UPDATE BRAND
-router.post('/brand/update', (req, res) => {
+router.post('/brand/update',auth,  (req, res) => {
   db.query(`UPDATE cosdd.tblbrand SET strUnitBrand=? WHERE intUnitID=?`, [req.body.unitBrand, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -176,7 +179,7 @@ router.post('/brand/update', (req, res) => {
 });
 
 //DELETE BRAND
-router.post('/brand/delete', (req, res) => {
+router.post('/brand/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblbrand SET intPresence=0 WHERE intUnitID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -191,7 +194,7 @@ router.post('/brand/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE UNIT TYPE
-router.post('/unittype', (req, res) => {   
+router.post('/unittype', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tblunittype (strUnitTypeDesc, intPresence) VALUES (?, 1)`, [req.body.unitType], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -202,7 +205,7 @@ router.post('/unittype', (req, res) => {
 });
 
 // READ UNIT TYPE
-router.get('/unittype', (req, res) => {
+router.get('/unittype', auth, (req, res) => {
     db.query('SELECT * FROM cosdd.tblunittype WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -212,7 +215,7 @@ router.get('/unittype', (req, res) => {
 });
 
 // UPDATE UNIT TYPE
-router.post('/unittype/update', (req, res) => {
+router.post('/unittype/update',auth,  (req, res) => {
   db.query(`UPDATE cosdd.tblunittype SET strUnitTypeDesc=? WHERE intUnitTypeID=?`, [req.body.unitType, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -223,7 +226,7 @@ router.post('/unittype/update', (req, res) => {
 });
 
 //DELETE UNIT TYPE
-router.post('/unittype/delete', (req, res) => {
+router.post('/unittype/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblunittype SET intPresence=0 WHERE intUnitTypeID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -237,7 +240,7 @@ router.post('/unittype/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE TECHNICIAN
-router.post('/technician', (req, res) => {   
+router.post('/technician',auth,  (req, res) => {   
   db.query(`INSERT INTO cosdd.tbltechnician (strTechnicianFName, strTechnicianLName, intPresence) VALUES (?, ?, 1)`, [req.body.techFName, req.body.techLName], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -248,7 +251,7 @@ router.post('/technician', (req, res) => {
 });
 
 // READ TECHNICIAN
-router.get('/technician', (req, res) => {
+router.get('/technician', auth, (req, res) => {
     db.query('SELECT * FROM cosdd.tbltechnician WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -258,7 +261,7 @@ router.get('/technician', (req, res) => {
 });
 
 // UPDATE TECHNICIAN
-router.post('/technician/update', (req, res) => {
+router.post('/technician/update', auth, (req, res) => {
   db.query(`UPDATE cosdd.tbltechnician SET strTechnicianFName=?, strTechnicianLName=? WHERE intTechnicianID=?`, [req.body.techFName, req.body.techLName, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -269,7 +272,7 @@ router.post('/technician/update', (req, res) => {
 });
 
 //DELETE TECHNICIAN
-router.post('/technician/delete', (req, res) => {
+router.post('/technician/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tbltechnician SET intPresence=0 WHERE intTechnicianID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -284,7 +287,7 @@ router.post('/technician/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE STATUS
-router.post('/status', (req, res) => {   
+router.post('/status', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tblstatus (strStatusName, txtStatusDesc) VALUES (?, ?)`, [req.body.statName, req.body.statDesc], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -295,7 +298,7 @@ router.post('/status', (req, res) => {
 });
 
 // READ STATUS
-router.get('/status', (req, res) => {
+router.get('/status', auth, (req, res) => {
     db.query('SELECT * FROM cosdd.tblstatus', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -305,7 +308,7 @@ router.get('/status', (req, res) => {
 });
 
 // UPDATE STATUS
-router.post('/status/update', (req, res) => {
+router.post('/status/update', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblstatus SET strStatusName=?, txtStatusDesc=? WHERE intStatusID=?`, [req.body.statName, req.body.statDesc, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -316,7 +319,7 @@ router.post('/status/update', (req, res) => {
 });
 
 //DELETE STATUS
-router.post('/status/delete', (req, res) => {
+router.post('/status/delete', auth, (req, res) => {
   db.query(`DELETE FROM cosdd.tblstatus WHERE intStatusID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -331,7 +334,7 @@ router.post('/status/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE PRICE
-router.post('/price', (req, res) => { 
+router.post('/price', auth, (req, res) => { 
   db.query(`INSERT INTO cosdd.tblprice (txtUnitDesc, fltPrice, intPresence) VALUES (?, ?, 1)`, [req.body.priStorage, req.body.priPrice], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -342,7 +345,7 @@ router.post('/price', (req, res) => {
 });
 
 // READ PRICE
-router.get('/price', (req, res) => {
+router.get('/price', auth, (req, res) => {
     db.query('SELECT * FROM cosdd.tblprice WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -354,7 +357,7 @@ router.get('/price', (req, res) => {
 });
 
 // UPDATE PRICE
-router.post('/price/update', (req, res) => {
+router.post('/price/update', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblprice SET txtUnitDesc=?, fltPrice=? WHERE intPriceID=?`, [req.body.priStorage, req.body.priPrice, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -365,7 +368,7 @@ router.post('/price/update', (req, res) => {
 });
 
 //DELETE PRICE
-router.post('/price/delete', (req, res) => {
+router.post('/price/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblprice SET intPresence=0 WHERE intPriceID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -380,7 +383,7 @@ router.post('/price/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE EMPLOYEE
-router.post('/employee', (req, res) => {   
+router.post('/employee', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tblemployee (strFirstName, strLastName, strEmpDept, intPresence) VALUES (?, ?, ?, 1)`, [req.body.empFName, req.body.empLName, req.body.empDept], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -391,7 +394,7 @@ router.post('/employee', (req, res) => {
 });
 
 // READ EMPLOYEE
-router.get('/employee', eqaDept, (req, res) => {
+router.get('/employee', auth,  eqaDept, (req, res) => {
     db.query('SELECT * FROM cosdd.tblemployee WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -402,7 +405,7 @@ router.get('/employee', eqaDept, (req, res) => {
 });
 
 // UPDATE EMPLOYEE
-router.post('/employee/update', (req, res) => {
+router.post('/employee/update', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblemployee SET strFirstName=?, strLastName=?, strEmpDept=? WHERE intZFEmpID=?`, [req.body.empFName, req.body.empLName, req.body.empDept, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -413,7 +416,7 @@ router.post('/employee/update', (req, res) => {
 });
 
 //DELETE EMPLOYEE 
-router.post('/employee/delete', (req, res) => {
+router.post('/employee/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblemployee SET intPresence=0 WHERE intZFEmpID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -428,7 +431,7 @@ router.post('/employee/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE STORAGE
-router.post('/storage', (req, res) => {   
+router.post('/storage', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tblstorage (txtStorageEquip, strBrand, strMod, strUnit, intStorageQty, fltPrice, intPresence) VALUES (?, ?, ?, ?, ?, ?, 1)`, [req.body.stoBrand + ' ' + req.body.stoModel + ' - ' + req.body.stoUnit, req.body.stoBrand, req.body.stoModel, req.body.stoUnit, req.body.strgQty, req.body.stoVal], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -439,7 +442,7 @@ router.post('/storage', (req, res) => {
 });
 
 // READ STORAGE
-router.get('/storage', priBrandQuery, priModelQuery, priUnitTypeQuery, (req, res) => {
+router.get('/storage', auth, priBrandQuery, priModelQuery, priUnitTypeQuery, (req, res) => {
     db.query('SELECT * FROM cosdd.tblstorage WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -452,7 +455,7 @@ router.get('/storage', priBrandQuery, priModelQuery, priUnitTypeQuery, (req, res
 });
 
 // UPDATE STORAGE
-router.post('/storage/update', (req, res) => {
+router.post('/storage/update', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblstorage SET txtStorageEquip=?, intStorageQty=?, fltPrice=? WHERE intStorageID=?`, [req.body.stoBrand + ' ' + req.body.stoModel + ' - ' + req.body.stoUnit, req.body.strgQty, req.body.stoVal, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -467,7 +470,7 @@ router.post('/storage/update', (req, res) => {
 });
 
 //DELETE STORAGE
-router.post('/storage/delete', (req, res) => {
+router.post('/storage/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblstorage SET intPresence=0 WHERE intStorageID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -482,7 +485,7 @@ router.post('/storage/delete', (req, res) => {
 //******************************************************* */
 
 // CREATE ACCOUNTS
-router.post('/accounts', (req, res) => {   
+router.post('/accounts', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tblaccounts (strDevice, strEmailAccount, strEmailPass, strIDAccount, strIDAccPassword, intPresence, intStoClaim) VALUES (?, ?, ?, ?, ?, 1, ?)`, [req.body.accDev, req.body.accEma, req.body.accEmaPass, req.body.accIDAcc, req.body.accIDAccPass, req.body.devOwn], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -493,7 +496,7 @@ router.post('/accounts', (req, res) => {
 });
 
 // READ ACCOUNTS
-router.get('/accounts', eqaEmployees, (req, res) => {
+router.get('/accounts', auth, eqaEmployees, (req, res) => {
     db.query('SELECT tblaccounts.*, tblemployee.strFirstName, tblemployee.strLastName FROM tblaccounts INNER JOIN tblemployee ON tblaccounts.intStoClaim=tblemployee.intZFEmpID WHERE tblaccounts.intPresence=1 AND tblemployee.intPresence=1;', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -504,7 +507,7 @@ router.get('/accounts', eqaEmployees, (req, res) => {
 });
 
 // UPDATE ACCOUNTS
-router.post('/accounts/update', (req, res) => {
+router.post('/accounts/update', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblaccounts SET txtAccountType=?, strAccEmail=?, strAccPassword=? WHERE intAccountID=?`, [req.body.accTyp, req.body.accEma, req.body.accPass, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -515,7 +518,7 @@ router.post('/accounts/update', (req, res) => {
 });
 
 //DELETE ACCOUNTS 
-router.post('/accounts/delete', (req, res) => {
+router.post('/accounts/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblaccounts SET intPresence=0 WHERE intAccountID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -531,8 +534,8 @@ router.post('/accounts/delete', (req, res) => {
 //******************************************************* */
 
 // READ INVENTORY RECORDS
-router.get('/equipment', eqaEmployees, stoEquipment, eqaDept, (req, res) => {
-  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtSerialNumber FROM tblownership  INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID WHERE tblownership.intPresence=1 AND tblemployee.intPresence=1;', function(err, results, fields){
+router.get('/equipment', auth, eqaEmployees, stoEquipment, eqaDept, (req, res) => {
+  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtPARNumber, tblownership.txtSerialNumber FROM tblownership  INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID WHERE tblownership.intPresence=1 AND tblemployee.intPresence=1;', function(err, results, fields){
       if (err) throw (err)
       else {
           res.render('transactions/views/equipment', { equipments: results,
@@ -544,8 +547,8 @@ router.get('/equipment', eqaEmployees, stoEquipment, eqaDept, (req, res) => {
 });
 
 // CREATE INVENTORY RECORDS
-router.post('/equipment/create', (req, res) => {   
-db.query(`INSERT INTO cosdd.tblownership (strOwnerDept, txtPropertyNumber, txtSerialNumber, intOwnedBy, dtmMRDate, intPriceFlagID, intPresence) VALUES (?,?,?,?,?,?,1);`, [req.body.equDept, req.body.equProp, req.body.equSer, req.body.equName, req.body.equDat, req.body.equDesc], (err, results, fields) => {
+router.post('/equipment/create', auth, (req, res) => {   
+db.query(`INSERT INTO cosdd.tblownership (strOwnerDept, txtPropertyNumber, txtPARNumber, txtSerialNumber, intOwnedBy, dtmMRDate, intPriceFlagID, intPresence) VALUES (?,?,?,?,?,?,?,1);`, [req.body.equDept, req.body.equProp, req.body.equPAR, req.body.equSer, req.body.equName, req.body.equDat, req.body.equDesc], (err, results, fields) => {
   db.query(`UPDATE tblownership a INNER JOIN tblstorage b ON a.intPriceFlagID=b.intStorageID SET txtActualEquipment = txtStorageEquip`, (err, results, fields) => {
     if (err)
         console.log(err);
@@ -557,7 +560,7 @@ db.query(`INSERT INTO cosdd.tblownership (strOwnerDept, txtPropertyNumber, txtSe
 });
 
 // UPDATE INVENTORY RECORDS
-router.post('/equipment/update', (req, res) => {
+router.post('/equipment/update', auth, (req, res) => {
 db.query(`UPDATE cosdd.tblownership SET strOwnerName=?, strOwnerDept=?, txtActualEquipment=?, txtPropertyNumber=?, txtSerialNumber=? WHERE intOwnershipID=?`, [req.body.equName, req.body.equDept, req.body.equDesc, req.body.equProp, req.body.equSer, req.body.id], (err, results, fields) => {
   if (err)
     console.log(err);
@@ -568,7 +571,7 @@ db.query(`UPDATE cosdd.tblownership SET strOwnerName=?, strOwnerDept=?, txtActua
 });
 
 // SOFT DELETE INVENTORY RECORDS
-router.post('/equipment/delete', (req, res) => {
+router.post('/equipment/delete', auth, (req, res) => {
 db.query(`UPDATE cosdd.tblownership SET intPresence=0 WHERE intOwnershipID=?`, [req.body.id], (err, results, fields) => {
   if (err)
     console.log(err);
@@ -584,7 +587,7 @@ db.query(`UPDATE cosdd.tblownership SET intPresence=0 WHERE intOwnershipID=?`, [
 //******************************************************* */
 
 // READ NETWORK ASSIGN
-router.get('/network', eqaEmployees, uniDevEquipment, accAll, (req, res) => {
+router.get('/network', auth, eqaEmployees, uniDevEquipment, accAll, (req, res) => {
     db.query('SELECT * FROM cosdd.tblnetwork WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -597,8 +600,8 @@ router.get('/network', eqaEmployees, uniDevEquipment, accAll, (req, res) => {
 });
 
 // CREATE NETWORK ASSIGN
-router.post('/network/create', (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblnetwork (strOwnerName, strDeviceName, strDeviceID, strNetworkAddress, intPresence) VALUES (?, ?, ?, ?, 1)`, [req.body.netName, req.body.netDevName, req.body.netDev, req.body.netAdd, req.body.id], (err, results, fields) => {
+router.post('/network/create', auth, (req, res) => {   
+  db.query(`INSERT INTO cosdd.tblnetwork (strOwnerName, strDeviceName, strNetworkAddress, strWifiAddress, intPresence) VALUES (?, ?, ?, ?, 1)`, [req.body.netName, req.body.netDevName, req.body.netAdd, req.body.wifiAdd], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -608,8 +611,8 @@ router.post('/network/create', (req, res) => {
 });
 
 // UPDATE NETWORK ASSIGN
-router.post('/network/update', (req, res) => {
-  db.query(`UPDATE cosdd.tblnetwork SET strOwnerName=?, strDeviceID=?, strDeviceName=?, strNetworkAddress=? WHERE intNetworkID=?`, [req.body.netName, req.body.netDev, req.body.netDevName, req.body.netAdd, req.body.id], (err, results, fields) => {
+router.post('/network/update',auth,  (req, res) => {
+  db.query(`UPDATE cosdd.tblnetwork SET strOwnerName=?, strDeviceName=?, strNetworkAddress=?, strWifiAddress=? WHERE intNetworkID=?`, [req.body.netName, req.body.netDevName, req.body.netAdd, req.body.wifiAdd, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -619,7 +622,7 @@ router.post('/network/update', (req, res) => {
 });
 
 //DELETE NETWORK ASSIGN
-router.post('/network/delete', (req, res) => {
+router.post('/network/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tblnetwork SET intPresence=0 WHERE intNetworkID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
@@ -634,7 +637,7 @@ router.post('/network/delete', (req, res) => {
 //******************************************************* */
 
 // READ INDIVIDUAL SLIP
-router.get('/slip', (req, res) => {
+router.get('/slip', auth, (req, res) => {
     db.query('SELECT * FROM cosdd.tblemployee WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -644,8 +647,8 @@ router.get('/slip', (req, res) => {
 });
 
 // SLIP PAGE PER INDIVIDUAL
-router.get('/slip/:maya', (req, res) => {
-  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtSerialNumber, DATE_FORMAT(tblownership.dtmMRDate, "%M %e, %Y") AS MRDate, fltPrice FROM tblownership INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID INNER JOIN tblstorage ON tblownership.intPriceFlagID=tblstorage.intStorageID WHERE tblownership.intPresence=1 AND intOwnedBy=?;', [req.params.maya], function(err, results, fields){
+router.get('/slip/:maya', auth, (req, res) => {
+  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtPARNumber, tblownership.txtSerialNumber, DATE_FORMAT(tblownership.dtmMRDate, "%M %e, %Y") AS MRDate, fltPrice FROM tblownership INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID INNER JOIN tblstorage ON tblownership.intPriceFlagID=tblstorage.intStorageID WHERE tblownership.intPresence=1 AND intOwnedBy=?;', [req.params.maya], function(err, results, fields){
     if (err) throw (err)
     else {
       console.log(results);
@@ -660,7 +663,7 @@ router.get('/slip/:maya', (req, res) => {
 //                     FINAL REPORT
 //******************************************************* */
 // READ INDIVIDUAL SLIP
-router.get('/invreport', (req, res) => {
+router.get('/invreport', auth, (req, res) => {
     db.query('SELECT *, DATE_FORMAT(dtmMRDate, "%M %e, %Y") AS MRDate FROM tblownership A INNER JOIN tblemployee B ON A.intOwnedBy = B.intZFEmpID INNER JOIN tblstorage C ON A.intPriceFlagID = C.intStorageID;', function(err, results, fields){
         if (err) throw (err)
         else {
@@ -673,7 +676,7 @@ router.get('/invreport', (req, res) => {
 //                     ACTIVE ACCOUNTS
 //******************************************************* */ 
 // READ INDIVIDUAL SLIP
-router.get('/active', (req, res) => {
+router.get('/active', auth, (req, res) => {
   db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblemployee.strEmpDept, tblaccounts.strDevice, tblaccounts.strEmailAccount, tblaccounts.strIDAccount, tblnetwork.strNetworkAddress, tblnetwork.strWifiAddress FROM tblemployee INNER JOIN tblaccounts ON tblemployee.intZFEmpID=tblaccounts.intStoClaim INNER JOIN tblnetwork ON tblaccounts.intAccountID = tblnetwork.intAccConf WHERE tblemployee.intPresence=1 AND tblaccounts.intPresence=1 AND tblnetwork.intPresence=1;', function(err, results, fields){
       if (err) throw (err)
       else {
@@ -852,6 +855,33 @@ function eqaDept(req, res, next){
     return next();
   });  
 }
+
+function countEmp(req, res, next){
+  db.query('SELECT COUNT(intZFEmpID) AS totalEmployees FROM tblemployee WHERE intPresence=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.countEm = results;
+    return next();
+  });  
+}
+
+function countOwn(req, res, next){
+  db.query('SELECT COUNT(intOwnershipID) AS totals FROM tblownership WHERE intPresence=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.countOwner = results;
+    return next();
+  });  
+}
+
+function countDept(req, res, next){
+  db.query('SELECT COUNT(intDeptID) AS deptTotal FROM tbldept WHERE intPresence=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.countDep = results;
+    return next();
+  });  
+}
 //******************************************************* */
 //                     MAINTENANCE
 //******************************************************* */
@@ -909,20 +939,20 @@ function queryInv(req, res, next){
 }
 
 
-router.get('/dashboard', dash);
-router.get('/department', dept);
-router.get('/diagnosis', diag);
-router.get('/status', stat);
-router.get('/technician', tech);
-router.get('/unittype', unittype);
-router.get('/brand', bran, queryBrand);
-router.get('/model', mod);
-router.get('/price', pri);
-router.get('/employee', emp);
-router.get('/accounts', acc);
-router.get('/contact', cont);
-router.get('/storage', sto);
-router.get('/slip/:maya', sliRep);
+router.get('/dashboard', auth, dash);
+router.get('/department', auth, dept);
+router.get('/diagnosis', auth, diag);
+router.get('/status', auth, stat);
+router.get('/technician', auth, tech);
+router.get('/unittype',auth,  unittype);
+router.get('/brand', auth, bran, queryBrand);
+router.get('/model', auth, mod);
+router.get('/price', auth, pri);
+router.get('/employee', auth, emp);
+router.get('/accounts', auth, acc);
+router.get('/contact', auth, cont);
+router.get('/storage', auth, sto);
+router.get('/slip/:maya', auth, sliRep);
 
 function inv(req, res){
     res.render('transactions/views/inventory');
@@ -952,13 +982,13 @@ function sli(req, res){
     res.render('reports/views/slip');
 }
 
-router.get('/inventory', inv);
-router.get('/reports', rep);
-router.get('/slip', sli);
-router.get('/equipment', equ, eqaEmployees);
-router.get('/network', netw);
-router.get('/invreport', invrepo);
-router.get('/active', actacc);
+router.get('/inventory', auth, inv);
+router.get('/reports', auth, rep);
+router.get('/slip', auth, sli);
+router.get('/equipment', auth, equ, eqaEmployees);
+router.get('/network', auth, netw);
+router.get('/invreport', auth, invrepo);
+router.get('/active', auth, actacc);
 
 function login(req, res){
   res.render('authorization/views/login');
