@@ -20,12 +20,14 @@ block unique-content
                   tr
                     th Employee Number
                     th Employee Name
+                    th Department
                     th Action
                 tbody
                   each emp in employees
                     tr
                       td #{emp.intZFEmpID}
                       td #{emp.strFirstName} #{emp.strLastName}
+                      td #{emp.strEmpDept}
                       td
                         button.btn.btn-primary.btn-circle(type='button', title='Edit employee details', data-toggle="modal", data-target="#editModal", data-fname=emp.strFirstName, data-lname=emp.strLastName, data-id=emp.intZFEmpID)
                           i.fa.fa-wrench
@@ -44,14 +46,20 @@ block unique-content
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   input.hidden#id(type='text' name='id')
                   .row
-                    .col-md-12
+                    .col-md-6
                       .form-group
                         label.control-label Employee's First Name
-                        input#empFName.form-control(type='text' name='empFName' placeholder="Ralph" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-12
+                        input.empFName.form-control(type='text' name='empFName' placeholder="Ralph" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-6
                       .form-group
                         label.control-label Employee's Last Name
-                        input#empLName.form-control(type='text' name='empLName' placeholder="Stilton" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.empLName.form-control(type='text' name='empLName' placeholder="Stilton" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-12
+                      .form-group
+                        label.control-label Department
+                        select.empDept.form-control(name='empDept')
+                          each dep in deppy
+                            option.empDept(value=dep.strDeptCode) #{dep.strDeptCode} - #{dep.txtDeptName}
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -68,14 +76,20 @@ block unique-content
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   input.hidden#id(type='text' name='id')
                   .row
-                    .col-md-12
+                    .col-md-6
                       .form-group
                         label.control-label Employee's First Name
-                        input.techFName.form-control(type='text' name='empFName' onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-12
+                        input.empFName.form-control(type='text' name='empFName' onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-6
                       .form-group
                         label.control-label Employee's Last Name
-                        input.techLName.form-control(type='text' name='empLName' onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.empLName.form-control(type='text' name='empLName' onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-12
+                      .form-group
+                        label.control-label Department
+                        select.empDept.form-control(name='empDept')
+                          each dep in deppy
+                            option.empDept(value=dep.strDeptCode) #{dep.strDeptCode} - #{dep.txtDeptName}
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -116,8 +130,8 @@ block unique-content
       var fname = button.data('fname')
       let modal = $(this);     
       modal.find('.modal-body #id').val(`${id}`)
-      modal.find('.modal-body .techFName').val(`${fname}`)
-      modal.find('.modal-body .techLName').val(`${lname}`)
+      modal.find('.modal-body .empFName').val(`${fname}`)
+      modal.find('.modal-body .empLName').val(`${lname}`)
       });
     script.
       var alphaNumOnly = /^[a-zA-Z0-9]+$/i;

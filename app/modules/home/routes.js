@@ -381,7 +381,7 @@ router.post('/price/delete', (req, res) => {
 
 // CREATE EMPLOYEE
 router.post('/employee', (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblemployee (strFirstName, strLastName, intPresence) VALUES (?, ?, 1)`, [req.body.empFName, req.body.empLName], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tblemployee (strFirstName, strLastName, strEmpDept, intPresence) VALUES (?, ?, ?, 1)`, [req.body.empFName, req.body.empLName, req.body.empDept], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -391,18 +391,19 @@ router.post('/employee', (req, res) => {
 });
 
 // READ EMPLOYEE
-router.get('/employee', (req, res) => {
+router.get('/employee', eqaDept, (req, res) => {
     db.query('SELECT * FROM cosdd.tblemployee WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
-            res.render('maintenance/views/employee', { employees: results });
+            res.render('maintenance/views/employee', { employees: results,
+                                                       deppy: req.depty });
         }
     });
 });
 
 // UPDATE EMPLOYEE
 router.post('/employee/update', (req, res) => {
-  db.query(`UPDATE cosdd.tblemployee SET txtUnitDesc=?, fltPrice=? WHERE intZFEmpID=?`, [req.body.statName, req.body.statDesc, req.body.id], (err, results, fields) => {
+  db.query(`UPDATE cosdd.tblemployee SET strFirstName=?, strLastName=?, strEmpDept=? WHERE intZFEmpID=?`, [req.body.empFName, req.body.empLName, req.body.empDept, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -482,7 +483,7 @@ router.post('/storage/delete', (req, res) => {
 
 // CREATE ACCOUNTS
 router.post('/accounts', (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblaccounts (strDevice, strDeviceAccount, strEmailAccount, strEmailPass, strIDAccount, strIDAccPassword, strNetworkAddress, strWifiAddress, intPresence) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)`, [req.body.accDev, req.body.accDevAcc, req.body.accEma, req.body.accEmaPass, req.body.accIDAcc, req.body.accIDAccPass, req.body.accNetAdd, req.body.accWifi], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tblaccounts (strDevice, strEmailAccount, strEmailPass, strIDAccount, strIDAccPassword, intPresence, intStoClaim) VALUES (?, ?, ?, ?, ?, 1, ?)`, [req.body.accDev, req.body.accEma, req.body.accEmaPass, req.body.accIDAcc, req.body.accIDAccPass, req.body.devOwn], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -492,11 +493,12 @@ router.post('/accounts', (req, res) => {
 });
 
 // READ ACCOUNTS
-router.get('/accounts', (req, res) => {
-    db.query('SELECT * FROM cosdd.tblaccounts WHERE intPresence=1', function(err, results, fields){
+router.get('/accounts', eqaEmployees, (req, res) => {
+    db.query('SELECT tblaccounts.*, tblemployee.strFirstName, tblemployee.strLastName FROM tblaccounts INNER JOIN tblemployee ON tblaccounts.intStoClaim=tblemployee.intZFEmpID WHERE tblaccounts.intPresence=1 AND tblemployee.intPresence=1;', function(err, results, fields){
         if (err) throw (err)
         else {
-            res.render('maintenance/views/accounts', { accounts: results });
+            res.render('maintenance/views/accounts', { accounts: results,
+                                                       owner: req.employ });
         }
     });
 });

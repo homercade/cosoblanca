@@ -26,12 +26,12 @@ block unique-content
                     th Email Account
                     th Email Password
                     th Account ID
-                    th Accound ID Password
+                    th Account ID Password
                     th Actions
                 tbody
                   each acc in accounts
                     tr
-                      td
+                      td #{acc.strFirstName} #{acc.strLastName}
                       td #{acc.strDevice}
                       td #{acc.strDeviceAccount}
                       td #{acc.strEmailAccount}
@@ -59,15 +59,13 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Device Owner
-                        input#accOwn.form-control(type='text' name='accOwn' placeholder="Diane Nguyen" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-6
+                        select.devOwn.form-control(name='devOwn')
+                          each oww in owner
+                            option(value=oww.intZFEmpID) #{oww.strFirstName} #{oww.strLastName}
+                    .col-md-12
                       .form-group
                         label.control-label Device
                         input#accDev.form-control(type='text' name='accDev' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-6
-                      .form-group
-                        label.control-label Device Account
-                        input#accDevAcc.form-control(type='text' name='accDevAcc' placeholder="NHA" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Email Account
@@ -76,10 +74,14 @@ block unique-content
                       .form-group
                         label.control-label Email Password
                         input#accEmaPass.form-control(type='password' name='accEmaPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-12
+                    .col-md-6
                       .form-group
                         label.control-label ID Account
                         input#accIDAcc.form-control(type='text' name='accIDAcc' placeholder="nha@icloud.com" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-6
+                      .form-group
+                        label.control-label Account Password
+                        input#accIDAccPass.form-control(type='password' name='accIDAccPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
