@@ -8,11 +8,23 @@ html(lang='en')
     meta(name='author', content='')
     title Login
     link(href='../vendor/bootstrap/css/custom-style.css', rel='stylesheet')
+    link(rel='stylesheet' type='text/css' href='../../vendor/bootstrap/css/loader.css')
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js")
+    script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js")
+    script.
+      $(window).load(function() {
+        // Animate loader off screen
+        $(".se-pre-con").fadeOut("slow");;
+      });
+    .se-pre-con
     .login-page
         .form
+            img.logImg(src="../../img/icon.png" alt="Image Title" width="80" height="80")
+            br 
+            br
             form.login-form(action='/login', method='get')
               input#username(type='text', placeholder='Username' name='username')
-              input#password(type='password', placeholder='password' name='password')
+              input#password(type='password', placeholder='••••••••' name='password')
               button Login
               p.message
-                | Hes
+                | Welcome to COSOBLANCA!

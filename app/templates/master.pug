@@ -37,6 +37,10 @@ html(lang='en')
     link(rel='stylesheet', type='text/css', href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/css/bootstrap-datepicker.css')
 
     script(src='../../vendor/metisMenu/metisMenu.min.js')
+    link(rel='stylesheet' type='text/css' href='../../vendor/bootstrap/css/loader.css')
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.2/modernizr.js")
+    //- script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js")
+    
     script.
       $(document).ready(function() {
         $('.datatables').DataTable({
@@ -50,6 +54,12 @@ html(lang='en')
           $(".datepicker").datepicker({ 
             format: "yyyy-mm-dd" })
        });
+       
+    script.
+      $(window).load(function() {
+        // Animate loader off screen
+        $(".se-pre-con").fadeOut("slow");;
+      });
 
   body
     #wrapper
