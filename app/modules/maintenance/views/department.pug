@@ -120,7 +120,7 @@ block unique-content
       });
       
     script.
-      var alphaNumOnly = /^[a-zA-Z0-9]+$/i;
+      var alphaNumOnly = /^[a-zA-Z0-9 ]+$/i;
 
       function restrictCharacters(myfield, e, restrictionType) {
           if (!e) var e = window.event

@@ -52,7 +52,7 @@ block unique-content
             .modal-body
               .container-fluid
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
-                  input.hidden#id(type='text' name='id')
+                  input.hidden.id(type='text' name='id')
                   .row
                     .col-md-12
                       .form-group
@@ -63,23 +63,23 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Device
-                        input#accDev.form-control(type='text' name='accDev' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accDev.form-control(type='text' name='accDev' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Email Account
-                        input#accEma.form-control(type='text' name='accEma' placeholder="example@gmail.com" onkeypress='return restrictCharactersB(this, event, alphaNumOnly)' required)
+                        input.accEma.form-control(type='text' name='accEma' placeholder="example@gmail.com" onkeypress='return restrictCharactersB(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Email Password
-                        input#accEmaPass.form-control(type='password' name='accEmaPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accEmaPass.form-control(type='password' name='accEmaPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label ID Account
-                        input#accIDAcc.form-control(type='text' name='accIDAcc' placeholder="nha@icloud.com" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accIDAcc.form-control(type='text' name='accIDAcc' placeholder="nha@icloud.com" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Account Password
-                        input#accIDAccPass.form-control(type='password' name='accIDAccPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accIDAccPass.form-control(type='password' name='accIDAccPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -96,30 +96,32 @@ block unique-content
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   input.hidden#id(type='text' name='id')
                   .row
-                    .col-md-6
+                    .col-md-12
+                      .form-group
+                        label.control-label Device Owner
+                        select.devOwn.form-control(name='devOwn')
+                          each oww in owner
+                            option(value=oww.intZFEmpID) #{oww.strFirstName} #{oww.strLastName}
+                    .col-md-12
                       .form-group
                         label.control-label Device
-                        input#accDev.form-control(type='text' name='accDev' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-6
-                      .form-group
-                        label.control-label Device Account
-                        input#accDevAcc.form-control(type='text' name='accDevAcc' placeholder="NHA" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accDev.form-control(type='text' name='accDev' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Email Account
-                        input#accEma.form-control(type='text' name='accEma' placeholder="example@gmail.com" onkeypress='return restrictCharactersB(this, event, alphaNumOnly)' required)
+                        input.accEma.form-control(type='text' name='accEma' placeholder="example@gmail.com" onkeypress='return restrictCharactersB(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Email Password
-                        input#accEmaPass.form-control(type='password' name='accEmaPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accEmaPass.form-control(type='password' name='accEmaPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label ID Account
-                        input#accIDAcc.form-control(type='text' name='accIDAcc' placeholder="nha@icloud.com" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accIDAcc.form-control(type='text' name='accIDAcc' placeholder="nha@icloud.com" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
-                        label.control-label ID Account Password
-                        input#accIDAccPass.form-control(type='password' name='accIDAccPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        label.control-label Account Password
+                        input.accIDAccPass.form-control(type='password' name='accIDAccPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save

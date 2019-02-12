@@ -7,7 +7,7 @@ var db = require('../../lib/database')();
 var session = require('express-session');
 
 var auth = function(req, res, next){
-  if(req.session && req.session.user === 'amy' && req.session.admin)
+  if(req.session && req.session.user === 'root' && req.session.admin)
     return next();
   else
     res.redirect('/');
@@ -22,8 +22,8 @@ router.get('/login', function(req, res) {
   if(!req.query.username || !req.query.password){
     res.redirect('/');
   }
-  else if(req.query.username === 'root' && req.query.password === 'pass'){
-    req.session.user = 'amy';
+  else if(req.query.username === 'admin' && req.query.password === 'pass'){
+    req.session.user = 'root';
     req.session.admin = true;
     res.redirect('/dashboard');
   }

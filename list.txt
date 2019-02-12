@@ -1,8 +1,6 @@
 To Do:
 
-> Sessions (login-logout)
 > Network-Active Accounts Connection
 > Inner Validations
 > Nodemailer
-> CSS, Bootstrap, and images
 > QA
