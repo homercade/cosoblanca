@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.24, for Win32 (x86)
 --
 -- Host: 127.0.0.1    Database: cosdd
 -- ------------------------------------------------------
--- Server version	5.7.21-log
+-- Server version	5.7.25
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -34,7 +34,7 @@ CREATE TABLE `tblaccounts` (
   PRIMARY KEY (`intAccountID`),
   KEY `intStoClaim` (`intStoClaim`),
   CONSTRAINT `intStoClaim` FOREIGN KEY (`intStoClaim`) REFERENCES `tblemployee` (`intZFEmpID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `tblaccounts` (
 
 LOCK TABLES `tblaccounts` WRITE;
 /*!40000 ALTER TABLE `tblaccounts` DISABLE KEYS */;
-INSERT INTO `tblaccounts` VALUES (000001,'MacBook Pro','nh@_cosdd001','heyyyy','nha_cosdd001@icloud.com','nhacosdd001',1,000001),(000002,'Lenovo','dianenguyen@gmail.com','sadgirl','dianenguyen@icloud.com','sadgirl',1,000002);
+INSERT INTO `tblaccounts` VALUES (000001,'MacBook Pro','nh@_cosdd001','heyyyy','nha_cosdd001@icloud.com','nhacosdd001',1,000001),(000002,'Lenovo','dianenguyen@gmail.com','sadgirl','dianenguyen@icloud.com','sadgirl',0,000002),(000003,'MacBookPro','hey@gmail.com','dadasd','fish@icloud.com','aadasdasd',0,000008),(000004,'MacBook Pro','aryastark@winterfell.com','onetwothree','aryastark@icloud.com','onethreefour',1,000003),(000005,'MacBook Pro','dianenguyen@gmail.com','sadgirl','dianenguyen@icloud.com','sadsadgirl',1,000002),(000006,'MacBook Pro','klinkpachinko@gmail.com','klink','klinkpachinko@icloud.com','klinkklink',1,000008);
 /*!40000 ALTER TABLE `tblaccounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -85,7 +85,7 @@ CREATE TABLE `tbldept` (
   `txtDeptName` longtext NOT NULL,
   `intPresence` tinyint(1) NOT NULL,
   PRIMARY KEY (`intDeptID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -94,7 +94,7 @@ CREATE TABLE `tbldept` (
 
 LOCK TABLES `tbldept` WRITE;
 /*!40000 ALTER TABLE `tbldept` DISABLE KEYS */;
-INSERT INTO `tbldept` VALUES (1,'None','No department assigned yet',1),(2,'OGM','Office of the General Manager',1),(3,'HR','Human Resource',1),(4,'AGM','Assisstant of the General Manager',1),(5,'ACCO','Secretariat',1),(8,'COSDD','Corporate Services and System Development Department',1);
+INSERT INTO `tbldept` VALUES (1,'None','No department assigned yet',1),(2,'OGM','Office of the General Manager',1),(3,'HR','Human Resource',1),(4,'AGM','Assisstant of the General Manager',1),(5,'ACCO','Secretariat',1),(8,'COSO','Corporate Operations and Systems Office',1),(9,'TEST','Testings',0);
 /*!40000 ALTER TABLE `tbldept` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,7 +112,7 @@ CREATE TABLE `tblemployee` (
   `strEmpDept` varchar(11) DEFAULT NULL,
   `intPresence` tinyint(1) NOT NULL,
   PRIMARY KEY (`intZFEmpID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,7 +121,7 @@ CREATE TABLE `tblemployee` (
 
 LOCK TABLES `tblemployee` WRITE;
 /*!40000 ALTER TABLE `tblemployee` DISABLE KEYS */;
-INSERT INTO `tblemployee` VALUES (000001,'Homer','Cadena','COSDD',1),(000002,'Diane','Nguyen','OGM',1),(000003,'Arya','Stark','HR',1),(000006,'Jeffry','Paguia','ACCO',1),(000007,'Richel','Natividad','COSDD',1),(000008,'Klink','Pachinko','None',1);
+INSERT INTO `tblemployee` VALUES (000001,'Homer','Cadena','COSDD',1),(000002,'Diane','Nguyen','OGM',1),(000003,'Arya','Stark','HR',1),(000006,'Jeffry','Paguia','ACCO',1),(000007,'Richel','Natividad','COSDD',0),(000008,'Klink','Pachinko','None',1),(000009,'new','employee','None',0),(000010,'John Homer','Cadena','ACCO',0);
 /*!40000 ALTER TABLE `tblemployee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,6 +167,7 @@ CREATE TABLE `tblmodel` (
   `intModelID` int(11) NOT NULL AUTO_INCREMENT,
   `strModelName` varchar(45) NOT NULL,
   `intPresence` tinyint(4) NOT NULL,
+  `intCompBool` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`intModelID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -177,7 +178,7 @@ CREATE TABLE `tblmodel` (
 
 LOCK TABLES `tblmodel` WRITE;
 /*!40000 ALTER TABLE `tblmodel` DISABLE KEYS */;
-INSERT INTO `tblmodel` VALUES (1,'MacBook Pro',1),(6,'Think Pad',1),(7,'Inkjet',1),(8,'Tower',1);
+INSERT INTO `tblmodel` VALUES (1,'MacBook Pro',1,1),(6,'Think Pad',1,0),(7,'Inkjet',1,0),(8,'Tower',1,1);
 /*!40000 ALTER TABLE `tblmodel` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -190,8 +191,7 @@ DROP TABLE IF EXISTS `tblnetwork`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tblnetwork` (
   `intNetworkID` int(11) NOT NULL AUTO_INCREMENT,
-  `strOwnerName` varchar(45) NOT NULL,
-  `strDeviceID` varchar(45) NOT NULL,
+  `strOwnerName` varchar(45) DEFAULT NULL,
   `strDeviceName` varchar(45) NOT NULL,
   `strNetworkAddress` longtext NOT NULL,
   `strWifiAddress` longtext,
@@ -200,7 +200,7 @@ CREATE TABLE `tblnetwork` (
   PRIMARY KEY (`intNetworkID`),
   KEY `intAccConf` (`intAccConf`),
   CONSTRAINT `intAccConf` FOREIGN KEY (`intAccConf`) REFERENCES `tblaccounts` (`intAccountID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -209,7 +209,7 @@ CREATE TABLE `tblnetwork` (
 
 LOCK TABLES `tblnetwork` WRITE;
 /*!40000 ALTER TABLE `tblnetwork` DISABLE KEYS */;
-INSERT INTO `tblnetwork` VALUES (3,'Diane Nguyen','NHA_COSDD001','Laptop','A0:B0:C0:D0:E0:F0','00-11-22-33-44-55',1,000001);
+INSERT INTO `tblnetwork` VALUES (3,'Homer Cadena','Apple MacBook Pro','A0:B0:C0:D0:E0:F0','00-11-22-33-44-55',1,000001),(4,'Arya Stark','Apple MacBook Pro','8A:B5:34:71:DE:AA','10-20-40-AE-10-BB',1,000003),(5,'Diane Nguyen','Apple MacBook Pro','21:21:21:21:21:21','01-02-03-04-05-06',0,000002),(6,'Diane Nguyen','Apple MacBook Pro','yetretert','fghfghfgh',0,000002),(7,'Homer Cadena','Apple MacBook Pro','yyyyyyyyyyy','yyyyyyyyyyyy',1,000001),(9,'Arya Stark','Apple MacBook Pro','werwerer','werwerer',1,000003),(10,'Diane Nguyen','Apple MacBook Pro','d:i:a:n:e','n:g:u:y:e:n',1,000002);
 /*!40000 ALTER TABLE `tblnetwork` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -231,9 +231,11 @@ CREATE TABLE `tblownership` (
   `intPriceFlagID` int(11) DEFAULT NULL,
   `intPresence` tinyint(1) NOT NULL,
   `intOwnedBy` int(6) unsigned zerofill NOT NULL,
+  `intNetworkFlag` tinyint(1) DEFAULT NULL,
+  `isDevice` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`intOwnershipID`),
   KEY `intOwnedBy` (`intOwnedBy`),
-  KEY `intPriceFlag_idx` (`intPriceFlagID`),
+  KEY `intPriceFlag` (`intPriceFlagID`),
   CONSTRAINT `intOwnedBy` FOREIGN KEY (`intOwnedBy`) REFERENCES `tblemployee` (`intZFEmpID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intPriceFlag` FOREIGN KEY (`intPriceFlagID`) REFERENCES `tblstorage` (`intStorageID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=latin1;
@@ -245,7 +247,7 @@ CREATE TABLE `tblownership` (
 
 LOCK TABLES `tblownership` WRITE;
 /*!40000 ALTER TABLE `tblownership` DISABLE KEYS */;
-INSERT INTO `tblownership` VALUES (3,'COSDD','Apple MacBook Pro - Laptop','COSO001','ABCD132','19-08-90','2019-01-17',2,1,000001),(11,'OGM','Lenovo ThinkPad - Monitor','OGM371','ABCE132','19-08-91','2019-02-02',1,1,000002),(12,'COSDD','Apple MacBook Pro - Laptop','COSO002','ADGE132','19-08-92','2019-01-23',2,1,000001),(13,'Secretariat','EPSON L120 - Printer','HATDOG','S4NDW1CH','19-08-93','2019-04-01',10,1,000003),(21,'OGM','Huawei D Series - Document Reader','OGM002','ATTP13','19-08-94','2019-05-08',11,1,000003),(22,'COSDD','Lenovo ThinkPad - Monitor','COSO003','BNHA132','19-08-95','2019-02-01',1,1,000001),(23,'OGM','Huawei D Series - Document Reader','OGM004','PRNH132','19-08-96','2019-02-18',11,1,000003),(25,'COSDD','Apple MacBook Pro - Laptop','COSO00069','JGHT132','19-08-97','2019-02-07',2,1,000006),(26,'COSDD','Apple MacBook Pro - Laptop','COSO0011','ABCD111','19-08-98','2019-02-07',2,1,000007),(27,'HR','Lenovo ThinkPad - Monitor','COSO0100','ABCDEFG','19-08-13','2019-02-11',1,1,000008),(28,'HR','Apple MacBook Pro - Laptop','COSO0100','ABCDEFG','19-08-13','2019-02-11',2,1,000008);
+INSERT INTO `tblownership` VALUES (3,'COSDD','Apple MacBook Pro - Laptop','COSO001','ABCD132','19-08-90','2019-01-17',2,1,000001,0,1),(11,'OGM','Lenovo ThinkPad - Monitor','OGM371','ABCE132','19-08-91','2019-02-02',1,1,000002,0,0),(12,'COSDD','Apple MacBook Pro - Laptop','COSO002','ADGE132','19-08-92','2019-01-23',2,1,000001,0,1),(13,'Secretariat','EPSON L120 - Printer','HATDOG','S4NDW1CH','19-08-93','2019-04-01',10,1,000003,0,0),(21,'OGM','Huawei D Series - Document Reader','OGM002','ATTP13','19-08-94','2019-05-08',11,1,000003,0,0),(22,'COSDD','Lenovo ThinkPad - Monitor','COSO003','BNHA132','19-08-95','2019-02-01',1,1,000001,0,0),(23,'OGM','Huawei D Series - Document Reader','OGM004','PRNH132','19-08-96','2019-02-18',11,1,000003,0,0),(25,'COSDD','Apple MacBook Pro - Laptop','COSO00069','JGHT132','19-08-97','2019-02-07',2,1,000006,0,1),(26,'COSDD','Apple MacBook Pro - Laptop','COSO0011','ABCD111','19-08-98','2019-02-07',2,1,000007,0,1),(27,'HR','Lenovo ThinkPad - Monitor','COSO0100','ABCDEFG','19-08-13','2019-02-11',1,1,000008,0,0),(28,'HR','Apple MacBook Pro - Laptop','COSO0100','ABCDEFG','19-08-13','2019-02-11',2,1,000008,0,1);
 /*!40000 ALTER TABLE `tblownership` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -319,9 +321,9 @@ CREATE TABLE `tblstorage` (
   `intStorageQty` int(6) NOT NULL,
   `fltPrice` float NOT NULL,
   `intPresence` tinyint(1) NOT NULL,
-  `isDevice` tinyint(1) DEFAULT NULL COMMENT 'to determine whether or not the unit is a device or not\n\n0 - not a device\n1 - is a device',
+  `intIsDevice` tinyint(1) DEFAULT NULL COMMENT 'to determine whether or not the unit is a device or not\n\n0 - not a device\n1 - is a device',
   PRIMARY KEY (`intStorageID`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -330,7 +332,7 @@ CREATE TABLE `tblstorage` (
 
 LOCK TABLES `tblstorage` WRITE;
 /*!40000 ALTER TABLE `tblstorage` DISABLE KEYS */;
-INSERT INTO `tblstorage` VALUES (1,'Lenovo ThinkPad - Monitor','Lenovo','ThinkPad','Monitor',200,3250,1,0),(2,'Apple MacBook Pro - Laptop','Apple','MacBook Pro','Laptop',5,71000,1,1),(10,'EPSON L120 - Printer','EPSON','L120','Printer',9,13500,1,0),(11,'Huawei D Series - Document Reader','Huawei','D Series','Document Reader',6,1975,1,0);
+INSERT INTO `tblstorage` VALUES (1,'Lenovo ThinkPad - Monitor','Lenovo','ThinkPad','Monitor',200,3250,1,0),(2,'Apple MacBook Pro - Laptop','Apple','MacBook Pro','Laptop',5,71000,1,1),(10,'EPSON L120 - Printer','EPSON','L120','Printer',9,13500,1,0),(11,'Huawei D Series - Document Reader','Huawei','D Series','Document Reader',6,1975,1,0),(12,'Testing Protocols Testing Protocosl - Laptop','Testing Protocol','Testing Protocol','Desktop',77,8857570,0,NULL);
 /*!40000 ALTER TABLE `tblstorage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -373,7 +375,7 @@ CREATE TABLE `tblunittype` (
   `intPresence` tinyint(1) NOT NULL,
   `intCompBool` tinyint(1) DEFAULT NULL COMMENT 'intCompBool: this is to determine whether a unit is a computing device or a peripheral device (to be used in network addresses).\n\n0 - Peripheral Devices\n1 - Computing Devices',
   PRIMARY KEY (`intUnitTypeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -382,7 +384,7 @@ CREATE TABLE `tblunittype` (
 
 LOCK TABLES `tblunittype` WRITE;
 /*!40000 ALTER TABLE `tblunittype` DISABLE KEYS */;
-INSERT INTO `tblunittype` VALUES (1,'Laptop',1,1),(2,'Desktop',1,1),(3,'Printer',1,0),(4,'Keyboard',0,0),(5,'UPS',1,0),(6,'Monitor',0,0),(7,'Document Reader',1,NULL),(8,'henlo',0,NULL);
+INSERT INTO `tblunittype` VALUES (1,'Laptop',1,1),(2,'Desktop',1,1),(3,'Printer',1,0),(4,'Keyboard',0,0),(5,'UPS',1,0),(6,'Monitor',0,0),(7,'Document Reader',1,NULL),(8,'henlo',0,NULL),(9,'Functionality Tests',0,NULL);
 /*!40000 ALTER TABLE `tblunittype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -395,10 +397,10 @@ DROP TABLE IF EXISTS `tbluser`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbluser` (
   `intUserID` int(11) NOT NULL AUTO_INCREMENT,
-  `strUserName` varchar(6) NOT NULL,
-  `strUserPass` varchar(8) NOT NULL,
+  `strUsername` varchar(11) NOT NULL,
+  `strPassword` varchar(11) NOT NULL,
   PRIMARY KEY (`intUserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -407,6 +409,7 @@ CREATE TABLE `tbluser` (
 
 LOCK TABLES `tbluser` WRITE;
 /*!40000 ALTER TABLE `tbluser` DISABLE KEYS */;
+INSERT INTO `tbluser` VALUES (1,'admin','password'),(2,'root','pass'),(3,'homer@dev','rofohpde');
 /*!40000 ALTER TABLE `tbluser` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -444,4 +447,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-11 16:33:27
+-- Dump completed on 2019-02-14  6:16:28

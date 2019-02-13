@@ -11,7 +11,7 @@ block unique-content
           button.btn.btn-primary.btn-success.btn-lg.pull-right(type='button', data-toggle="modal", data-target="#addModal")
             i.fa.fa-plus-circle.fa-fw
             |  Set Accounts
-          button.btn.btn-info.btn-primary.btn-lg.pull-right#helpMod(type='button', title="What's this?", data-toggle="modal", data-target="#helpModal")
+          button.btn.btn-info.btn-primary.btn-lg.pull-right.helpMod(type='button', title="What's this?", data-toggle="modal", data-target=".helpModal")
             i.fa.fa-question.fa-fw
       .col-lg-12
         .panel.panel-default
@@ -177,7 +177,12 @@ block unique-content
       });
 
     script.
-      $('#helpMod').click(function(){
+      $('.helpMod').click(function(){
+        swal("Account Maintenance", "This page displays all account details including the user's email address, usernames, and passwords.")
+      });
+      
+    script.
+      $('.helpMod').click(function(){
         swal("Account Maintenance", "This page displays all account details including the user's email address, usernames, and passwords.")
       });
 

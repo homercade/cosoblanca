@@ -1,6 +1,3 @@
 To Do:
-
-> Network-Active Accounts Connection
 > Inner Validations
 > Nodemailer
-> QA

@@ -53,7 +53,7 @@ router.get('/dashboard', auth, countEmp, countOwn, countDept, (req, res) => {
 //******************************************************* */
 // CREATE DEPARTMENTS
 router.post('/department', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tbldept (strDeptCode, txtDeptNamen intPresence) VALUES (?, ?, 1)`, [req.body.deptCode, req.body.deptName], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tbldept (strDeptCode, txtDeptName, intPresence) VALUES (?, ?, 1)`, [req.body.deptCode, req.body.deptName], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -680,7 +680,7 @@ router.get('/invreport', auth, (req, res) => {
 //******************************************************* */ 
 // READ INDIVIDUAL SLIP
 router.get('/active', auth, (req, res) => {
-  db.query('SELECT tblnetwork.strOwnerName, tblnetwork.strDeviceName, tblnetwork.strNetworkAddress, tblnetwork.strWifiAddress, tblaccounts.strEmailAccount, tblaccounts.strIDAccount, tblemployee.strEmpDept FROM tblnetwork INNER JOIN tblaccounts ON tblnetwork.intAccConf=tblaccounts.intStoClaim INNER JOIN tblemployee ON tblaccounts.intStoClaim=tblemployee.intZFEmpID WHERE tblnetwork.intPresence=1', function(err, results, fields){
+  db.query('SELECT tblnetwork.strOwnerName, tblnetwork.strDeviceName, tblnetwork.strNetworkAddress, tblnetwork.strWifiAddress, tblaccounts.strEmailAccount, tblaccounts.strIDAccount, tblemployee.strEmpDept FROM tblnetwork INNER JOIN tblaccounts ON tblnetwork.intAccConf=tblaccounts.intStoClaim INNER JOIN tblemployee ON tblaccounts.intStoClaim=tblemployee.intZFEmpID WHERE tblnetwork.intPresence=1 AND tblaccounts.intPresence=1 AND tblemployee.intPresence=1;', function(err, results, fields){
       if (err) throw (err)
       else {
           res.render('reports/views/active', {  actres: results });
