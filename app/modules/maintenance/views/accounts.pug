@@ -37,7 +37,7 @@ block unique-content
                       td #{acc.strIDAccount}
                       td #{acc.strIDAccPassword}
                       td
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit account details', data-toggle="modal", data-target="#editModal", data-id=acc.intAccountID, data-dev=acc.strDevice, data-devid=acc.strDeviceAccount, data-email=acc.strEmailAccount, data-idacc=acc.strIDAccount, data-pass=acc.strPassword, data-netw=acc.strNetworkAddress)
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit account details', data-toggle="modal", data-target="#editModal", data-id=acc.intAccountID, data-dev=acc.strDevice, data-devid=acc.strDeviceAccount, data-email=acc.strEmailAccount, data-empass=acc.strEmailPass, data-idacc=acc.strIDAccount, data-idpass=acc.strIDAccPassword, data-netw=acc.strNetworkAddress)
                           i.fa.fa-wrench
                         button.btn.btn-danger.btn-circle(type='button', title='Delete account details', data-toggle="modal", data-target="#deleteModal" data-id=acc.intAccountID)
                           i.fa.fa-trash
@@ -161,16 +161,18 @@ block unique-content
       var dev = button.data('dev')
       var devid = button.data('devid')
       var email = button.data('email')
+      var empass = button.data('empass')
       var idacc = button.data('idacc')
-      var pass = button.data('pass')
+      var idpass = button.data('idpass')
       var netw = button.data('netw')
       let modal = $(this);     
       modal.find('.modal-body .id').val(`${id}`)
       modal.find('.modal-body .accDev').val(`${dev}`)
-      modal.find('.modal-body .accPass').val(`${pass}`)
       modal.find('.modal-body .accDevAcc').val(`${devid}`)
       modal.find('.modal-body .accEma').val(`${email}`)
+      modal.find('.modal-body .accEmaPass').val(`${empass}`)
       modal.find('.modal-body .accIDAcc').val(`${idacc}`)
+      modal.find('.modal-body .accIDAccPass').val(`${idpass}`)
       modal.find('.modal-body .accNetAdd').val(`${netw}`)
       });
 

@@ -587,26 +587,29 @@ db.query(`UPDATE cosdd.tblownership SET intPresence=0 WHERE intOwnershipID=?`, [
 //******************************************************* */
 
 // READ NETWORK ASSIGN
-router.get('/network', auth, eqaEmployees, uniDevEquipment, accAll, (req, res) => {
+router.get('/network', auth, eqaEmployees, uniDevEquipment, accAll, isThatADevice, (req, res) => {
     db.query('SELECT * FROM cosdd.tblnetwork WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
             res.render('transactions/views/network', {  networks: results,   
                                                         employ: req.employ,
                                                         devvy: req.devvy,  
-                                                        accy: req.accy });
+                                                        accy: req.accy,
+                                                        device: req.issaDevice });
         }
     });
 });
 
 // CREATE NETWORK ASSIGN
 router.post('/network/create', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblnetwork (strOwnerName, strDeviceName, strNetworkAddress, strWifiAddress, intPresence) VALUES (?, ?, ?, ?, 1)`, [req.body.netName, req.body.netDevName, req.body.netAdd, req.body.wifiAdd], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-        res.redirect('/network');
-    }
+  db.query(`INSERT INTO cosdd.tblnetwork (strDeviceName, strNetworkAddress, strWifiAddress, intAccConf, intPresence) VALUES (?, ?, ?, ?, 1)`, [req.body.netDevName, req.body.netAdd, req.body.wifiAdd, req.body.netName], (err, results, fields) => {
+    db.query(`UPDATE tblnetwork a INNER JOIN tblemployee b ON a.intAccConf=b.intZFEmpID SET a.strOwnerName=CONCAT(b.strFirstName,' ',b.strLastName)`, (err, results, fields) => {
+      if (err)
+        console.log(err);
+      else {
+          res.redirect('/network');
+      }
+    });
   });
 });
 
@@ -677,7 +680,7 @@ router.get('/invreport', auth, (req, res) => {
 //******************************************************* */ 
 // READ INDIVIDUAL SLIP
 router.get('/active', auth, (req, res) => {
-  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblemployee.strEmpDept, tblaccounts.strDevice, tblaccounts.strEmailAccount, tblaccounts.strIDAccount, tblnetwork.strNetworkAddress, tblnetwork.strWifiAddress FROM tblemployee INNER JOIN tblaccounts ON tblemployee.intZFEmpID=tblaccounts.intStoClaim INNER JOIN tblnetwork ON tblaccounts.intAccountID = tblnetwork.intAccConf WHERE tblemployee.intPresence=1 AND tblaccounts.intPresence=1 AND tblnetwork.intPresence=1;', function(err, results, fields){
+  db.query('SELECT tblnetwork.strOwnerName, tblnetwork.strDeviceName, tblnetwork.strNetworkAddress, tblnetwork.strWifiAddress, tblaccounts.strEmailAccount, tblaccounts.strIDAccount, tblemployee.strEmpDept FROM tblnetwork INNER JOIN tblaccounts ON tblnetwork.intAccConf=tblaccounts.intStoClaim INNER JOIN tblemployee ON tblaccounts.intStoClaim=tblemployee.intZFEmpID WHERE tblnetwork.intPresence=1', function(err, results, fields){
       if (err) throw (err)
       else {
           res.render('reports/views/active', {  actres: results });
@@ -824,7 +827,7 @@ function accAll(req, res, next){
   });  
 }
 function uniDevEquipment(req, res, next){
-  db.query('SELECT strUnitTypeDesc FROM tblunittype WHERE intPresence=1 AND intCompBool=1', function(err, results, fields){
+  db.query('SELECT strModelName FROM tblmodel WHERE intPresence=1 AND intCompBool=1', function(err, results, fields){
     if(err) throw(err)
     else
       req.devvy = results;
@@ -879,6 +882,15 @@ function countDept(req, res, next){
     if(err) throw(err)
     else
       req.countDep = results;
+    return next();
+  });  
+}
+function isThatADevice(req, res, next){
+   // db.query('SELECT tblownership.intOwnedBy, tblownership.intPriceFlagID, tblstorage.strBrand, tblstorage.strMod FROM tblownership INNER JOIN tblstorage ON tblownership.intPriceFlagID=tblstorage.intStorageID WHERE tblownership.intPresence=1 AND tblownership.isDevice=1 AND tblownership.intOwnedBy=?', function(err, results, fields){
+    db.query('SELECT strBrand, strMod FROM tblstorage WHERE intPresence=1 AND intIsDevice=1;', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.issaDevice = results;
     return next();
   });  
 }

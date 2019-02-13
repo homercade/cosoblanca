@@ -53,14 +53,14 @@ block unique-content
                         label.control-label Owned By
                         select.netName.form-control(name='netName') 
                           each emp in employ
-                            option.netName(value=emp.strFirstName+' '+emp.strLastName) #{emp.strFirstName} #{emp.strLastName}
+                            option.netName(value=emp.intZFEmpID) #{emp.strFirstName} #{emp.strLastName}
                         // at netName ah: onchange='populate(this.id, 'netDevName')
                     .col-md-6
                       .form-group
                         label.control-label Device
                         select.netDevName.form-control(name='netDevName')
-                          each dev in devvy
-                            option.netDevName(value=dev.strUnitTypeDesc) #{dev.strUnitTypeDesc}
+                          each dev in device
+                            option.netDevName(value=dev.strBrand+' '+dev.strMod) #{dev.strBrand} - #{dev.strMod}
                     .col-md-12
                       .form-group
                         label.control-label Network Address
