@@ -1,0 +1,168 @@
+extends ../../../templates/master.pug 
+block vars
+  - var title = 'MS Office Assignment'
+
+block unique-content
+  #page-wrapper
+    .row
+      .col-lg-12
+        h1.page-header
+          | MS Office Assignment
+          button.btn.btn-primary.btn-success.btn-lg.pull-right(type='button', data-toggle="modal", data-target="#addModal")
+            i.fa.fa-plus-circle.fa-fw
+            |  Assign Serial
+      .col-lg-12
+        .panel.panel-default
+          .panel-body
+            .table-responsive
+              table.table.table-hover.datatables
+                thead
+                    tr
+                      th Owner
+                      th Serial Number
+                      th Actions
+                tbody
+                  each ofs in offser
+                    tr
+                      td #{ofs.strOwnerName} 
+                      td #{ofs.strSerialNumber} 
+                      td 
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=ofs.intOAID, data-owner=ofs.intOAEmpID, data-serial=ofs.strOASerial)
+                            i.fa.fa-wrench
+                        button.btn.btn-danger.btn-circle(type='button', title='Remove data', data-toggle="modal", data-target="#deleteModal", data-id=ofs.intOAID)
+                            i.fa.fa-trash 
+
+    #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h4#myModalLabel.modal-title Assign Serial
+          form(action='/officeassign/create', method='post')
+            .modal-body
+              .container-fluid
+                .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
+                  input.hidden#id(type='text' name='id')
+                  .row
+                    .col-md-12
+                      .form-group
+                        label.control-label Owner Name
+                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        // select.oaOwner.form-control(name='oaOwner') 
+                        //   each oa in offa
+                        //     option.oaOwner(value=emp.intZFEmpID) #{emp.strFirstName} #{emp.strLastName}
+                        // at netName ah: onchange='populate(this.id, 'netDevName')
+                    .col-md-12
+                      .form-group
+                        label.control-label Serial Number
+                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+              button.btn.btn-primary(type='submit') Save
+
+    #editModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h4#myModalLabel.modal-title Edit Assignment
+          form(action='/officeassign/update', method='post')
+            .modal-body
+              .container-fluid
+                .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
+                  input.hidden.id(type='text' name='id')
+                  .row
+                    .col-md-12
+                      .form-group
+                        label.control-label Owner Name
+                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                    .col-md-12
+                      .form-group
+                        label.control-label Serial Number
+                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+              button.btn.btn-primary(type='submit') Save
+
+
+    #deleteModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h4#myModalLabel.modal-title Remove Assignment
+          form(action='/officeassign/delete', method='post')
+            .modal-body
+              .container-fluid
+                .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
+                  input.hidden.id(type='text' name='id')
+                  .row
+                    .col-md-12
+                      .form-group
+                        h4 Remove this assignment?
+            .modal-footer
+              button.btn.btn-default(type='button', data-dismiss='modal') Close
+              button.btn.btn-default(type='submit') Delete
+
+    script.
+      $(document).ready(function() {
+      $('#dataTables-example').DataTable({
+      responsive: true
+      });
+      });
+
+    script.
+      $('#deleteModal').on('show.bs.modal', function(event){
+        var button = $(event.relatedTarget)      
+        var id = button.data('id')
+        let modal = $(this)     
+        modal.find('.modal-body .id').val(`${id}`)
+      });
+
+    script.
+      $('#editModal').on('show.bs.modal', function(event){
+      var button = $(event.relatedTarget)      
+      var id = button.data('id')
+      var netadd = button.data('netadd')
+      var wifiadd = button.data('wifiadd')
+      let modal = $(this);     
+      modal.find('.modal-body .id').val(`${id}`)
+      modal.find('.modal-body .netAdd').val(`${netadd}`)
+      modal.find('.modal-body .wifiAdd').val(`${wifiadd}`)
+      });
+      
+    script.
+      var alphaNumOnly = /^[a-zA-Z0-9-]+$/i;
+
+      function restrictCharacters(myfield, e, restrictionType) {
+          if (!e) var e = window.event
+          if (e.keyCode) code = e.keyCode;
+          else if (e.which) code = e.which;
+          var character = String.fromCharCode(code);
+          // if they pressed esc... remove focus from field...
+          if (code==27) { this.blur(); return false; }
+          // ignore if they are press other keys
+          // strange because code: 39 is the down key AND ' key...
+          // and DEL also equals .
+          if (!e.ctrlKey && code!=9 && code!=8 && (code!=39 || (code==39 && character=="'"))) {
+              if (character.match(restrictionType)) {
+                  return true;
+              } else {
+                  return false;
+              }
+          }
+      };
+      //- script.
+      //-   function populate(s1, s2){
+      //-     var s1 = document.getElementById(s1);
+      //-     var s2 = document.getElementById(s2);
+
+      //-     s2.innerHTML = "";
+      //-     if(s1.value == intZFEmpID){
+      //-       var optionArray = [];
+      //-       each tee in employ
+      //-         optionArray.push(tee.)  
+              
+      //-     }
+      //-   }
+      

@@ -143,6 +143,49 @@ router.post('/model/delete', auth, (req, res) => {
 });
 
 //******************************************************* */
+//                          OFFICE SERIAL
+//******************************************************* */
+
+// CREATE OFFICE SERIAL
+router.post('/office', auth, (req, res) => {   
+  db.query(`INSERT INTO cosdd.tbloffice (strMSEmail, strMSPassword, strMSSerial, intPresence) VALUES (?, ?, ?, 1)`, [req.body.offEmail, req.body.offPass, req.body.offSerial], (err, results, fields) => {
+    if (err) throw(err);
+    else {
+        res.redirect('/office');
+    }
+  });
+});
+
+// READ OFFICE SERIAL
+router.get('/office', auth,  (req, res) => {
+    db.query('SELECT * FROM cosdd.tbloffice WHERE intPresence=1', function(err, results, fields){
+        if (err) throw (err)
+        else {
+            res.render('maintenance/views/office', { office: results });
+        }
+    });
+});
+
+// UPDATE OFFICE SERIAL
+router.post('/office/update', auth, (req, res) => {
+  db.query(`UPDATE cosdd.tbloffice SET strMSEmail=?, strMSPassword=?, strMSSerial=? WHERE intMSID=?`, [req.body.offEmail, req.body.offPass, req.body.offSerial, req.body.id], (err, results, fields) => {
+    if (err) throw(err);
+    else {
+      res.redirect('/office');
+    }
+  });
+});
+
+//DELETE OFFICE SERIAL
+router.post('/office/delete', auth, (req, res) => {
+  db.query(`UPDATE cosdd.tbloffice SET intPresence=0 WHERE intMSID=?`, [req.body.id], (err, results, fields) => {
+    if (err) throw(err);
+    else {
+      res.redirect('/office');
+    }
+  });
+});
+//******************************************************* */
 //                          BRAND
 //******************************************************* */
 
@@ -635,6 +678,55 @@ router.post('/network/delete', auth, (req, res) => {
   });
 });
 
+
+//******************************************************* */
+//               OFFICE ASSIGNMENT
+//******************************************************* */
+
+// READ  OFFICE ASSIGNMENT
+router.get('/officeassign', auth, eqaEmployees, uniDevEquipment, accAll, isThatADevice, (req, res) => {
+    db.query('SELECT * FROM cosdd.tblofficeassign WHERE intPresence=1', function(err, results, fields){
+        if (err) throw (err)
+        else {
+            res.render('transactions/views/officeassign', {  offser: results });
+        }
+    });
+});
+
+// CREATE  OFFICE ASSIGNMENT
+router.post('/officeassign/create', auth, (req, res) => {   
+  db.query(`INSERT INTO cosdd.tblnetwork (strDeviceName, strNetworkAddress, strWifiAddress, intAccConf, intPresence) VALUES (?, ?, ?, ?, 1)`, [req.body.netDevName, req.body.netAdd, req.body.wifiAdd, req.body.netName], (err, results, fields) => {
+    db.query(`UPDATE tblnetwork a INNER JOIN tblemployee b ON a.intAccConf=b.intZFEmpID SET a.strOwnerName=CONCAT(b.strFirstName,' ',b.strLastName)`, (err, results, fields) => {
+      if (err)
+        console.log(err);
+      else {
+          res.redirect('/officeassign');
+      }
+    });
+  });
+});
+
+// UPDATE OFFICE ASSIGNMENT
+router.post('/officeassign/update',auth,  (req, res) => {
+  db.query(`UPDATE cosdd.tblofficeassign SET strOwnerName=?, strDeviceName=?, strNetworkAddress=?, strWifiAddress=? WHERE intNetworkID=?`, [req.body.netName, req.body.netDevName, req.body.netAdd, req.body.wifiAdd, req.body.id], (err, results, fields) => {
+    if (err)
+      console.log(err);
+    else {
+      res.redirect('/officeassign');
+    }
+  });
+});
+
+//DELETE  OFFICE ASSIGNMENT
+router.post('/officeassign/delete', auth, (req, res) => {
+  db.query(`UPDATE cosdd.tblofficeassign SET intPresence=0 WHERE intNetworkID=?`, [req.body.id], (err, results, fields) => {
+    if (err)
+      console.log(err);
+    else {
+      res.redirect('/officeassign');
+    }
+  });
+});
 //******************************************************* */
 //                    INDIVIDUAL SLIP
 //******************************************************* */
@@ -940,7 +1032,9 @@ function sto(req, res){
 function sliRep(req, res){
     res.render('reports/views/slip-report');
 }
-
+function offi(req, res){
+    res.render('maintenance/views/office');
+}
 function queryInv(req, res, next){
   db.query('SELECT txtInvEquipment, strInvPropNo, strInvSerialNo, DATE_FORMAT(dtmDateReceived, "%M %e, %Y") AS neuteredDate FROM tblinventory WHERE intPresence=1;'), function(err, results){
     if(err) throw(err);
@@ -959,6 +1053,7 @@ router.get('/technician', auth, tech);
 router.get('/unittype',auth,  unittype);
 router.get('/brand', auth, bran, queryBrand);
 router.get('/model', auth, mod);
+router.get('/office', auth, offi);
 router.get('/price', auth, pri);
 router.get('/employee', auth, emp);
 router.get('/accounts', auth, acc);
@@ -982,7 +1077,9 @@ function equ(req, res){
 function netw(req, res){
     res.render('transactions/views/network');
 }
-
+function ofa(req, res){
+    res.render('transactions/views/officeassign');
+}
 
 function invrepo(req, res){
     res.render('reports/views/invreport');
@@ -999,6 +1096,7 @@ router.get('/reports', auth, rep);
 router.get('/slip', auth, sli);
 router.get('/equipment', auth, equ, eqaEmployees);
 router.get('/network', auth, netw);
+router.get('/officeassign', auth, ofa);
 router.get('/invreport', auth, invrepo);
 router.get('/active', auth, actacc);
 

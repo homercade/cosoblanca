@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.24, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: cosdd
 -- ------------------------------------------------------
--- Server version	5.7.25
+-- Server version	5.7.21-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -211,6 +211,59 @@ LOCK TABLES `tblnetwork` WRITE;
 /*!40000 ALTER TABLE `tblnetwork` DISABLE KEYS */;
 INSERT INTO `tblnetwork` VALUES (3,'Homer Cadena','Apple MacBook Pro','A0:B0:C0:D0:E0:F0','00-11-22-33-44-55',1,000001),(4,'Arya Stark','Apple MacBook Pro','8A:B5:34:71:DE:AA','10-20-40-AE-10-BB',1,000003),(5,'Diane Nguyen','Apple MacBook Pro','21:21:21:21:21:21','01-02-03-04-05-06',0,000002),(6,'Diane Nguyen','Apple MacBook Pro','yetretert','fghfghfgh',0,000002),(7,'Homer Cadena','Apple MacBook Pro','yyyyyyyyyyy','yyyyyyyyyyyy',1,000001),(9,'Arya Stark','Apple MacBook Pro','werwerer','werwerer',1,000003),(10,'Diane Nguyen','Apple MacBook Pro','d:i:a:n:e','n:g:u:y:e:n',1,000002);
 /*!40000 ALTER TABLE `tblnetwork` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tbloffice`
+--
+
+DROP TABLE IF EXISTS `tbloffice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tbloffice` (
+  `intMSID` int(11) NOT NULL AUTO_INCREMENT,
+  `strMSEmail` varchar(45) NOT NULL,
+  `strMSPassword` varchar(45) NOT NULL,
+  `strMSSerial` varchar(45) NOT NULL,
+  `intPresence` tinyint(1) NOT NULL,
+  `intLimitFlag` int(1) DEFAULT NULL,
+  PRIMARY KEY (`intMSID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tbloffice`
+--
+
+LOCK TABLES `tbloffice` WRITE;
+/*!40000 ALTER TABLE `tbloffice` DISABLE KEYS */;
+INSERT INTO `tbloffice` VALUES (1,'homercadena@gmail.com','henlomushimushi','2015-02839-MN-0',1,NULL),(2,'dianenguyen@gmail.com','sadgirl','padaosdsid',1,NULL),(3,'hello','hello','hello',0,NULL);
+/*!40000 ALTER TABLE `tbloffice` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tblofficeassign`
+--
+
+DROP TABLE IF EXISTS `tblofficeassign`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tblofficeassign` (
+  `intOAID` int(11) NOT NULL,
+  `intOAEmpID` varchar(45) DEFAULT NULL,
+  `strOASerial` varchar(45) DEFAULT NULL,
+  `intPresence` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`intOAID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tblofficeassign`
+--
+
+LOCK TABLES `tblofficeassign` WRITE;
+/*!40000 ALTER TABLE `tblofficeassign` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tblofficeassign` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -447,4 +500,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-14  6:16:28
+-- Dump completed on 2019-02-14 11:26:12
