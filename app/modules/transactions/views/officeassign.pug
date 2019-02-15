@@ -19,13 +19,17 @@ block unique-content
                 thead
                     tr
                       th Owner
+                      th PC Name
+                      th Password 
                       th Serial Number
                       th Actions
                 tbody
                   each ofs in offser
                     tr
-                      td #{ofs.strOwnerName} 
-                      td #{ofs.strSerialNumber} 
+                      td #{ofs.intOAEmpID} 
+                      td #{ofs.strPCName}
+                      td #{ofs.strPassword}
+                      td #{ofs.strOASerial} 
                       td 
                         button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=ofs.intOAID, data-owner=ofs.intOAEmpID, data-serial=ofs.strOASerial)
                             i.fa.fa-wrench

@@ -222,11 +222,9 @@ DROP TABLE IF EXISTS `tbloffice`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tbloffice` (
   `intMSID` int(11) NOT NULL AUTO_INCREMENT,
-  `strMSEmail` varchar(45) NOT NULL,
-  `strMSPassword` varchar(45) NOT NULL,
   `strMSSerial` varchar(45) NOT NULL,
+  `intVacancy` int(1) DEFAULT NULL,
   `intPresence` tinyint(1) NOT NULL,
-  `intLimitFlag` int(1) DEFAULT NULL,
   PRIMARY KEY (`intMSID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -237,7 +235,7 @@ CREATE TABLE `tbloffice` (
 
 LOCK TABLES `tbloffice` WRITE;
 /*!40000 ALTER TABLE `tbloffice` DISABLE KEYS */;
-INSERT INTO `tbloffice` VALUES (1,'homercadena@gmail.com','henlomushimushi','2015-02839-MN-0',1,NULL),(2,'dianenguyen@gmail.com','sadgirl','padaosdsid',1,NULL),(3,'hello','hello','hello',0,NULL);
+INSERT INTO `tbloffice` VALUES (1,'Fab23536_01',5,1),(2,'padaosdsid',5,0),(3,'hello',5,0);
 /*!40000 ALTER TABLE `tbloffice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,8 +249,10 @@ DROP TABLE IF EXISTS `tblofficeassign`;
 CREATE TABLE `tblofficeassign` (
   `intOAID` int(11) NOT NULL,
   `intOAEmpID` varchar(45) DEFAULT NULL,
+  `strPassword` varchar(45) NOT NULL,
+  `strPCName` varchar(45) NOT NULL,
+  `intPresence` tinyint(1) NOT NULL,
   `strOASerial` varchar(45) DEFAULT NULL,
-  `intPresence` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`intOAID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -263,6 +263,7 @@ CREATE TABLE `tblofficeassign` (
 
 LOCK TABLES `tblofficeassign` WRITE;
 /*!40000 ALTER TABLE `tblofficeassign` DISABLE KEYS */;
+INSERT INTO `tblofficeassign` VALUES (1,'Homer Cadena','Fa23536_01','PC_8EL',1,'Fa23536');
 /*!40000 ALTER TABLE `tblofficeassign` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -500,4 +501,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-14 11:26:12
+-- Dump completed on 2019-02-15 20:10:06

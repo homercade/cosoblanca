@@ -18,16 +18,14 @@ block unique-content
               table.table.table-hover.datatables
                 thead
                   tr
-                    th Microsoft ID
-                    th Microsoft Password
                     th Serial Number
+                    th Vacant Users
                     th Action
                 tbody
                   each mso in office
                     tr
-                      td #{mso.strMSEmail}
-                      td #{mso.strMSPassword}
                       td #{mso.strMSSerial}
+                      td #{mso.intVacancy}
                       td
                         button.btn.btn-primary.btn-circle(type='button', title='Edit details', data-toggle="modal", data-target="#editModal", data-id=mso.intMSID data-ema=mso.strMSEmail data-pass=mso.strMSPassword data-serial=mso.strMSSerial)
                           i.fa.fa-wrench
@@ -45,14 +43,6 @@ block unique-content
               .container-fluid
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   .row
-                    .col-md-12
-                      .form-group
-                        label.control-label Microsoft ID
-                        input.offEmail.form-control(type='text' name='offEmail' placeholder="John Doe" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-12
-                      .form-group
-                        label.control-label Microsoft Password
-                        input.offPass.form-control(type='password' name='offPass' placeholder="John Doe" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-12
                       .form-group
                         label.control-label Serial Number
@@ -73,14 +63,6 @@ block unique-content
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   input.hidden.id(type='text' name='id')
                   .row
-                    .col-md-12
-                      .form-group
-                        label.control-label Microsoft ID
-                        input.offEmail.form-control(type='text' name='offEmail' placeholder="John Doe" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-12
-                      .form-group
-                        label.control-label Microsoft Password
-                        input.offPass.form-control(type='password' name='offPass' placeholder="John Doe" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-12
                       .form-group
                         label.control-label Serial Number
@@ -132,7 +114,7 @@ block unique-content
       });
       
     script.
-      var alphaNumOnly = /^[a-zA-Z0-9 ]+$/i;
+      var alphaNumOnly = /^[a-zA-Z0-9_ ]+$/i;
 
       function restrictCharacters(myfield, e, restrictionType) {
           if (!e) var e = window.event
