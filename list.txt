@@ -6,3 +6,10 @@ To Do:
 > MS Office Assignment
 > swal(); Confirmation and Verification
 > Date Sorting
+> Code Simplification
+> Clean Coding and Efficiency Design
+> Blackbox and Whitebox Testing
+> Session Destroyer
+> PDFMake Module
+> Mini commands
+> Swal Helper
