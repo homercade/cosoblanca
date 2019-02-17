@@ -22,9 +22,9 @@ html(lang='en')
             img.logImg(src="../../img/icon.png" alt="Image Title" width="80" height="80")
             br 
             br
-            form.login-form(action='/login', method='get')
-              input#username(type='text', placeholder='Username' name='username')
-              input#password(type='password', placeholder='••••••••' name='password')
+            form.login-form(action='/login', method='post')
+              input.username(type='text', placeholder='Username' name='username')
+              input.password(type='password', placeholder='••••••••' name='password')
               button Login
               p.message
                 | Welcome to COSOBLANCA!

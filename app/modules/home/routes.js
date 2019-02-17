@@ -6,30 +6,51 @@ var router = express.Router();
 var db = require('../../lib/database')();
 var session = require('express-session');
 
-var auth = function(req, res, next){
-  if(req.session && req.session.user === 'root' && req.session.admin)
-    return next();
-  else
-    res.redirect('/');
-}
 router.use(session({
   secret: 'AU832hrui4yryw8413JH3',
   resave: true,
   saveUninitialized: true
 }));
 
-router.get('/login', function(req, res) {
-  if(!req.query.username || !req.query.password){
-    res.redirect('/');
-  }
-  else if(req.query.username === 'admin' && req.query.password === 'pass'){
-    req.session.user = 'root';
-    req.session.admin = true;
-    res.redirect('/dashboard');
-  }
+// router.get('/login', function(req, res) {
+//   if(!req.query.username || !req.query.password){
+//     res.redirect('/');
+//   }
+//   else if(req.query.username === 'admin' && req.query.password === 'pass'){
+//     req.session.user = 'root';
+//     req.session.admin = true;
+//     res.redirect('/dashboard');
+//   }
+//   else
+//     res.redirect('/');
+// });
+
+router.post('/login', (req, res) => {
+  db.query('SELECT strUsername, strPassword FROM cosdd.tbluser WHERE strUsername=? AND strPassword=?', [req.body.username, req.body.password], function(err, results, fields){
+    if (err) {throw (err)}
+    var resultArray = Object.values(JSON.parse(JSON.stringify(results)))
+    var user = resultArray[0].strUsername;
+    var pass = resultArray[0].strPassword;
+    if(!req.body.username && !req.body.password){
+      res.redirect('/');
+    }
+    else if(user === req.body.username && pass === req.body.password){
+      req.session.user = 'root';
+      req.session.admin = true;
+      res.redirect('/dashboard');
+    }
+    else{
+      res.redirect('/');
+    }
+  });
+});
+
+var auth = function(req, res, next){
+  if(req.session && req.session.user === 'root' && req.session.admin)
+    return next();
   else
     res.redirect('/');
-});
+}
 
 router.get('/logout', function(req, res){
   req.session.destroy();
