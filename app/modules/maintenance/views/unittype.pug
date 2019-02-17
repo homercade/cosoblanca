@@ -45,7 +45,7 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Unit Type
-                        input#unitType.form-control(type='text' name='unitType' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input#unitType.form-control(type='text' name='unitType' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -65,7 +65,7 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Unit Type
-                        input.unitType.form-control(type='text' name='unitType' onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.unitType.form-control(type='text' name='unitType' onkeypress='return restrictCharacters(this, event, alphaOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -107,24 +107,3 @@ block unique-content
       modal.find('.modal-body #id').val(`${id}`)
       modal.find('.modal-body .unitType').val(`${unitType}`)
       });
-    script.
-      var alphaNumOnly = /^[a-zA-Z0-9 ]+$/i;
-
-      function restrictCharacters(myfield, e, restrictionType) {
-          if (!e) var e = window.event
-          if (e.keyCode) code = e.keyCode;
-          else if (e.which) code = e.which;
-          var character = String.fromCharCode(code);
-          // if they pressed esc... remove focus from field...
-          if (code==27) { this.blur(); return false; }
-          // ignore if they are press other keys
-          // strange because code: 39 is the down key AND ' key...
-          // and DEL also equals .
-          if (!e.ctrlKey && code!=9 && code!=8 && (code!=39 || (code==39 && character=="'"))) {
-              if (character.match(restrictionType)) {
-                  return true;
-              } else {
-                  return false;
-              }
-          }
-      };

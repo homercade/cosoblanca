@@ -64,11 +64,11 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Network Address
-                        input.netAdd.form-control(type='text' name='netAdd' placeholder="A0:B1:C2:D3:E4:F5" required)
+                        input.netAdd.form-control(type='text' name='netAdd' placeholder="A0:B1:C2:D3:E4:F5" onkeypress='return restrictCharacters(this, event, networkOnly)' maxlength='17' required)
                     .col-md-12
                       .form-group
                         label.control-label WiFi Address
-                        input.wifiAdd.form-control(type='text' name='wifiAdd' placeholder="00-14-22-01-23-45" required)
+                        input.wifiAdd.form-control(type='text' name='wifiAdd' placeholder="00-14-22-01-23-45" onkeypress='return restrictCharacters(this, event, parPropOnly)' maxlength='17' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -100,11 +100,11 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Network Address
-                        input.netAdd.form-control(type='text' name='netAdd' placeholder="A0:B1:C2:D3:E4:F5" required)
+                        input.netAdd.form-control(type='text' name='netAdd' placeholder="A0:B1:C2:D3:E4:F5" onkeypress='return restrictCharacters(this, event, networkOnly)' maxlength='17' required)
                     .col-md-12
                       .form-group
                         label.control-label WiFi Address
-                        input.wifiAdd.form-control(type='text' name='wifiAdd' placeholder="00-14-22-01-23-45" required)
+                        input.wifiAdd.form-control(type='text' name='wifiAdd' placeholder="00-14-22-01-23-45" onkeypress='return restrictCharacters(this, event, parPropOnly)' maxlength='17' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -155,28 +155,7 @@ block unique-content
       modal.find('.modal-body .netAdd').val(`${netadd}`)
       modal.find('.modal-body .wifiAdd').val(`${wifiadd}`)
       });
-      
-    script.
-      var alphaNumOnly = /^[a-zA-Z0-9]+$/i;
-
-      function restrictCharacters(myfield, e, restrictionType) {
-          if (!e) var e = window.event
-          if (e.keyCode) code = e.keyCode;
-          else if (e.which) code = e.which;
-          var character = String.fromCharCode(code);
-          // if they pressed esc... remove focus from field...
-          if (code==27) { this.blur(); return false; }
-          // ignore if they are press other keys
-          // strange because code: 39 is the down key AND ' key...
-          // and DEL also equals .
-          if (!e.ctrlKey && code!=9 && code!=8 && (code!=39 || (code==39 && character=="'"))) {
-              if (character.match(restrictionType)) {
-                  return true;
-              } else {
-                  return false;
-              }
-          }
-      };
+  
       //- script.
       //-   function populate(s1, s2){
       //-     var s1 = document.getElementById(s1);

@@ -1,22 +1,7 @@
-doctype html
-html(lang='en')
-  head
-    meta(charset='utf-8')
-    meta(http-equiv='X-UA-Compatible', content='IE=edge')
-    meta(name='viewport', content='width=device-width, initial-scale=1')
-    title Active Accounts
-    link(rel='icon', href='../../img/icon.png')
-    link(href='../../vendor/bootstrap/css/bootstrap.min.css', rel='stylesheet')
-    link(href='../../vendor/metisMenu/metisMenu.min.css', rel='stylesheet')
-    link(href='../../dist/css/sb-admin-2.css', rel='stylesheet')
-    link(href='../../vendor/morrisjs/morris.css', rel='stylesheet')
-    link(href='https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', rel='stylesheet', type='text/css')
-    link(href='../../vendor/jquery/jquery.js', rel='stylesheet')
-    script(src="https://unpkg.com/sweetalert/dist/sweetalert.min.js")
-    script(src="https://code.jquery.com/jquery-2.2.4.min.js")
-    link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous")
-    link(rel="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css")
-    script(rel="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js")
+extends ../../../templates/master-reports.pug 
+block vars
+  - var title = 'Active Accounts'
+block unique-master
   body
     #wrapper
       .col-lg-12
@@ -26,7 +11,7 @@ html(lang='en')
         .panel.panel-default
           .panel-body
             .table-responsive
-              table.table.table-hover
+              table.table.table-hover.datatable
                 thead
                   tr
                     th Owner
@@ -37,12 +22,12 @@ html(lang='en')
                     th Network Address
                     th WiFi Address
                 tbody
-                each act in actres
-                  tr
-                    td #{act.strOwnerName}
-                    td #{act.strDeviceName}
-                    td #{act.strEmpDept}
-                    td #{act.strEmailAccount}
-                    td #{act.strIDAccount}
-                    td #{act.strNetworkAddress}
-                    td #{act.strWifiAddress}
+                  each act in actres
+                    tr
+                      td #{act.strOwnerName}
+                      td #{act.strDeviceName}
+                      td #{act.strEmpDept}
+                      td #{act.strEmailAccount}
+                      td #{act.strIDAccount}
+                      td #{act.strNetworkAddress}
+                      td #{act.strWifiAddress}

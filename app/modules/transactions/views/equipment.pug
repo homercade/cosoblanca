@@ -73,15 +73,15 @@ block unique-content
                     .col-md-6
                       .form-group
                         label.control-label Property Number
-                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, parPropOnly)' maxlength='11' required)
                     .col-md-6
                       .form-group
                         label.control-label Serial Number
-                        input.equSer.form-control(type='text' name='equSer' placeholder="00AA132" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.equSer.form-control(type='text' name='equSer' placeholder="00AA132" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='7' required)
                     .col-md-6
                       .form-group
                         label.control-label PAR Number
-                        input.equPAR.form-control(type='text' name='equPAR' placeholder="00-00-00" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.equPAR.form-control(type='text' name='equPAR' placeholder="00-00-00" onkeypress='return restrictCharacters(this, event, parPropOnly)' maxlength='10' required)
                     .col-md-6
                       .form-group
                         label.control-label MR Date
@@ -123,15 +123,15 @@ block unique-content
                     .col-md-6
                       .form-group
                         label.control-label Property Number
-                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, parPropOnly)' maxlength='11' required)
                     .col-md-6
                       .form-group
                         label.control-label Serial Number
-                        input.equSer.form-control(type='text' name='equSer' placeholder="00AA132" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.equSer.form-control(type='text' name='equSer' placeholder="00AA132" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='7' required)
                     .col-md-6
                       .form-group
                         label.control-label PAR Number
-                        input.equPAR.form-control(type='text' name='equPAR' placeholder="00-00-00" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.equPAR.form-control(type='text' name='equPAR' placeholder="00-00-00" onkeypress='return restrictCharacters(this, event, parPropOnly)' maxlength='10' required)
                     .col-md-6
                       .form-group
                         label.control-label MR Date
@@ -168,7 +168,7 @@ block unique-content
       });
 
     script.
-      $('.editModal').on('show.bs.modal', function(event){
+      $('#editModal').on('show.bs.modal', function(event){
       var button = $(event.relatedTarget)      
       var id = button.data('id')
       var prop = button.data('prop')
@@ -182,26 +182,4 @@ block unique-content
       modal.find('.modal-body .equDat').val(`${dat}`)
       modal.find('.modal-body .equPAR').val(`${par}`)
       });
-    
-    script.
-      var alphaNumOnly = /^[a-zA-Z0-9 -]+$/i;
-
-      function restrictCharacters(myfield, e, restrictionType) {
-          if (!e) var e = window.event
-          if (e.keyCode) code = e.keyCode;
-          else if (e.which) code = e.which;
-          var character = String.fromCharCode(code);
-          // if they pressed esc... remove focus from field...
-          if (code==27) { this.blur(); return false; }
-          // ignore if they are press other keys
-          // strange because code: 39 is the down key AND ' key...
-          // and DEL also equals .
-          if (!e.ctrlKey && code!=9 && code!=8 && (code!=39 || (code==39 && character=="'"))) {
-              if (character.match(restrictionType)) {
-                  return true;
-              } else {
-                  return false;
-              }
-          }
-      };
 

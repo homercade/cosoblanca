@@ -63,23 +63,23 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Device
-                        input.accDev.form-control(type='text' name='accDev' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accDev.form-control(type='text' name='accDev' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Email Account
-                        input.accEma.form-control(type='text' name='accEma' placeholder="example@gmail.com" onkeypress='return restrictCharactersB(this, event, alphaNumOnly)' required)
+                        input.accEma.form-control(type='text' name='accEma' placeholder="example@gmail.com" onkeypress='return restrictCharactersB(this, event, emailOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Email Password
-                        input.accEmaPass.form-control(type='password' name='accEmaPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accEmaPass.form-control(type='password' name='accEmaPass' placeholder="••••••••" required)
                     .col-md-6
                       .form-group
                         label.control-label ID Account
-                        input.accIDAcc.form-control(type='text' name='accIDAcc' placeholder="nha@icloud.com" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accIDAcc.form-control(type='text' name='accIDAcc' placeholder="nha@icloud.com" onkeypress='return restrictCharactersB(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Account Password
-                        input.accIDAccPass.form-control(type='password' name='accIDAccPass' placeholder="••••••••" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.accIDAccPass.form-control(type='password' name='accIDAccPass' placeholder="••••••••" required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -180,52 +180,3 @@ block unique-content
       $('.helpMod').click(function(){
         swal("Account Maintenance", "This page displays all account details including the user's email address, usernames, and passwords.")
       });
-      
-    script.
-      $('.helpMod').click(function(){
-        swal("Account Maintenance", "This page displays all account details including the user's email address, usernames, and passwords.")
-      });
-
-    //REGEX FOR INPUT
-    script.
-      var alphaNumOnly = /^[a-zA-Z0-9_ ]+$/i;
-      var emailOnly = [\w-]+@([\w-]+\.)+[\w-]+;
-      var networkOnly = /^[a-zA-Z0-9:-]+$/i;
-
-      function restrictCharacters(myfield, e, restrictionType) {
-          if (!e) var e = window.event
-          if (e.keyCode) code = e.keyCode;
-          else if (e.which) code = e.which;
-          var character = String.fromCharCode(code);
-          // if they pressed esc... remove focus from field...
-          if (code==27) { this.blur(); return false; }
-          // ignore if they are press other keys
-          // strange because code: 39 is the down key AND ' key...
-          // and DEL also equals .
-          if (!e.ctrlKey && code!=9 && code!=8 && (code!=39 || (code==39 && character=="'"))) {
-              if (character.match(restrictionType)) {
-                  return true;
-              } else {
-                  return false;
-              }
-          }
-      };
-
-      function restrictCharactersB(myfield, e, restrictionType) {
-          if (!e) var e = window.event
-          if (e.keyCode) code = e.keyCode;
-          else if (e.which) code = e.which;
-          var character = String.fromCharCode(code);
-          // if they pressed esc... remove focus from field...
-          if (code==27) { this.blur(); return false; }
-          // ignore if they are press other keys
-          // strange because code: 39 is the down key AND ' key...
-          // and DEL also equals .
-          if (!e.ctrlKey && code!=9 && code!=8 && code!=64 && (code!=39 || (code==39 && character=="'"))) {
-              if (character.match(restrictionType)) {
-                  return true;
-              } else {
-                  return false;
-              }
-          }
-      };

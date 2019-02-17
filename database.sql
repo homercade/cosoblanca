@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.6.24, for Win32 (x86)
 --
 -- Host: 127.0.0.1    Database: cosdd
 -- ------------------------------------------------------
--- Server version	5.7.21-log
+-- Server version	5.7.25
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -429,7 +429,7 @@ CREATE TABLE `tblunittype` (
   `intPresence` tinyint(1) NOT NULL,
   `intCompBool` tinyint(1) DEFAULT NULL COMMENT 'intCompBool: this is to determine whether a unit is a computing device or a peripheral device (to be used in network addresses).\n\n0 - Peripheral Devices\n1 - Computing Devices',
   PRIMARY KEY (`intUnitTypeID`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -438,7 +438,7 @@ CREATE TABLE `tblunittype` (
 
 LOCK TABLES `tblunittype` WRITE;
 /*!40000 ALTER TABLE `tblunittype` DISABLE KEYS */;
-INSERT INTO `tblunittype` VALUES (1,'Laptop',1,1),(2,'Desktop',1,1),(3,'Printer',1,0),(4,'Keyboard',0,0),(5,'UPS',1,0),(6,'Monitor',0,0),(7,'Document Reader',1,NULL),(8,'henlo',0,NULL),(9,'Functionality Tests',0,NULL);
+INSERT INTO `tblunittype` VALUES (1,'Laptop',1,1),(2,'Desktop',1,1),(3,'Printer',1,0),(4,'Keyboard',0,0),(5,'UPS',1,0),(6,'Monitor',0,0),(7,'Document Reader',1,NULL),(8,'henlo',0,NULL),(9,'Functionality Tests',0,NULL),(10,'OMG',0,NULL);
 /*!40000 ALTER TABLE `tblunittype` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -501,4 +501,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-17 15:29:37
+-- Dump completed on 2019-02-18  1:05:34

@@ -1,7 +1,7 @@
 extends ../../../templates/master-reports.pug 
 block vars
   - var title = 'EMP' + maya
-block unique-content
+block unique-master
   body
     #wrapper
       .col-lg-12
@@ -13,7 +13,7 @@ block unique-content
         .panel.panel-default
           .panel-body
             .table-responsive
-              table.table.table-hover
+              table.table.table-hover.datatable
                 thead
                   tr
                     th Equipment
@@ -23,11 +23,11 @@ block unique-content
                     th MR Date
                     th Value
                 tbody
-                each pes in person
-                  tr
-                    td #{pes.txtActualEquipment}
-                    td #{pes.txtPropertyNumber}
-                    td #{pes.txtPARNumber}
-                    td #{pes.txtSerialNumber}
-                    td #{pes.MRDate}
-                    td ₱ #{pes.fltPrice}
+                  each pes in person
+                    tr
+                      td #{pes.txtActualEquipment}
+                      td #{pes.txtPropertyNumber}
+                      td #{pes.txtPARNumber}
+                      td #{pes.txtSerialNumber}
+                      td #{pes.MRDate}
+                      td ₱ #{pes.fltPrice}

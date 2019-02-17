@@ -49,7 +49,7 @@ block unique-content
                     .col-md-4
                       .form-group
                         label.control-label Brand
-                        input.stoBrand.form-control(type='text' name='stoBrand' placeholder="Apple" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.stoBrand.form-control(type='text' name='stoBrand' placeholder="Apple" onkeypress='return restrictCharacters(this, event, alphaOnly)' required)
                     .col-md-4
                       .form-group
                         label.control-label Model
@@ -67,7 +67,7 @@ block unique-content
                     .col-md-9
                       .form-group
                         label.control-label Value
-                        input#stoVal.form-control(type='text' name='stoVal' placeholder="₱1000.00" onkeypress='return restrictCharacters(this, event, numOnly)' required)
+                        input#stoVal.form-control(type='text' name='stoVal' placeholder="₱1000.00" onkeypress='return restrictCharacters(this, event, floatOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -87,7 +87,7 @@ block unique-content
                     .col-md-4
                       .form-group
                         label.control-label Brand
-                        input.stoBrand.form-control(type='text' name='stoBrand' placeholder="Apple" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input.stoBrand.form-control(type='text' name='stoBrand' placeholder="Apple" onkeypress='return restrictCharacters(this, event, alphaOnly)' required)
                     .col-md-4
                       .form-group
                         label.control-label Model
@@ -105,7 +105,7 @@ block unique-content
                     .col-md-9
                       .form-group
                         label.control-label Value
-                        input#stoVal.form-control(type='text' name='stoVal' placeholder="1000.00" onkeypress='return restrictCharacters(this, event, numOnly)' required)
+                        input#stoVal.form-control(type='text' name='stoVal' placeholder="1000.00" onkeypress='return restrictCharacters(this, event, floatOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -153,27 +153,4 @@ block unique-content
       //- modal.find('.modal-body .strUnit').val(`${unit}`)
       modal.find('.modal-body .strgQty').val(`${qty}`)
       });
-      
-    script.
-      var alphaNumOnly = /^[a-zA-Z0-9 ]+$/i;
-      var numOnly = /^[0-9.]+$/i;
-
-      function restrictCharacters(myfield, e, restrictionType) {
-          if (!e) var e = window.event
-          if (e.keyCode) code = e.keyCode;
-          else if (e.which) code = e.which;
-          var character = String.fromCharCode(code);
-          // if they pressed esc... remove focus from field...
-          if (code==27) { this.blur(); return false; }
-          // ignore if they are press other keys
-          // strange because code: 39 is the down key AND ' key...
-          // and DEL also equals .
-          if (!e.ctrlKey && code!=9 && code!=8 && (code!=39 || (code==39 && character=="'"))) {
-              if (character.match(restrictionType)) {
-                  return true;
-              } else {
-                  return false;
-              }
-          }
-      };
 
