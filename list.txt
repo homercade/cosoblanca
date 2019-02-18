@@ -13,3 +13,4 @@ To Do:
 > PDFMake Module
 > Mini commands
 > Swal Helper
+> Validations first
