@@ -19,7 +19,7 @@ block unique-content
                 thead
                   tr
                     th Serial Number
-                    th Vacant Users
+                    th Vacancy Left
                     th Action
                 tbody
                   each mso in office
@@ -27,7 +27,7 @@ block unique-content
                       td #{mso.strMSSerial}
                       td #{mso.intVacancy}
                       td
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit details', data-toggle="modal", data-target="#editModal", data-id=mso.intMSID data-ema=mso.strMSEmail data-pass=mso.strMSPassword data-serial=mso.strMSSerial)
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit details', data-toggle="modal", data-target="#editModal", data-id=mso.intMSID, data-serial=mso.strMSSerial, data-vaca=mso.intVacancy)
                           i.fa.fa-wrench
                         button.btn.btn-danger.btn-circle(type='button', title='Delete office serial', data-toggle="modal", data-target="#deleteModal", data-id=mso.intMSID)
                           i.fa.fa-trash
@@ -46,7 +46,7 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Serial Number
-                        input.offSerial.form-control(type='text' name='offSerial' placeholder="PC811984813" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='8' required)         
+                        input.offSerial.form-control(type='text' name='offSerial' placeholder="ABC12345" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='8' required)         
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Add
@@ -63,10 +63,14 @@ block unique-content
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   input.hidden.id(type='text' name='id')
                   .row
-                    .col-md-12
+                    .col-md-9
                       .form-group
                         label.control-label Serial Number
-                        input.offSerial.form-control(type='text' name='offSerial' placeholder="PC811984813" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='8' required)         
+                        input.offSerial.form-control(type='text' name='offSerial' placeholder="ABC12345" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='8' required)         
+                    .col-md-3
+                      .form-group
+                        label.control-label Vacancy
+                        input.offVaca.form-control(type='text' name='offVaca' placeholder="0" onkeypress='return restrictCharacters(this, event, numOnly)' maxlength='1' required)         
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -103,12 +107,10 @@ block unique-content
       $('#editModal').on('show.bs.modal', function(event){
       var button = $(event.relatedTarget)      
       var id = button.data('id')
-      var email = button.data('ema')
-      var pass = button.data('pass')
-      var serial = button.data('serial')
+      var serial= button.data('serial')
+      var vacant = button.data('vaca')
       let modal = $(this);     
       modal.find('.modal-body .id').val(` ${id}`)
-      modal.find('.modal-body .offEmail').val(`${email}`)
-      modal.find('.modal-body .offPass').val(`${pass}`)
       modal.find('.modal-body .offSerial').val(`${serial}`)
+      modal.find('.modal-body .offVaca').val(`${vacant}`)
       });

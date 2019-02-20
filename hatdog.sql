@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.6.24, for Win32 (x86)
+-- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
 -- Host: 127.0.0.1    Database: cosdd
 -- ------------------------------------------------------
--- Server version	5.7.25
+-- Server version	5.7.21-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -121,7 +121,7 @@ CREATE TABLE `tblemployee` (
 
 LOCK TABLES `tblemployee` WRITE;
 /*!40000 ALTER TABLE `tblemployee` DISABLE KEYS */;
-INSERT INTO `tblemployee` VALUES (000001,'Homer','Cadena','COSDD',1),(000002,'Diane','Nguyen','OGM',1),(000003,'Arya','Stark','HR',1),(000006,'Jeffry','Paguia','ACCO',1),(000007,'Richel','Natividad','COSDD',0),(000008,'Klink','Pachinko','None',1),(000009,'new','employee','None',0),(000010,'John Homer','Cadena','ACCO',0);
+INSERT INTO `tblemployee` VALUES (000001,'Homer','Cadena','COSO',1),(000002,'Diane','Nguyen','OGM',1),(000003,'Arya','Stark','HR',1),(000006,'Jeffry','Paguia','ACCO',1),(000007,'Richel','Natividad','COSDD',0),(000008,'Klink','Pachinko','None',1),(000009,'new','employee','None',0),(000010,'John Homer','Cadena','ACCO',0);
 /*!40000 ALTER TABLE `tblemployee` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,7 +226,7 @@ CREATE TABLE `tbloffice` (
   `intVacancy` int(1) DEFAULT NULL,
   `intPresence` tinyint(1) NOT NULL,
   PRIMARY KEY (`intMSID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +235,7 @@ CREATE TABLE `tbloffice` (
 
 LOCK TABLES `tbloffice` WRITE;
 /*!40000 ALTER TABLE `tbloffice` DISABLE KEYS */;
-INSERT INTO `tbloffice` VALUES (1,'Fab23536_01',5,1),(2,'padaosdsid',5,0),(3,'hello',5,0);
+INSERT INTO `tbloffice` VALUES (1,'Fab23536',5,1),(2,'padaosdsid',5,0),(3,'hello',5,0),(4,'Dab75322',2,1),(5,'Nan21082',5,1);
 /*!40000 ALTER TABLE `tbloffice` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,12 +248,18 @@ DROP TABLE IF EXISTS `tblofficeassign`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tblofficeassign` (
   `intOAID` int(11) NOT NULL,
-  `intOAEmpID` varchar(45) DEFAULT NULL,
-  `strPassword` varchar(45) NOT NULL,
+  `intOAFKEmpID` int(6) unsigned zerofill DEFAULT NULL,
+  `strPassword` varchar(45) DEFAULT NULL,
   `strPCName` varchar(45) NOT NULL,
+  `strOASerial` varchar(8) DEFAULT NULL,
+  `strOAEmpName` varchar(45) DEFAULT NULL,
   `intPresence` tinyint(1) NOT NULL,
-  `strOASerial` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`intOAID`)
+  `intOASerial` int(11) DEFAULT NULL,
+  PRIMARY KEY (`intOAID`),
+  KEY `intOAFKEmpID` (`intOAFKEmpID`),
+  KEY `intOASerial_idx` (`intOASerial`),
+  CONSTRAINT `intOAFKEmpID` FOREIGN KEY (`intOAFKEmpID`) REFERENCES `tblemployee` (`intZFEmpID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `intOASerial` FOREIGN KEY (`intOASerial`) REFERENCES `tbloffice` (`intMSID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -263,7 +269,7 @@ CREATE TABLE `tblofficeassign` (
 
 LOCK TABLES `tblofficeassign` WRITE;
 /*!40000 ALTER TABLE `tblofficeassign` DISABLE KEYS */;
-INSERT INTO `tblofficeassign` VALUES (1,'Homer Cadena','Fa23536_01','PC_8EL',1,'Fa23536');
+INSERT INTO `tblofficeassign` VALUES (1,000001,'Fab23565_01','PC-8EL','Fab23565','Homer Cadena',1,1),(2,000003,'Sel71048_01','PC-8LD','Sel71048','Arya Stark',1,4);
 /*!40000 ALTER TABLE `tblofficeassign` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -501,4 +507,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-18  1:05:34
+-- Dump completed on 2019-02-20 16:42:28

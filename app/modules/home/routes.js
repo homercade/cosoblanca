@@ -169,7 +169,7 @@ router.post('/model/delete', auth, (req, res) => {
 
 // CREATE OFFICE SERIAL
 router.post('/office', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tbloffice (strMSEmail, strMSPassword, strMSSerial, intPresence) VALUES (?, ?, ?, 1)`, [req.body.offEmail, req.body.offPass, req.body.offSerial], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tbloffice (strMSSerial, intVacancy, intPresence) VALUES (?, 5, 1)`, [req.body.offSerial], (err, results, fields) => {
     if (err) throw(err);
     else {
         res.redirect('/office');
@@ -189,7 +189,7 @@ router.get('/office', auth,  (req, res) => {
 
 // UPDATE OFFICE SERIAL
 router.post('/office/update', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tbloffice SET strMSEmail=?, strMSPassword=?, strMSSerial=? WHERE intMSID=?`, [req.body.offEmail, req.body.offPass, req.body.offSerial, req.body.id], (err, results, fields) => {
+  db.query(`UPDATE cosdd.tbloffice SET strMSSerial=?, intVacancy=? WHERE intMSID=?`, [req.body.offSerial, req.body.offVaca, req.body.id], (err, results, fields) => {
     if (err) throw(err);
     else {
       res.redirect('/office');
@@ -526,10 +526,6 @@ router.post('/storage/update', auth, (req, res) => {
     else {
         res.redirect('/storage');
     }
-    console.log(req.body.stoBrand);
-    console.log(req.body.stoModel);
-    console.log(req.body.stoUnit);
-    console.log(req.body.strgQty);
   });
 });
 
@@ -705,31 +701,31 @@ router.post('/network/delete', auth, (req, res) => {
 //******************************************************* */
 
 // READ  OFFICE ASSIGNMENT
-router.get('/officeassign', auth, eqaEmployees, uniDevEquipment, accAll, isThatADevice, (req, res) => {
+router.get('/officeassign', auth, eqaEmployees, dispOffice, (req, res) => {
     db.query('SELECT * FROM cosdd.tblofficeassign WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
-            res.render('transactions/views/officeassign', {  offser: results });
+            res.render('transactions/views/officeassign', {  offser: results,
+                                                             employ: req.employ,
+                                                             offy: req.offy });
         }
     });
 });
 
 // CREATE  OFFICE ASSIGNMENT
 router.post('/officeassign/create', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblnetwork (strDeviceName, strNetworkAddress, strWifiAddress, intAccConf, intPresence) VALUES (?, ?, ?, ?, 1)`, [req.body.netDevName, req.body.netAdd, req.body.wifiAdd, req.body.netName], (err, results, fields) => {
-    db.query(`UPDATE tblnetwork a INNER JOIN tblemployee b ON a.intAccConf=b.intZFEmpID SET a.strOwnerName=CONCAT(b.strFirstName,' ',b.strLastName)`, (err, results, fields) => {
-      if (err)
-        console.log(err);
-      else {
-          res.redirect('/officeassign');
-      }
-    });
+  db.query(`INSERT INTO cosdd.tblnetwork (strPCName, strOASerial, strOAEmpName, intPresence) VALUES (?, ?, ?, 1)`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner], (err, results, fields) => {
+    if (err)
+      console.log(err);
+    else {
+        res.redirect('/officeassign');
+    }
   });
 });
 
 // UPDATE OFFICE ASSIGNMENT
 router.post('/officeassign/update',auth,  (req, res) => {
-  db.query(`UPDATE cosdd.tblofficeassign SET strOwnerName=?, strDeviceName=?, strNetworkAddress=?, strWifiAddress=? WHERE intNetworkID=?`, [req.body.netName, req.body.netDevName, req.body.netAdd, req.body.wifiAdd, req.body.id], (err, results, fields) => {
+  db.query(`UPDATE cosdd.tblofficeassign SET strPCName=?, strOASerial=?, intOAEmpName=? WHERE intOAID=?`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner, req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -740,7 +736,7 @@ router.post('/officeassign/update',auth,  (req, res) => {
 
 //DELETE  OFFICE ASSIGNMENT
 router.post('/officeassign/delete', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tblofficeassign SET intPresence=0 WHERE intNetworkID=?`, [req.body.id], (err, results, fields) => {
+  db.query(`UPDATE cosdd.tblofficeassign SET intPresence=0 WHERE intOAID=?`, [req.body.id], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -971,7 +967,14 @@ function eqaDept(req, res, next){
     return next();
   });  
 }
-
+function dispOffice(req, res, next){
+  db.query('SELECT * FROM tbloffice WHERE intPresence=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.offy = results;
+    return next();
+  });  
+}
 function countEmp(req, res, next){
   db.query('SELECT COUNT(intZFEmpID) AS totalEmployees FROM tblemployee WHERE intPresence=1', function(err, results, fields){
     if(err) throw(err)

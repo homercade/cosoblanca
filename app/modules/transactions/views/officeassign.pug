@@ -18,20 +18,18 @@ block unique-content
               table.table.table-hover.datatables
                 thead
                     tr
-                      th Owner
                       th PC Name
-                      th Password 
                       th Serial Number
+                      th Assigned To
                       th Actions
                 tbody
                   each ofs in offser
                     tr
-                      td #{ofs.intOAEmpID} 
                       td #{ofs.strPCName}
-                      td #{ofs.strPassword}
                       td #{ofs.strOASerial} 
+                      td #{ofs.strOAEmpName} 
                       td 
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=ofs.intOAID, data-owner=ofs.intOAEmpID, data-serial=ofs.strOASerial)
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=ofs.intOAID, data-owner=ofs.intOAEmpID, data-serial=ofs.strOASerial, data-name=ofs.strPCName, data-oaemp=ofs.intOAEmpID, data-oaser=ofs.strOASerial)
                             i.fa.fa-wrench
                         button.btn.btn-danger.btn-circle(type='button', title='Remove data', data-toggle="modal", data-target="#deleteModal", data-id=ofs.intOAID)
                             i.fa.fa-trash 
@@ -50,16 +48,20 @@ block unique-content
                   .row
                     .col-md-12
                       .form-group
-                        label.control-label Owner Name
-                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                        // select.oaOwner.form-control(name='oaOwner') 
-                        //   each oa in offa
-                        //     option.oaOwner(value=emp.intZFEmpID) #{emp.strFirstName} #{emp.strLastName}
-                        // at netName ah: onchange='populate(this.id, 'netDevName')
-                    .col-md-12
+                        label.control-label PC Name
+                        input.ofaName.form-control(type='text' name='ofaName' placeholder="PC-AAA" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='6' required)
+                    .col-md-6
                       .form-group
-                        label.control-label Serial Number
-                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        label.control-label Serial
+                        select.ofaSerial.form-control(name='ofaSerial')
+                          each ms in offy
+                            option.ofaOwner(value=ms.strMSSerial) #{ms.strMSSerial}
+                    .col-md-6
+                      .form-group
+                        label.control-label Owned By
+                        select.ofaOwner.form-control(name='ofaOwner')
+                          each emp in employ
+                            option.ofaSerial(value=emp.strFirstName+' '+emp.strLastName) #{emp.strFirstName} #{emp.strLastName}
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -78,12 +80,20 @@ block unique-content
                   .row
                     .col-md-12
                       .form-group
-                        label.control-label Owner Name
-                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
-                    .col-md-12
+                        label.control-label PC Name
+                        input.ofaName.form-control(type='text' name='ofaName' placeholder="PC-AAA" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='6' required)
+                    .col-md-6
                       .form-group
-                        label.control-label Serial Number
-                        input.equProp.form-control(type='text' name='equProp' placeholder="AAAA-000" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        label.control-label Serial
+                        select.ofaSerial.form-control(name='ofaSerial')
+                          each ms in offy
+                            option.ofaSerial(value=ms.strMSSerial) #{ms.strMSSerial}
+                    .col-md-6
+                      .form-group
+                        label.control-label Owned By
+                        select.ofaOwner.form-control(name='ofaOwner')
+                          each emp in employ
+                            option.ofaOwner(value=emp.strFirstName+' '+emp.strLastName) #{emp.strFirstName} #{emp.strLastName}
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -127,12 +137,14 @@ block unique-content
       $('#editModal').on('show.bs.modal', function(event){
       var button = $(event.relatedTarget)      
       var id = button.data('id')
-      var netadd = button.data('netadd')
-      var wifiadd = button.data('wifiadd')
+      var pc = button.data('name')
+      var oaemp = button.data('oaemp')
+      var oaser = button.data('oaser')
       let modal = $(this);     
       modal.find('.modal-body .id').val(`${id}`)
-      modal.find('.modal-body .netAdd').val(`${netadd}`)
-      modal.find('.modal-body .wifiAdd').val(`${wifiadd}`)
+      modal.find('.modal-body .ofaName').val(`${pc}`)
+      modal.find('.modal-body .ofaOwner .ofaOwner').val(`${oaemp}`)
+      modal.find('.modal-body .ofaSerial .ofaSerial').val(`${oaser}`)
       });
       
     script.

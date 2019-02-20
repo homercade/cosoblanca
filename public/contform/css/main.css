@@ -20,6 +20,8 @@
   src: url('../fonts/raleway/Raleway-Bold.ttf'); 
 }
 
+@import url('https://fonts.googleapis.com/css?family=Oxygen');
+
 /*//////////////////////////////////////////////////////////////////
 [ RESTYLE TAG ]*/
 
@@ -31,7 +33,7 @@
 
 body, html {
 	height: 100%;
-	font-family: Raleway-SemiBold, sans-serif;
+	font-family: Oxygen, sans-serif;
 }
 
 /*---------------------------------------------*/
