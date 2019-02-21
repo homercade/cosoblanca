@@ -1,0 +1,27 @@
+extends ../../../templates/master-reports.pug 
+block vars
+  - var title = 'MS Office Distribution'
+block unique-master
+  body
+    #wrapper
+      .col-lg-12
+        h1.page-header
+          | MS Office Report
+      .col-lg-12
+        .panel.panel-default
+          .panel-body
+            .table-responsive
+              table.table.table-hover.datatable
+                thead
+                  tr
+                    th Employee Number
+                    th Owner
+                    th Department
+                    th MS Office Serial
+                tbody
+                  each off in offer
+                    tr
+                      td #{off.intZFEmpID}
+                      td #{off.strOAEmpName}
+                      td #{off.strEmpDept}
+                      td #{off.strMSSerial}

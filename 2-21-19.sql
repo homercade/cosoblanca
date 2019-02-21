@@ -247,7 +247,7 @@ DROP TABLE IF EXISTS `tblofficeassign`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `tblofficeassign` (
-  `intOAID` int(11) NOT NULL,
+  `intOAID` int(11) NOT NULL AUTO_INCREMENT,
   `intOAFKEmpID` int(6) unsigned zerofill DEFAULT NULL,
   `strPassword` varchar(45) DEFAULT NULL,
   `strPCName` varchar(45) NOT NULL,
@@ -260,7 +260,7 @@ CREATE TABLE `tblofficeassign` (
   KEY `intOASerial_idx` (`intOASerial`),
   CONSTRAINT `intOAFKEmpID` FOREIGN KEY (`intOAFKEmpID`) REFERENCES `tblemployee` (`intZFEmpID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `intOASerial` FOREIGN KEY (`intOASerial`) REFERENCES `tbloffice` (`intMSID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -507,4 +507,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-20 16:42:28
+-- Dump completed on 2019-02-21 14:14:27

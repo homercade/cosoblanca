@@ -714,7 +714,7 @@ router.get('/officeassign', auth, eqaEmployees, dispOffice, (req, res) => {
 
 // CREATE  OFFICE ASSIGNMENT
 router.post('/officeassign/create', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblnetwork (strPCName, strOASerial, strOAEmpName, intPresence) VALUES (?, ?, ?, 1)`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tblofficeassign (strPCName, intOASerial, strOAEmpName, intPresence) VALUES (?, ?, ?, 1)`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
@@ -725,12 +725,13 @@ router.post('/officeassign/create', auth, (req, res) => {
 
 // UPDATE OFFICE ASSIGNMENT
 router.post('/officeassign/update',auth,  (req, res) => {
-  db.query(`UPDATE cosdd.tblofficeassign SET strPCName=?, strOASerial=?, intOAEmpName=? WHERE intOAID=?`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner, req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/officeassign');
-    }
+  db.query(`UPDATE cosdd.tblofficeassign SET strPCName=?, intOASerial=?, strOAFKEmpID=? WHERE intOAID=?`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner, req.body.id], (err, results, fields) => {
+    db.query(`UPDATE tblofficeassign a INNER JOIN tblemployee b ON a.intOAFKEmpID=b.intZFEmpID INNER JOIN tbloffice c ON a.intOASerial=c.intMSID SET a.strOAEmpName=CONCAT(b.strFirstName,' ',b.strLastName)`, (err, results, fields) => {
+      if(err) throw (err)
+      else{
+        res.redirect('/officeassign');
+      }
+    });
   });
 });
 
@@ -796,6 +797,21 @@ router.get('/active', auth, (req, res) => {
       }
   });
 });
+
+
+//******************************************************* */
+//                 OFFICE DISTRIBUTION
+//******************************************************* */ 
+// READ INDIVIDUAL SLIP
+router.get('/officereport', auth, (req, res) => {
+  db.query('SELECT tblemployee.intZFEmpID, tblemployee.strEmpDept, tblofficeassign.strOAEmpName, tbloffice.strMSSerial FROM tblemployee INNER JOIN tblofficeassign ON tblemployee.intZFEmpID=tblofficeassign.intOAFKEmpID INNER JOIN tbloffice ON tblofficeassign.intOASerial=tbloffice.intMSID WHERE tblofficeassign.intPresence=1 AND tblemployee.intPresence=1 AND tbloffice.intPresence=1 GROUP BY intZFEmpID ASC', function(err, results, fields){
+      if (err) throw (err)
+      else {
+          res.render('reports/views/officereport', { offer: results });
+      }
+  });
+});
+
 
 //******************************************************* */
 //                FUNCTIONS are NOT FUN
@@ -935,6 +951,7 @@ function accAll(req, res, next){
     return next();
   });  
 }
+
 function uniDevEquipment(req, res, next){
   db.query('SELECT strModelName FROM tblmodel WHERE intPresence=1 AND intCompBool=1', function(err, results, fields){
     if(err) throw(err)
@@ -943,6 +960,7 @@ function uniDevEquipment(req, res, next){
     return next();
   });  
 }
+
 function eqaEmployees(req, res, next){
   db.query('SELECT * FROM tblemployee WHERE intPresence=1', function(err, results, fields){
     if(err) throw(err)
@@ -951,6 +969,7 @@ function eqaEmployees(req, res, next){
     return next();
   });  
 }
+
 function eqaEmployees2(req, res, next){
   db.query('SELECT * FROM tblemployee WHERE intPresence=1 AND intZFEmpID=?', [req.body.maya], function(err, results, fields){
     if(err) throw(err)
@@ -959,6 +978,7 @@ function eqaEmployees2(req, res, next){
     return next();
   });  
 }
+
 function eqaDept(req, res, next){
   db.query('SELECT * FROM tbldept WHERE intPresence=1', function(err, results, fields){
     if(err) throw(err)
@@ -967,6 +987,7 @@ function eqaDept(req, res, next){
     return next();
   });  
 }
+
 function dispOffice(req, res, next){
   db.query('SELECT * FROM tbloffice WHERE intPresence=1', function(err, results, fields){
     if(err) throw(err)
@@ -975,6 +996,7 @@ function dispOffice(req, res, next){
     return next();
   });  
 }
+
 function countEmp(req, res, next){
   db.query('SELECT COUNT(intZFEmpID) AS totalEmployees FROM tblemployee WHERE intPresence=1', function(err, results, fields){
     if(err) throw(err)
@@ -1001,6 +1023,7 @@ function countDept(req, res, next){
     return next();
   });  
 }
+
 function isThatADevice(req, res, next){
    // db.query('SELECT tblownership.intOwnedBy, tblownership.intPriceFlagID, tblstorage.strBrand, tblstorage.strMod FROM tblownership INNER JOIN tblstorage ON tblownership.intPriceFlagID=tblstorage.intStorageID WHERE tblownership.intPresence=1 AND tblownership.isDevice=1 AND tblownership.intOwnedBy=?', function(err, results, fields){
     db.query('SELECT strBrand, strMod FROM tblstorage WHERE intPresence=1 AND intIsDevice=1;', function(err, results, fields){
@@ -1068,7 +1091,6 @@ function queryInv(req, res, next){
   }
 }
 
-
 router.get('/dashboard', auth, dash);
 router.get('/department', auth, dept);
 router.get('/diagnosis', auth, diag);
@@ -1114,6 +1136,9 @@ function actacc(req, res){
 function sli(req, res){
     res.render('reports/views/slip');
 }
+function offre(req, res){
+    res.render('reports/views/officereport')
+}
 
 router.get('/inventory', auth, inv);
 router.get('/reports', auth, rep);
@@ -1123,6 +1148,7 @@ router.get('/network', auth, netw);
 router.get('/officeassign', auth, ofa);
 router.get('/invreport', auth, invrepo);
 router.get('/active', auth, actacc);
+router.get('/officereport', auth, offre);
 
 function login(req, res){
   res.render('authorization/views/login');
