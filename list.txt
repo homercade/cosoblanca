@@ -2,8 +2,6 @@ To Do:
 > Inner Validations
 > Nodemailer
 > Office Maintenance
-> MS Office Logic
-> MS Office Assignment
 > swal(); Confirmation and Verification
 > Date Sorting
 > Code Simplification
