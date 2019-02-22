@@ -91,3 +91,13 @@ html(lang='en')
           }
       };
     
+    script.
+      function checkForm(form)
+      {
+        if(form.inputfield.value == ""){
+          swal("This field is empty!");
+          form.inputfield.focus();
+          return false;
+        }
+      }
+    

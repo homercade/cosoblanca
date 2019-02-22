@@ -32,7 +32,7 @@ router.post('/login', (req, res) => {
     var user = resultArray[0].strUsername;
     var pass = resultArray[0].strPassword;
     if(!req.body.username && !req.body.password){
-      res.redirect('/');
+      res.redirect('/login');
     }
     else if(user === req.body.username && pass === req.body.password){
       req.session.user = 'root';
@@ -116,54 +116,6 @@ router.post('/department/delete', auth, (req, res) => {
 });
 
 //******************************************************* */
-//                          MODEL
-//******************************************************* */
-
-// CREATE MODEL
-router.post('/model', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblmodel (strModelName, intPresence) VALUES (?, 1)`, [req.body.unitModel], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-        res.redirect('/model');
-    }
-  });
-});
-
-// READ MODEL
-router.get('/model', auth,  (req, res) => {
-    db.query('SELECT * FROM cosdd.tblmodel WHERE intPresence=1', function(err, results, fields){
-        if (err) throw (err)
-        else {
-            res.render('maintenance/views/model', { models: results });
-        }
-    });
-});
-
-// UPDATE MODEL
-router.post('/model/update', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tblmodel SET strModelName=? WHERE intModelID=?`, [req.body.unitModel, req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/model');
-    }
-    console.log(req.body.unitModel);
-  });
-});
-
-//DELETE MODEL
-router.post('/model/delete', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tblmodel SET intPresence=0 WHERE intModelID=?`, [req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/model');
-    }
-  });
-});
-
-//******************************************************* */
 //                          OFFICE SERIAL
 //******************************************************* */
 
@@ -203,52 +155,6 @@ router.post('/office/delete', auth, (req, res) => {
     if (err) throw(err);
     else {
       res.redirect('/office');
-    }
-  });
-});
-//******************************************************* */
-//                          BRAND
-//******************************************************* */
-
-// CREATE BRAND
-router.post('/brand', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblbrand (strUnitBrand, intPresence) VALUES (?, 1)`, [req.body.unitBrand], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-        res.redirect('/brand');
-    }
-  });
-});
-
-// READ BRAND
-router.get('/brand', auth, (req, res) => {
-    db.query('SELECT * FROM cosdd.tblbrand WHERE intPresence=1', function(err, results, fields){
-        if (err) throw (err)
-        else {
-            res.render('maintenance/views/brand', { brands: results });
-        }
-    });
-});
-
-// UPDATE BRAND
-router.post('/brand/update',auth,  (req, res) => {
-  db.query(`UPDATE cosdd.tblbrand SET strUnitBrand=? WHERE intUnitID=?`, [req.body.unitBrand, req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/brand');
-    }
-  });
-});
-
-//DELETE BRAND
-router.post('/brand/delete', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tblbrand SET intPresence=0 WHERE intUnitID=?`, [req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/brand');
     }
   });
 });
@@ -296,148 +202,6 @@ router.post('/unittype/delete', auth, (req, res) => {
       console.log(err);
     else {
       res.redirect('/unittype');
-    }
-  });
-});
-//******************************************************* */
-//                       TECHNICIAN
-//******************************************************* */
-
-// CREATE TECHNICIAN
-router.post('/technician',auth,  (req, res) => {   
-  db.query(`INSERT INTO cosdd.tbltechnician (strTechnicianFName, strTechnicianLName, intPresence) VALUES (?, ?, 1)`, [req.body.techFName, req.body.techLName], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-        res.redirect('/technician');
-    }
-  });
-});
-
-// READ TECHNICIAN
-router.get('/technician', auth, (req, res) => {
-    db.query('SELECT * FROM cosdd.tbltechnician WHERE intPresence=1', function(err, results, fields){
-        if (err) throw (err)
-        else {
-            res.render('maintenance/views/technician', { technicians: results });
-        }
-    });
-});
-
-// UPDATE TECHNICIAN
-router.post('/technician/update', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tbltechnician SET strTechnicianFName=?, strTechnicianLName=? WHERE intTechnicianID=?`, [req.body.techFName, req.body.techLName, req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/technician');
-    }
-  });
-});
-
-//DELETE TECHNICIAN
-router.post('/technician/delete', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tbltechnician SET intPresence=0 WHERE intTechnicianID=?`, [req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/technician');
-    }
-  });
-});
-
-//******************************************************* */
-//                      STATUS
-//******************************************************* */
-
-// CREATE STATUS
-router.post('/status', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblstatus (strStatusName, txtStatusDesc) VALUES (?, ?)`, [req.body.statName, req.body.statDesc], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-        res.redirect('/status');
-    }
-  });
-});
-
-// READ STATUS
-router.get('/status', auth, (req, res) => {
-    db.query('SELECT * FROM cosdd.tblstatus', function(err, results, fields){
-        if (err) throw (err)
-        else {
-            res.render('maintenance/views/status', { statuses: results });
-        }
-    });
-});
-
-// UPDATE STATUS
-router.post('/status/update', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tblstatus SET strStatusName=?, txtStatusDesc=? WHERE intStatusID=?`, [req.body.statName, req.body.statDesc, req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/status');
-    }
-  });
-});
-
-//DELETE STATUS
-router.post('/status/delete', auth, (req, res) => {
-  db.query(`DELETE FROM cosdd.tblstatus WHERE intStatusID=?`, [req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/status');
-    }
-  });
-});
-
-//******************************************************* */
-//                      PRICE
-//******************************************************* */
-
-// CREATE PRICE
-router.post('/price', auth, (req, res) => { 
-  db.query(`INSERT INTO cosdd.tblprice (txtUnitDesc, fltPrice, intPresence) VALUES (?, ?, 1)`, [req.body.priStorage, req.body.priPrice], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-        res.redirect('/price');
-    }
-  });
-});
-
-// READ PRICE
-router.get('/price', auth, (req, res) => {
-    db.query('SELECT * FROM cosdd.tblprice WHERE intPresence=1', function(err, results, fields){
-        if (err) throw (err)
-        else {
-            res.render('maintenance/views/price', { pricey: results,
-                                                    equips: req.equips,
-                                                    equiper: req.equiper });
-        }
-    });
-});
-
-// UPDATE PRICE
-router.post('/price/update', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tblprice SET txtUnitDesc=?, fltPrice=? WHERE intPriceID=?`, [req.body.priStorage, req.body.priPrice, req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/price');
-    }
-  });
-});
-
-//DELETE PRICE
-router.post('/price/delete', auth, (req, res) => {
-  db.query(`UPDATE cosdd.tblprice SET intPresence=0 WHERE intPriceID=?`, [req.body.id], (err, results, fields) => {
-    if (err)
-      console.log(err);
-    else {
-      res.redirect('/price');
     }
   });
 });
@@ -817,36 +581,6 @@ router.get('/officereport', auth, (req, res) => {
 //                FUNCTIONS are NOT FUN
 //******************************************************* */
 
-function queryBrand(req, res, next){
-  db.query(`SELECT * FROM cosdd.tblbrand`, function(err, results, fields){
-        if (err) throw (err)
-        else {
-          req.brandQuery = results;
-        }
-    });
-  return next();
-}
-
-function queryPersonnel(req, res, next){
-  db.query(`SELECT * FROM cosdd.tbltechnician`, function(err, results, fields){
-        if (err) throw (err)
-        else {
-          req.personQuery = results;
-        }
-    });
-  return next();
-}
-
-function queryStatus(req, res, next){
-  db.query(`SELECT * FROM cosdd.tblstatus`, function(err, results, fields){
-        if (err) throw (err)
-        else {
-          req.statusQuery = results;
-        }
-    });
-  return next();
-}
-
 function queryDepartment(req, res, next){
   db.query(`SELECT * FROM cosdd.tbldept`, function(err, results, fields){
         if (err) throw (err)
@@ -872,36 +606,6 @@ function queryEmployee(req, res, next){
         if (err) throw (err)
         else {
           req.empQuery = results;
-        }
-    });
-  return next();
-}
-
-function queryModel(req, res, next){
-  db.query(`SELECT * FROM cosdd.tblmodel`, function(err, results, fields){
-        if (err) throw (err)
-        else {
-          req.modelQuery = results;
-        }
-    });
-  return next();
-}
-
-function queryPrice(req, res, next){
-  db.query(`SELECT * FROM cosdd.tblprice`, function(err, results, fields){
-        if (err) throw (err)
-        else {
-          req.priceQuery = results;
-        }
-    });
-  return next();
-}
-
-function queryUnit(req, res, next){
-  db.query(`SELECT * FROM cosdd.tblunittype`, function(err, results, fields){
-        if (err) throw (err)
-        else {
-          req.uttpQuery = results;
         }
     });
   return next();
@@ -1043,26 +747,8 @@ function dept(req, res){
 function dash(req, res){
     res.render('home/views/dashboard');
 }
-function diag(req, res){
-    res.render('maintenance/views/diagnosis');
-}
-function stat(req, res){
-    res.render('maintenance/views/status');
-}
-function tech(req, res){
-    res.render('maintenance/views/technician');
-}
 function unittype(req, res){
     res.render('maintenance/views/unittype');
-}
-function bran(req, res){
-    res.render('maintenance/views/brand');
-}
-function mod(req, res){
-    res.render('maintenance/views/model');
-}
-function pri(req, res){
-    res.render('maintenance/views/price', stoEquipment);
 }
 function emp(req, res){
     res.render('maintenance/views/employee');
@@ -1093,30 +779,17 @@ function queryInv(req, res, next){
 
 router.get('/dashboard', auth, dash);
 router.get('/department', auth, dept);
-router.get('/diagnosis', auth, diag);
-router.get('/status', auth, stat);
-router.get('/technician', auth, tech);
 router.get('/unittype',auth,  unittype);
-router.get('/brand', auth, bran, queryBrand);
-router.get('/model', auth, mod);
 router.get('/office', auth, offi);
-router.get('/price', auth, pri);
 router.get('/employee', auth, emp);
 router.get('/accounts', auth, acc);
 router.get('/contact', auth, cont);
 router.get('/storage', auth, sto);
 router.get('/slip/:maya', auth, sliRep);
 
-function inv(req, res){
-    res.render('transactions/views/inventory');
-}
-function renderInv(req, res){
-    res.render('transactions/views/inventory');
-}
 function rep(req, res){
     res.render('transactions/views/reports');
 }
-
 function equ(req, res){
     res.render('transactions/views/equipment');
 }
@@ -1140,7 +813,6 @@ function offre(req, res){
     res.render('reports/views/officereport')
 }
 
-router.get('/inventory', auth, inv);
 router.get('/reports', auth, rep);
 router.get('/slip', auth, sli);
 router.get('/equipment', auth, equ, eqaEmployees);
