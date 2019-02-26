@@ -29,7 +29,7 @@ block unique-content
                             td #{sto.intStorageQty}
                             td ₱#{sto.fltPrice}
                             td
-                                button.btn.btn-primary.btn-circle(type='button', title='Edit storage input', data-toggle="modal", data-target="#editModal" data-id=sto.intStorageID data-qty=sto.intStorageQty data-brand=sto.strBrand data-mod=sto.strMod)
+                                button.btn.btn-primary.btn-circle(type='button', title='Edit storage input', data-toggle="modal", data-target="#editModal" data-id=sto.intStorageID data-qty=sto.intStorageQty data-pri=sto.fltPrice data-brand=sto.strBrand data-mod=sto.strMod)
                                     i.fa.fa-wrench
                                 button.btn.btn-danger.btn-circle(type='button', title='Delete storage data', data-toggle="modal", data-target="#deleteModal" data-id=sto.intStorageID)
                                     i.fa.fa-trash
@@ -58,6 +58,7 @@ block unique-content
                       .form-group
                         label.control-label Unit Type
                         select#stoUnit.form-control(name='stoUnit')
+                          option.stoUnit(value='' selected) - Select Unit -
                           each uni in unity
                             option.stoUnit(value=uni.intUnitID) #{uni.strUnitTypeDesc}
                     .col-md-3
@@ -96,16 +97,17 @@ block unique-content
                       .form-group
                         label.control-label Unit Type
                         select.stoUnit.form-control(name='stoUnit')
+                          option.stoUnit(value='' selected) - Select Unit -
                           each uni in unity
                             option.stoUnit(value=uni.intUnitID) #{uni.strUnitTypeDesc}
                     .col-md-3
                       .form-group
                         label.control-label Quantity
-                        input#strgQty.form-control(type='text' name='strgQty' placeholder="1" onkeypress='return restrictCharacters(this, event, numOnly)' required)
+                        input.strgQty.form-control(type='text' name='strgQty' placeholder="1" onkeypress='return restrictCharacters(this, event, numOnly)' required)
                     .col-md-9
                       .form-group
                         label.control-label Value
-                        input#stoVal.form-control(type='text' name='stoVal' placeholder="1000.00" onkeypress='return restrictCharacters(this, event, floatOnly)' required)
+                        input.stoVal.form-control(type='text' name='stoVal' placeholder="1000.00" onkeypress='return restrictCharacters(this, event, floatOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -144,13 +146,13 @@ block unique-content
       var id = button.data('id')
       var brand = button.data('brand')
       var mod = button.data('mod')
-      //- var unit = button.data('unit')
       var qty = button.data('qty')
+      var pri = button.data('pri')
       let modal = $(this);     
       modal.find('.modal-body .id').val(`${id}`)
       modal.find('.modal-body .stoBrand').val(`${brand}`)
       modal.find('.modal-body .stoModel').val(`${mod}`)
-      //- modal.find('.modal-body .strUnit').val(`${unit}`)
       modal.find('.modal-body .strgQty').val(`${qty}`)
+      modal.find('.modal-body .stoVal').val(`${pri}`)
       });
 

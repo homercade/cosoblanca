@@ -25,22 +25,28 @@ router.use(session({
 //     res.redirect('/');
 // });
 
+
 router.post('/login', (req, res) => {
-  db.query('SELECT strUsername, strPassword FROM cosdd.tbluser WHERE strUsername=? AND strPassword=?', [req.body.username, req.body.password], function(err, results, fields){
-    if (err) {throw (err)}
-    var resultArray = Object.values(JSON.parse(JSON.stringify(results)))
-    var user = resultArray[0].strUsername;
-    var pass = resultArray[0].strPassword;
-    if(!req.body.username && !req.body.password){
-      res.redirect('/login');
-    }
-    else if(user === req.body.username && pass === req.body.password){
-      req.session.user = 'root';
-      req.session.admin = true;
-      res.redirect('/dashboard');
+  var field_user = req.body.username;
+  var field_pass = req.body.password;
+  db.query('SELECT strUsername, strPassword FROM cosdd.tbluser WHERE strUsername=? AND strPassword=?', [field_user, field_pass], function(err, results, fields){
+    if (err) {
+      throw (err)
     }
     else{
-      res.redirect('/');
+        if(results.length > 0){
+          if(results[0].strPassword == field_pass){
+            req.session.user = 'root';
+            req.session.admin = true;
+            res.redirect('/dashboard');
+          }
+          else{
+            res.redirect('/');
+          }
+        }
+        else{
+          res.redirect('/');
+        }
     }
   });
 });
