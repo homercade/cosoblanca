@@ -55,13 +55,13 @@ block unique-content
                         label.control-label Serial
                         select.ofaSerial.form-control(name='ofaSerial')
                           each ms in offy
-                            option.ofaOwner(value=ms.strMSSerial) #{ms.strMSSerial}
+                            option.ofaOwner(value=ms.intMSID) #{ms.strMSSerial}
                     .col-md-6
                       .form-group
                         label.control-label Owned By
                         select.ofaOwner.form-control(name='ofaOwner')
                           each emp in employ
-                            option.ofaSerial(value=emp.strFirstName+' '+emp.strLastName) #{emp.strFirstName} #{emp.strLastName}
+                            option.ofaSerial(value=emp.intZFEmpID) #{emp.strFirstName} #{emp.strLastName}
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
@@ -87,7 +87,7 @@ block unique-content
                         label.control-label Serial
                         select.ofaSerial.form-control(name='ofaSerial')
                           each ms in offy
-                            option.ofaSerial(value=ms.strMSID) #{ms.strMSSerial}
+                            option.ofaSerial(value=ms.intMSID) #{ms.strMSSerial}
                     .col-md-6
                       .form-group
                         label.control-label Owned By

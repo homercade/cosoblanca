@@ -484,19 +484,33 @@ router.get('/officeassign', auth, eqaEmployees, dispOffice, (req, res) => {
 
 // CREATE  OFFICE ASSIGNMENT
 router.post('/officeassign/create', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblofficeassign (strPCName, intOASerial, strOAEmpName, intPresence) VALUES (?, ?, ?, 1)`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tblofficeassign (strPCName, intOASerial, intOAFKEmpID, intPresence) VALUES (?, ?, ?, 1)`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner], (err, results, fields) => {
     if (err)
       console.log(err);
     else {
-        res.redirect('/officeassign');
+      db.query(`UPDATE tblofficeassign a INNER JOIN tblemployee b ON a.intOAFKEmpID=b.intZFEmpID INNER JOIN tbloffice c ON a.intOASerial=c.intMSID SET a.strOAEmpName=CONCAT(b.strFirstName,' ',b.strLastName), a.strOASerial=c.strMSSerial WHERE a.intPresence=1 AND b.intPresence=1 AND c.intPresence=1`, (err, results, fields) => {
+      if(err) throw (err)
+      else{
+        db.query(`UPDATE cosdd.tbloffice, cosdd.tblofficeassign SET tbloffice.intVacancy=(tbloffice.intVacancy-1) WHERE tbloffice.intMSID=?`, [req.body.ofaSerial], (err, results, fields) => {
+          if(err) throw(err)
+          else{
+            res.redirect('/officeassign');
+          }
+        });
+      }
+    });
     }
   });
 });
 
-// UPDATE OFFICE ASSIGNMENT
-router.post('/officeassign/update',auth,  (req, res) => {
-  db.query(`UPDATE cosdd.tblofficeassign SET strPCName=?, intOASerial=?, strOAFKEmpID=? WHERE intOAID=?`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner, req.body.id], (err, results, fields) => {
-    db.query(`UPDATE tblofficeassign a INNER JOIN tblemployee b ON a.intOAFKEmpID=b.intZFEmpID INNER JOIN tbloffice c ON a.intOASerial=c.intMSID SET a.strOAEmpName=CONCAT(b.strFirstName,' ',b.strLastName)`, (err, results, fields) => {
+// UPDATE OFFICE ASSIGNMENT 
+router.post('/officeassign/update', auth,  (req, res) => {
+  console.log(req.body.id);
+  console.log(req.body.ofaName);
+  console.log(req.body.ofaSerial);
+  console.log(req.body.ofaOwner);
+  db.query(`UPDATE cosdd.tblofficeassign SET strPCName=?, intOASerial=?, intOAFKEmpID=? WHERE intOAID=?`, [req.body.ofaName, req.body.ofaSerial, req.body.ofaOwner, req.body.id], (err, results, fields) => {
+    db.query(`UPDATE tblofficeassign a INNER JOIN tblemployee b ON a.intOAFKEmpID=b.intZFEmpID INNER JOIN tbloffice c ON a.intOASerial=c.intMSID SET a.strOAEmpName=CONCAT(b.strFirstName,' ',b.strLastName), a.strOASerial=c.strMSSerial WHERE intOAID=?`, [req.body.id], (err, results, fields) => {
       if(err) throw (err)
       else{
         res.redirect('/officeassign');
