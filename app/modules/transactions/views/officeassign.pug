@@ -29,7 +29,7 @@ block unique-content
                       td #{ofs.strOASerial} 
                       td #{ofs.strOAEmpName} 
                       td 
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=ofs.intOAID, data-owner=ofs.intOAEmpID, data-serial=ofs.strOASerial, data-name=ofs.strPCName, data-oaemp=ofs.intOAEmpID, data-oaser=ofs.strOASerial)
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=ofs.intOAID, data-owner=ofs.intOAEmpID, data-serial=ofs.strOASerial, data-name=ofs.strPCName, data-oaemp=ofs.intOAEmpID, data-oaser=ofs.intOASerial)
                             i.fa.fa-wrench
                         button.btn.btn-danger.btn-circle(type='button', title='Remove data', data-toggle="modal", data-target="#deleteModal", data-id=ofs.intOAID)
                             i.fa.fa-trash 
@@ -85,13 +85,15 @@ block unique-content
                     .col-md-6
                       .form-group
                         label.control-label Serial
-                        select.ofaSerial.form-control(name='ofaSerial')
+                        select.ofaSerial.selSer.form-control(name='ofaSerial')
+                          option.ofaSerial(value='' selected) - Select Serial -
                           each ms in offy
                             option.ofaSerial(value=ms.intMSID) #{ms.strMSSerial}
                     .col-md-6
                       .form-group
                         label.control-label Owned By
-                        select.ofaOwner.form-control(name='ofaOwner')
+                        select.ofaOwner.selEmp.form-control(name='ofaOwner')
+                          option.ofaOwner(value='' selected) - Select Owner -
                           each emp in employ
                             option.ofaOwner(value=emp.intZFEmpID) #{emp.strFirstName} #{emp.strLastName}
             .modal-footer
@@ -138,9 +140,13 @@ block unique-content
       var button = $(event.relatedTarget)      
       var id = button.data('id')
       var pc = button.data('name')
+      var sser = button.data('oaser')
+      var semp = button.data('oaemp')
       let modal = $(this);     
       modal.find('.modal-body .id').val(`${id}`)
       modal.find('.modal-body .ofaName').val(`${pc}`)
+      //- modal.find('.modal-body .selSer').val(`${sser}`)
+      //- modal.find('.modal-body .selEmp').val(`${}`)
       });
       
     script.

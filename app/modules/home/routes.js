@@ -471,13 +471,14 @@ router.post('/network/delete', auth, (req, res) => {
 //******************************************************* */
 
 // READ  OFFICE ASSIGNMENT
-router.get('/officeassign', auth, eqaEmployees, dispOffice, (req, res) => {
+router.get('/officeassign', auth, eqaEmployees, dispOffice, offEx, (req, res) => {
     db.query('SELECT * FROM cosdd.tblofficeassign WHERE intPresence=1', function(err, results, fields){
         if (err) throw (err)
         else {
             res.render('transactions/views/officeassign', {  offser: results,
                                                              employ: req.employ,
-                                                             offy: req.offy });
+                                                             offy: req.offy, 
+                                                             exi: req.issaExist});
         }
     });
 });
@@ -754,6 +755,16 @@ function isThatADevice(req, res, next){
     if(err) throw(err)
     else
       req.issaDevice = results;
+    return next();
+  });  
+}
+
+function offEx(req, res, next){
+   // db.query('SELECT tblownership.intOwnedBy, tblownership.intPriceFlagID, tblstorage.strBrand, tblstorage.strMod FROM tblownership INNER JOIN tblstorage ON tblownership.intPriceFlagID=tblstorage.intStorageID WHERE tblownership.intPresence=1 AND tblownership.isDevice=1 AND tblownership.intOwnedBy=?', function(err, results, fields){
+    db.query('SELECT * FROM tblofficeassign WHERE intPresence=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.issaExist = results;
     return next();
   });  
 }

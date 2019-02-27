@@ -58,6 +58,7 @@ block unique-content
                       .form-group
                         label.control-label Device Owner
                         select.devOwn.form-control(name='devOwn')
+                          option.devOwn(value='' selected) - Select Employee/Owner -
                           each oww in owner
                             option(value=oww.intZFEmpID) #{oww.strFirstName} #{oww.strLastName}
                     .col-md-12

@@ -29,7 +29,7 @@ block unique-content
                       td #{emp.strFirstName} #{emp.strLastName}
                       td #{emp.strEmpDept}
                       td
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit employee details', data-toggle="modal", data-target="#editModal", data-fname=emp.strFirstName, data-lname=emp.strLastName, data-id=emp.intZFEmpID)
+                        button.btn.btn-primary.btn-circle(type='button', title='Edit employee details', data-toggle="modal", data-target="#editModal", data-fname=emp.strFirstName, data-lname=emp.strLastName, data-id=emp.intZFEmpID, data-drpdept=emp.strEmpDept)
                           i.fa.fa-wrench
                         button.btn.btn-danger.btn-circle(type='button', title='Delete employee details', data-toggle="modal", data-target="#deleteModal", data-id=emp.intZFEmpID)
                           i.fa.fa-trash
@@ -58,6 +58,7 @@ block unique-content
                       .form-group
                         label.control-label Department
                         select.empDept.form-control(name='empDept')
+                          option.stoUnit(value='' selected) - Select Department -
                           each dep in deppy
                             option.empDept(value=dep.strDeptCode) #{dep.strDeptCode} - #{dep.txtDeptName}
             .modal-footer
@@ -87,7 +88,8 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Department
-                        select.empDept.form-control(name='empDept')
+                        select.empDept.selectSample.form-control(name='empDept')
+                          option.empDept(value='' selected) - Select Department -
                           each dep in deppy
                             option.empDept(value=dep.strDeptCode) #{dep.strDeptCode} - #{dep.txtDeptName}
             .modal-footer
@@ -128,10 +130,12 @@ block unique-content
       var id = button.data('id')
       var lname = button.data('lname')
       var fname = button.data('fname')
+      var dept = button.data('drpdept')
       let modal = $(this);     
       modal.find('.modal-body #id').val(`${id}`)
       modal.find('.modal-body .empFName').val(`${fname}`)
       modal.find('.modal-body .empLName').val(`${lname}`)
+      modal.find('.modal-body .selectSample').val(`${dept}`)
       });
     script.
       var alphaNumOnly = /^[a-zA-Z0-9 ]+$/i;
