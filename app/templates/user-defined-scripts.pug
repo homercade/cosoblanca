@@ -48,6 +48,10 @@ html(lang='en')
     script.
       $(function() {
           $(".datepicker").datepicker({ 
+            endDate: "today",
+            beforeShow: function(){
+              jQuery( this ).datepicker({ endDate: "today" });
+            },
             format: "yyyy-mm-dd" })
        });
        
@@ -111,4 +115,9 @@ html(lang='en')
               pass.type='password';
           }
       }
-    
+
+    script.
+      $(window).on('load', function() {
+        // Animate loader off screen
+        $('.se-pre-con').fadeOut('slow');
+      });

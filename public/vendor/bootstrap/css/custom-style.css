@@ -1,5 +1,4 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
-
 .login-page {
   width: 360px;
   padding: 8% 0 0;
@@ -51,6 +50,11 @@
 .form .message a {
   color: #4CAF50;
   text-decoration: none;
+}
+.form .message-err {
+  margin: 15px 0 0;
+  color: red;
+  font-size: 12px;
 }
 .form .register-form {
   display: none;

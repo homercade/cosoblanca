@@ -365,7 +365,7 @@ router.post('/accounts/delete', auth, (req, res) => {
 
 // READ INVENTORY RECORDS
 router.get('/equipment', auth, eqaEmployees, stoEquipment, eqaDept, (req, res) => {
-  db.query('SELECT tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtPARNumber, tblownership.txtSerialNumber FROM tblownership  INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID WHERE tblownership.intPresence=1 AND tblemployee.intPresence=1;', function(err, results, fields){
+  db.query('SELECT tblownership.intOwnershipID, tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtPARNumber, tblownership.txtSerialNumber FROM tblownership  INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID WHERE tblownership.intPresence=1 AND tblemployee.intPresence=1;', function(err, results, fields){
       if (err) throw (err)
       else {
           res.render('transactions/views/equipment', { equipments: results,
