@@ -5,6 +5,10 @@ var express = require('express');
 var router = express.Router();
 var db = require('../../lib/database')();
 var session = require('express-session');
+var nodemailer = require('nodemailer');
+var contact_user = process.env.NODEMAILER_USER;
+var contact_pass = process.env.NODEMAILER_PASS;
+var contact_service = process.env.NODEMAILER_SERVICE;
 
 router.use(session({
   secret: 'AU832hrui4yryw8413JH3',
@@ -74,6 +78,29 @@ router.get('/dashboard', auth, countEmp, countOwn, countDept, (req, res) => {
     }
   });
 })
+
+// var transporter = nodemailer.createTransport({
+//   service: contact_service,
+//   auth: {
+//     user: contact_user,
+//     pass: contact_pass
+//   }
+// });
+
+// var mailOptions = {
+//   from: 'nha_cosdd@gov.ph',
+//   to: contact_user,
+//   subject: 'NHA Contact Page',
+//   text: 'Henlo'
+// };
+
+// transporter.sendMail(mailOptions, function(error, info){
+//   if(error)
+//     console.log(error);
+//   else
+//     console.log('Email sent: ' + info.response);
+// });
+
 
 //******************************************************* */
 //                      DEPARTMENT
