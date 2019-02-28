@@ -6,6 +6,8 @@ var router = express.Router();
 var db = require('../../lib/database')();
 var session = require('express-session');
 var nodemailer = require('nodemailer');
+const puppeteer = require('puppeteer');
+
 var contact_user = process.env.NODEMAILER_USER;
 var contact_pass = process.env.NODEMAILER_PASS;
 var contact_service = process.env.NODEMAILER_SERVICE;
@@ -29,8 +31,27 @@ router.use(session({
 //     res.redirect('/');
 // });
 
+//- PDF CREATION
+
+const createPdf = async() =>{
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  const options = {
+    path: 'app/modules/home/views/google.pdf',
+    format: 'A4',
+  }
+
+  await page.goto('https://google.com', { waitUntil: 'networkidle2' });
+  await page.pdf(options);
+
+  await browser.close();
+}
+
 
 router.post('/login', (req, res) => {
+  // console.log('boink');
+  // createPdf();
+  // console.log('boink sandwich');
   var field_user = req.body.username;
   var field_pass = req.body.password;
   db.query('SELECT strUsername, strPassword FROM cosdd.tbluser WHERE strUsername=? AND strPassword=?', [field_user, field_pass], function(err, results, fields){
