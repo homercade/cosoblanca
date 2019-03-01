@@ -47,7 +47,8 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Serial Number
-                        input.offSerial.form-control(type='text' name='offSerial' placeholder="ABC12345" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='8' required)         
+                        input.offSerial.form-control(type='text' name='offSerial' placeholder="ABC12345" onkeypress='return restrictCharacters(this, event, alphaNumOnly); firstLetter(this, s);' maxlength='8' required)         
+                      p.err-text Warning!
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Add

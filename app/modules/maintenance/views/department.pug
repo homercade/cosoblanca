@@ -30,7 +30,7 @@ block unique-content
                       td
                         button.btn.btn-primary.btn-circle(type='button', title='Edit department', data-toggle="modal", data-target="#editModal", data-id=de.intDeptID, data-deptcode=de.strDeptCode, data-deptname=de.txtDeptName)
                           i.fa.fa-wrench
-                        button.btn.btn-danger.btn-circle(type='button', title='Delete department', data-toggle="modal", data-target="#deleteModal", data-id=de.intDeptID)
+                        button.btn.btn-danger.btn-circle(type='button', title='Delete department', data-toggle='modal', data-target='#deleteModal' data-id=de.intDeptID)
                           i.fa.fa-trash
     
     #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
@@ -80,33 +80,95 @@ block unique-content
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
 
-
     #deleteModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog
         .modal-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
             h4#myModalLabel.modal-title Remove Department
-          form(action='/department/delete', method='post')
+          form.deleteDept.delDept(action='/department/delete', method='post')
             .modal-body
               .container-fluid
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
-                  input.hidden#id(type='text' name='id')
                   .row
                     .col-md-12
                       .form-group
                         h4 Delete this department?
+                    input.hidden.id(type='text' name='id')
+
             .modal-footer
-              button.btn.btn-default(type='button', data-dismiss='modal') Close
-              button.btn.btn-default(type='submit') Delete
+              // button.btn.btn-default(type='button', data-dismiss='modal') Close
+              button.btn.btn-default.deleteDept(type='submit') Delete
+    
+    script.
+      $('.helpMod').click(function(){
+        swal("Account Maintenance", "This page displays all account details including the user's email address, usernames, and passwords.")
+      });
 
     script.
       $('#deleteModal').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget)      
         var id = button.data('id')
         let modal = $(this)     
-        modal.find('.modal-body #id').val(` ${id}`)
+        modal.find('.modal-body .id').val(`${id}`)
       });
+
+    script.
+      $(document).on('click', '.deleteDept', function(e) {
+      var form = event.target.form;
+      e.preventDefault();
+      swal({
+        title: 'Delete Department?',
+        text: 'This record cannot be accessed once deleted.',
+        icon: 'warning',
+        buttons: true,
+        dangerMode: true,
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+      }).then((result) => {
+          if(result) {
+            swal("Success!", "Department successfully deleted!", "success");
+            $('.delDept').submit();
+          }
+          else{
+            swal("Canceled", "Your record is safe!", "error");
+          }                  
+        });
+      });
+    //- script.
+    //-   $('.deleteModal').click(function(e){
+    //-       e.preventDefault();
+    //-       var deptId = $(this).data('id');
+    //-       swalDelete(deptId);
+    //-   });
+
+    //-   function swalDelete(deptId){
+    //-     swal({
+    //-       title: 'Delete Department?',
+    //-       text: 'This record cannot be accessed once deleted.',
+    //-       icon: 'warning',
+    //-       buttons: true,
+    //-       dangerMode: true,
+    //-       confirmButtonText: 'Yes',
+    //-      },function(){
+    //-         return new Promise(function(resolve)){
+    //-           $.ajax({
+    //-             url: '/department/delete',
+    //-             type: 'POST',
+    //-             data: { 'id': id },
+    //-             dataType: 'json'
+    //-           })
+    //-           .done(function(response{
+    //-             swal('Deleted!', 'Department is successfully deleted!', 'success');
+    //-           })
+    //-           .fail(function(response{
+    //-             swal('Oops...', 'Something went wrong with AJAX!', 'error');
+    //-           }))
+    //-           ),
+    //-           allowOutsideClick: false;
+    //-         }
+    //-       }
+    //-   }
 
     script.
       $('#editModal').on('show.bs.modal', function(event){
@@ -119,4 +181,3 @@ block unique-content
       modal.find('.modal-body .deptCode').val(`${deptcode}`)
       modal.find('.modal-body .deptName').val(`${deptname}`)
       });
-      

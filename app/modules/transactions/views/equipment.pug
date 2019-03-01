@@ -56,19 +56,22 @@ block unique-content
                     .col-md-6
                       .form-group
                         label.control-label Owned By
-                        select#equName.form-control(name='equName')
+                        select#combobox.equName.form-control(name='equName')
+                          option.equName(value='' selected) - Select Employee/Owner -
                           each emp in employ
                             option.equName(value=emp.intZFEmpID) #{emp.strFirstName} #{emp.strLastName}
                     .col-md-6
                       .form-group
                         label.control-label Department
                         select#equDept.form-control(name='equDept')
+                          option.equDept(value='' selected) - Select Department -
                           each dep in depty
                             option.equDept(value=dep.strDeptCode) #{dep.strDeptCode}
                     .col-md-12
                       .form-group
                         label.control-label Equipment
                         select.equDesc.form-control(name='equDesc')
+                          option.equDesc(value='' selected) - Select Equipment -
                           each seq in sequi
                             option.equDesc(value=seq.intStorageID) #{seq.txtStorageEquip}
                     .col-md-6

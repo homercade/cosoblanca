@@ -13,6 +13,12 @@ html(lang='en')
     link(href='../vendor/jquery/jquery.js', rel='stylesheet')
     link(rel='stylesheet', type='text/css', href='../contform/css/main.css')
     link(href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet")
+    //----------------------------------------------------------------------------- -//
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.css')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css')
+    link(href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.min.css.map')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js')
     //- --------------------------------------------------------------------------- -//
     link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous")
     link(href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.css")
@@ -134,4 +140,9 @@ html(lang='en')
           window.print();
 
           document.body.innerHTML = originalContents;
+      }
+
+    script.
+      function firstLetter(s) {
+        return s.replace(/^.{1}/g, s[0].toUpperCase());
       }
