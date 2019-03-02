@@ -7,6 +7,7 @@ var db = require('../../lib/database')();
 var session = require('express-session');
 var nodemailer = require('nodemailer');
 const puppeteer = require('puppeteer');
+var swal = require('sweetalert')
 
 var contact_user = process.env.NODEMAILER_USER;
 var contact_pass = process.env.NODEMAILER_PASS;
@@ -66,11 +67,11 @@ router.post('/login', (req, res) => {
             res.redirect('/dashboard');
           }
           else{
-            res.redirect('/');
+            return res.redirect('/?incorrect');
           }
         }
         else{
-          res.redirect('/');
+          return res.redirect('/');
         }
     }
   });
@@ -164,7 +165,7 @@ router.post('/department/delete', auth, (req, res) => {
     if (err)
       console.log(err);
     else {
-      res.redirect('/department');
+      res.send('deleted');
     }
   });
 });
@@ -902,7 +903,7 @@ router.get('/active', auth, actacc);
 router.get('/officereport', auth, offre);
 
 function login(req, res){
-  res.render('authorization/views/login');
+  res.render('authorization/views/login', req.query);
 }
 
 function notFound(req, res){

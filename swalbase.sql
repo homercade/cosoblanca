@@ -84,7 +84,7 @@ CREATE TABLE `tbldept` (
   `txtDeptName` longtext NOT NULL,
   `intPresence` tinyint(1) NOT NULL,
   PRIMARY KEY (`intDeptID`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `tbldept` (
 
 LOCK TABLES `tbldept` WRITE;
 /*!40000 ALTER TABLE `tbldept` DISABLE KEYS */;
-INSERT INTO `tbldept` VALUES (1,'HR','Human Resource Management',0);
+INSERT INTO `tbldept` VALUES (1,'HR','Human Resource Management',1),(5,'ET','Extra Terrestrial',1),(6,'OS','Operating Systems',1),(7,'HRS','Human Resource Management',1),(8,'BOI','Corporate Operations and Systems Offices',1),(9,'OS','Operating Systems',1),(10,'COSO','Corporate Operations and Systems Office',1);
 /*!40000 ALTER TABLE `tbldept` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -365,4 +365,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-03-01 16:36:54
+-- Dump completed on 2019-03-02 23:50:29
