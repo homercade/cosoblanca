@@ -34,7 +34,7 @@ block unique-content
                       td 
                         button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=netty.intNetworkID, data-netadd=netty.strNetworkAddress, data-wifiadd=netty.strWifiAddress)
                             i.fa.fa-wrench
-                        button.btn.btn-danger.btn-circle(type='button', title='Remove data', data-toggle="modal", data-target="#deleteModal", data-id=netty.intNetworkID)
+                        button.btn.btn-danger.btn-circle.myDelete(type='button', value=netty.intNetworkID)
                             i.fa.fa-trash 
 
     #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
@@ -53,13 +53,14 @@ block unique-content
                       .form-group
                         label.control-label Owned By
                         select.netName.form-control(name='netName') 
+                          option.netName(value='' selected) - Select Employee/Owner -
                           each emp in employ
                             option.netName(value=emp.intZFEmpID) #{emp.strFirstName} #{emp.strLastName}
-                        // at netName ah: onchange='populate(this.id, 'netDevName')
                     .col-md-6
                       .form-group
                         label.control-label Device
                         select.netDevName.form-control(name='netDevName')
+                          option.netDevName(value='' selected) - Select Device -
                           each dev in device
                             option.netDevName(value=dev.strBrand+' '+dev.strMod) #{dev.strBrand} - #{dev.strMod}
                     .col-md-12
@@ -96,6 +97,7 @@ block unique-content
                       .form-group
                         label.control-label Device
                         select.netDevName.form-control(name='netDevName')
+                          option.netDevName(value='' selected) - Select Device -
                           each dev in devvy
                             option.netDevName(value=dev.strUnitTypeDesc) #{dev.strUnitTypeDesc}
                     .col-md-12
@@ -145,6 +147,58 @@ block unique-content
         modal.find('.modal-body .id').val(`${id}`)
       });
 
+    script.
+      $(document).ready(function(){
+        $('.myDelete').click(function(){
+          var idNow = $(this).val();
+          var link = '/network/delete/';
+          console.log(idNow);
+          swal({
+            title: 'Delete Assignment?',
+            text: 'This record cannot be accessed once deleted.',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+            dangerMode: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/network/delete/';
+                var bura = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow
+                  },
+                  success:(function(response){
+                    if(response == "deleted"){
+                      swal({
+                        title: "Success!",
+                        text: "Hooray! Network assignment successfully deleted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      bura.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is safe.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
     script.
       $('#editModal').on('show.bs.modal', function(event){
       var button = $(event.relatedTarget)      

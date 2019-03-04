@@ -32,7 +32,7 @@ block unique-content
                       td 
                         button.btn.btn-primary.btn-circle(type='button', title='Edit assignment', data-toggle="modal", data-target="#editModal", data-id=ofs.intOAID, data-owner=ofs.intOAEmpID, data-serial=ofs.strOASerial, data-name=ofs.strPCName, data-oaemp=ofs.intOAEmpID, data-oaser=ofs.intOASerial)
                             i.fa.fa-wrench
-                        button.btn.btn-danger.btn-circle(type='button', title='Remove data', data-toggle="modal", data-target="#deleteModal", data-id=ofs.intOAID)
+                        button.btn.btn-danger.btn-circle.myDelete(type='button', value=ofs.intOAID)
                             i.fa.fa-trash 
 
     #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
@@ -128,13 +128,60 @@ block unique-content
       });
       });
 
+    
     script.
-      $('#deleteModal').on('show.bs.modal', function(event){
-        var button = $(event.relatedTarget)      
-        var id = button.data('id')
-        let modal = $(this)     
-        modal.find('.modal-body .id').val(`${id}`)
-      });
+      $(document).ready(function(){
+        $('.myDelete').click(function(){
+          var idNow = $(this).val();
+          var link = '/officeassign/delete/';
+          console.log(idNow);
+          swal({
+            title: 'Delete Assignment?',
+            text: 'This record cannot be accessed once deleted.',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+            dangerMode: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/officeassign/delete/';
+                var bura = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow
+                  },
+                  success:(function(response){
+                    if(response == "deleted"){
+                      swal({
+                        title: "Success!",
+                        text: "Hooray! Office assignment successfully deleted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      bura.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is safe.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+
 
     script.
       $('#editModal').on('show.bs.modal', function(event){

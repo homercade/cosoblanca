@@ -38,7 +38,7 @@ block unique-content
                       td 
                         button.btn.btn-primary.btn-circle(type='button', title='Edit storage input', data-toggle="modal", data-target="#editModal", data-id=equi.intOwnershipID, data-prop=equi.txtPropertyNumber, data-ser=equi.txtSerialNumber, data-dat=equi.dtmMRDate, data-par=equi.txtPARNumber)
                             i.fa.fa-wrench
-                        button.btn.btn-danger.btn-circle(type='button', title='Delete storage data', data-toggle="modal", data-target="#deleteModal", data-id=equi.intOwnershipID)
+                        button.btn.btn-danger.btn-circle.myDelete(type='button', value=equi.intOwnershipID)
                             i.fa.fa-trash 
 
     #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
@@ -110,18 +110,21 @@ block unique-content
                       .form-group
                         label.control-label Owned By
                         select.equName.form-control(name='equName')
+                          option.netDevName(value='' selected) - Select Employee/Owner -
                           each emp in employ
                             option.equName(value=emp.intZFEmpID) #{emp.strFirstName} #{emp.strLastName}
                     .col-md-6
                       .form-group
                         label.control-label Department
                         select.equDept.form-control(name='equDept')
+                          option.netDevName(value='' selected) - Select Department -
                           each dep in depty
                             option.equDept(value=dep.strDeptCode) #{dep.strDeptCode}
                     .col-md-12
                       .form-group
                         label.control-label Equipment
                         select.equDesc.form-control(name='equDesc')
+                          option.netDevName(value='' selected) - Select Equipment -
                           each seq in sequi
                             option.equDesc(value=seq.intStorageID) #{seq.txtStorageEquip}
                     .col-md-6
@@ -170,6 +173,60 @@ block unique-content
         let modal = $(this)     
         modal.find('.modal-body .id').val(`${id}`)
       });
+
+    script.
+      $(document).ready(function(){
+        $('.myDelete').click(function(){
+          var idNow = $(this).val();
+          var link = '/equipment/delete/';
+          console.log(idNow);
+          swal({
+            title: 'Delete Record?',
+            text: 'This record cannot be accessed once deleted.',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+            dangerMode: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/equipment/delete/';
+                var bura = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow
+                  },
+                  success:(function(response){
+                    if(response == "deleted"){
+                      swal({
+                        title: "Success!",
+                        text: "Hooray! Equipment record successfully deleted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      bura.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is safe.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+
 
     script.
       $('#editModal').on('show.bs.modal', function(event){

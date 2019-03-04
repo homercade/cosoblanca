@@ -209,7 +209,7 @@ router.post('/office/delete', auth, (req, res) => {
   db.query(`UPDATE cosdd.tbloffice SET intPresence=0 WHERE intMSID=?`, [req.body.id], (err, results, fields) => {
     if (err) throw(err);
     else {
-      res.redirect('/office');
+      res.send('deleted');
     }
   });
 });
@@ -256,7 +256,7 @@ router.post('/unittype/delete', auth, (req, res) => {
     if (err)
       console.log(err);
     else {
-      res.redirect('/unittype');
+      res.send('deleted');
     }
   });
 });
@@ -304,7 +304,7 @@ router.post('/employee/delete', auth, (req, res) => {
     if (err)
       console.log(err);
     else {
-      res.redirect('/employee');
+      res.send('deleted');
     }
   });
 });
@@ -354,7 +354,7 @@ router.post('/storage/delete', auth, (req, res) => {
     if (err)
       console.log(err);
     else {
-      res.redirect('/storage');
+      res.send('deleted')
     }
   });
 });
@@ -402,7 +402,7 @@ router.post('/accounts/delete', auth, (req, res) => {
     if (err)
       console.log(err);
     else {
-      res.redirect('/accounts');
+      res.send('deleted');
     }
   });
 });
@@ -455,7 +455,7 @@ db.query(`UPDATE cosdd.tblownership SET intPresence=0 WHERE intOwnershipID=?`, [
   if (err)
     console.log(err);
   else {
-    res.redirect('/equipment');
+    res.send('deleted');
   }
 });
 });
@@ -482,6 +482,10 @@ router.get('/network', auth, eqaEmployees, uniDevEquipment, accAll, isThatADevic
 // CREATE NETWORK ASSIGN
 router.post('/network/create', auth, (req, res) => {   
   db.query(`INSERT INTO cosdd.tblnetwork (strDeviceName, strNetworkAddress, strWifiAddress, intAccConf, intPresence) VALUES (?, ?, ?, ?, 1)`, [req.body.netDevName, req.body.netAdd, req.body.wifiAdd, req.body.netName], (err, results, fields) => {
+    console.log(req.body.netDevName);
+    console.log(req.body.netAdd);
+    console.log(req.body.wifiAdd);
+    console.log(req.body.netName);
     db.query(`UPDATE tblnetwork a INNER JOIN tblemployee b ON a.intAccConf=b.intZFEmpID SET a.strOwnerName=CONCAT(b.strFirstName,' ',b.strLastName)`, (err, results, fields) => {
       if (err)
         console.log(err);
@@ -509,7 +513,7 @@ router.post('/network/delete', auth, (req, res) => {
     if (err)
       console.log(err);
     else {
-      res.redirect('/network');
+      res.send('deleted')
     }
   });
 });
@@ -544,7 +548,7 @@ router.post('/officeassign/create', auth, (req, res) => {
         db.query(`UPDATE cosdd.tbloffice, cosdd.tblofficeassign SET tbloffice.intVacancy=(tbloffice.intVacancy-1) WHERE tbloffice.intMSID=?`, [req.body.ofaSerial], (err, results, fields) => {
           if(err) throw(err)
           else{
-            res.redirect('/officeassign');
+            res.send('/officeassign');
           }
         });
       }
@@ -575,7 +579,7 @@ router.post('/officeassign/delete', auth, (req, res) => {
     if (err)
       console.log(err);
     else {
-      res.redirect('/officeassign');
+      res.send('deleted');
     }
   });
 });

@@ -32,7 +32,7 @@ block unique-content
                       td
                         button.btn.btn-primary.btn-circle(type='button', title='Edit employee details', data-toggle="modal", data-target="#editModal", data-fname=emp.strFirstName, data-lname=emp.strLastName, data-id=emp.intZFEmpID, data-drpdept=emp.strEmpDept)
                           i.fa.fa-wrench
-                        button.btn.btn-danger.btn-circle(type='button', title='Delete employee details', data-toggle="modal", data-target="#deleteModal", data-id=emp.intZFEmpID)
+                        button.btn.btn-danger.btn-circle.myDelete(type='button', value=emp.intZFEmpID)
                           i.fa.fa-trash
 
     #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
@@ -98,25 +98,6 @@ block unique-content
               button.btn.btn-primary(type='submit') Save
 
 
-    #deleteModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-      .modal-dialog
-        .modal-content
-          .modal-header
-            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-            h4#myModalLabel.modal-title Remove Employee
-          form(action='/employee/delete', method='post')
-            .modal-body
-              .container-fluid
-                .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
-                  input.hidden#id(type='text' name='id')
-                  .row
-                    .col-md-12
-                      .form-group
-                        h4 Delete this employee?
-            .modal-footer
-              button.btn.btn-default(type='button', data-dismiss='modal') Close
-              button.btn.btn-default(type='submit') Delete
-
     script.
       $('#deleteModal').on('show.bs.modal', function(event){
         var button = $(event.relatedTarget)      
@@ -124,6 +105,60 @@ block unique-content
         let modal = $(this)     
         modal.find('.modal-body #id').val(` ${id}`)
       });
+
+
+    script.
+      $(document).ready(function(){
+        $('.myDelete').click(function(){
+          var idNow = $(this).val();
+          var link = '/employee/delete/';
+          console.log(idNow);
+          swal({
+            title: 'Delete Employee?',
+            text: 'This record cannot be accessed once deleted.',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+            dangerMode: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/employee/delete/';
+                var bura = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow
+                  },
+                  success:(function(response){
+                    if(response == "deleted"){
+                      swal({
+                        title: "Success!",
+                        text: "Hooray! Employee successfully deleted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      bura.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is safe.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
 
     script.
       $('#editModal').on('show.bs.modal', function(event){

@@ -81,26 +81,6 @@ block unique-content
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
-
-    #deleteModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-      .modal-dialog
-        .modal-content
-          .modal-header
-            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-            h4#myModalLabel.modal-title Remove Department
-          form.deleteDept.delDept(action='/department/delete', method='post')
-            .modal-body
-              .container-fluid
-                .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
-                  .row
-                    .col-md-12
-                      .form-group
-                        h4 Delete this department?
-                    input.hidden.id(type='text' name='id')
-
-            .modal-footer
-              // button.btn.btn-default(type='button', data-dismiss='modal') Close
-              button.btn.btn-default.deleteDept(type='submit') Delete
     
     script.
       $(document).ready(function(){
@@ -112,7 +92,7 @@ block unique-content
             title: 'Delete Department?',
             text: 'This record cannot be accessed once deleted.',
             icon: 'warning',
-            buttons: true,
+            buttons: ['No', 'Yes'],
             dangerMode: true,
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes'
@@ -135,7 +115,7 @@ block unique-content
                         icon: "success",
                         buttons: false,
                         closeOnConfirm: false,
-                        timer: 1000
+                        timer: 1500
                       });
                       bura.fadeOut();                    
                     }
@@ -143,82 +123,17 @@ block unique-content
                 })
               }
               else{
-                swal("Canceled", "Your record is safe!", "error");
+                swal({
+                  title: "Canceled",
+                  text: "Your record is safe.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
               }
           })
         })
       })
-    script.
-      $('.helpMod').click(function(){
-        swal("Account Maintenance", "This page displays all account details including the user's email address, usernames, and passwords.")
-      });
-
-    script.
-      $('#deleteModal').on('show.bs.modal', function(event){
-        var button = $(event.relatedTarget)      
-        var id = button.data('id')
-        let modal = $(this)     
-        modal.find('.modal-body .id').val(`${id}`)
-      });
-
-    script.
-      $(document).on('submit', '.deleteDept', function(e) {
-      var form = event.target.form;
-      e.preventDefault();
-      //- var idNow = button.data('id');
-      //- console.log(idNow);
-      swal({
-        title: 'Delete Department?',
-        text: 'This record cannot be accessed once deleted.',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes',
-      }).then((result) => {
-          if(result) {
-            swal("Success!", "Department successfully deleted!", "success");
-            $('.delDept').submit();
-          }
-          else{
-            swal("Canceled", "Your record is safe!", "error");
-          }                  
-        });
-      });
-    //- script.
-    //-   $('.deleteModal').click(function(e){
-    //-       e.preventDefault();
-    //-       var deptId = $(this).data('id');
-    //-       swalDelete(deptId);
-    //-   });
-
-    //-   function swalDelete(deptId){
-    //-     swal({
-    //-       title: 'Delete Department?',
-    //-       text: 'This record cannot be accessed once deleted.',
-    //-       icon: 'warning',
-    //-       buttons: true,
-    //-       dangerMode: true,
-    //-       confirmButtonText: 'Yes',
-    //-      },function(){
-    //-         return new Promise(function(resolve)){
-    //-           $.ajax({
-    //-             url: '/department/delete',
-    //-             type: 'POST',
-    //-             data: { 'id': id },
-    //-             dataType: 'json'
-    //-           })
-    //-           .done(function(response{
-    //-             swal('Deleted!', 'Department is successfully deleted!', 'success');
-    //-           })
-    //-           .fail(function(response{
-    //-             swal('Oops...', 'Something went wrong with AJAX!', 'error');
-    //-           }))
-    //-           ),
-    //-           allowOutsideClick: false;
-    //-         }
-    //-       }
-    //-   }
 
     script.
       $('#editModal').on('show.bs.modal', function(event){
