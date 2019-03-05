@@ -67,11 +67,13 @@ router.post('/login', (req, res) => {
             res.redirect('/dashboard');
           }
           else{
+            console.log('flag 2');
             return res.redirect('/?incorrect');
           }
         }
         else{
-          return res.redirect('/');
+          console.log('flag 3');
+          return res.redirect('/?incorrect');
         }
     }
   });

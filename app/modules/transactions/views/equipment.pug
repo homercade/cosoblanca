@@ -181,7 +181,7 @@ block unique-content
           var link = '/equipment/delete/';
           console.log(idNow);
           swal({
-            title: 'Delete Record?',
+            title: 'Delete equipment record?',
             text: 'This record cannot be accessed once deleted.',
             icon: 'warning',
             buttons: ['No', 'Yes'],
@@ -203,7 +203,7 @@ block unique-content
                     if(response == "deleted"){
                       swal({
                         title: "Success!",
-                        text: "Hooray! Equipment record successfully deleted!",
+                        text: "Equipment record successfully deleted!",
                         icon: "success",
                         buttons: false,
                         closeOnConfirm: false,

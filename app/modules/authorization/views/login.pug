@@ -27,9 +27,9 @@ html(lang='en')
               p.message
                   | Welcome to COSOBLANCA!
               if hasIncorrect
-                p.message
+                p.err-text(style='font-size:12px;')
+                  br
                   | #{hasIncorrect}
-
               
     .login-footer
       a(href='https://github.com/homercade') Homer Cadena | &copy; Copyright 2019
