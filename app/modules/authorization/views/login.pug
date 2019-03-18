@@ -15,7 +15,8 @@ html(lang='en')
     script(src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js")
     .se-pre-con
     .login-page
-        - var hasIncorrect = typeof incorrect !== 'undefined' ? 'Incorrect username or password.' : ''
+        - var hasIncorrect = typeof incorrect !== 'undefined' ? 'Incorrect username or password.' : '';
+        - var incorrectCount = 0;
         .form
             img.logImg(src="../../img/icon.png" alt="Image Title" width="80" height="80")
             br 
@@ -24,12 +25,12 @@ html(lang='en')
               input.username(type='text', placeholder='Username' name='username' onsubmit="return checkForm(this);" required)
               input.password(type='password', placeholder='••••••••' name='password' required)
               button Login
-              p.message
-                  | Welcome to COSOBLANCA!
-              if hasIncorrect
+              if hasIncorrect && incorrectCount>=1
                 p.err-text(style='font-size:12px;')
                   br
                   | #{hasIncorrect}
-              
+              else
+                p.message
+                  | Welcome to COSOBLANCA!
     .login-footer
       a(href='https://github.com/homercade') Homer Cadena | &copy; Copyright 2019

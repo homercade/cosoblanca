@@ -28,6 +28,7 @@ module.exports = app => {
         resave: false,
         saveUninitialized: true
     }))
+
 	// app.use(flash());
 	// app.use(passport.initialize());
 	// app.use(passport.session());
@@ -35,9 +36,9 @@ module.exports = app => {
     // app.use(session({ secret: 'passport-cosdd', cookie: { maxAge: 600000 }, resave: false, saveUninitialized: false }))
 
     // app.get('/', (req, res) => res.redirect('/login'));
- //    var store = new BetterMemoryStore({ expires: 60 * 60 * 1000, debug: true });
+    //    var store = new BetterMemoryStore({ expires: 60 * 60 * 1000, debug: true });
 
- // 	app.use(sess({
+    // 	app.use(sess({
 
 	//     name: 'JSESSION',
 

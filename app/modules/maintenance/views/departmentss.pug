@@ -22,7 +22,7 @@ block unique-content
                     th Department Code
                     th Department Name
                     th Action
-                tbody#dept_tbody
+                tbody
                   each de in depart
                     tr
                       td #{de.strDeptCode}
@@ -169,23 +169,11 @@ block unique-content
                         buttons: false,
                         closeOnConfirm: false,
                         timer: 1500
-                      })
-                      var table_data = '';
-                      table_data +=`
-                        <tr>
-                          <td> ${response.strDeptCode} </td>
-                          <td> ${response.txtDeptName} </td>
-                          <td>
-                            <button class="btn btn-primary btn-cirlcle" type='button', title='Edit department', data-toggle="modal", data-target="#editModal", data-id=${response.intDeptID}, data-deptcode=${response.strDeptCode}, data-deptname=${response.txtDeptName} >
-                              <i class="fa fa-wrench"> </i>
-                            </button>
-                            <button class="btn btn-danger btn-circle deleteSwal" type="button", value=${response.intDeptID}> 
-                              <i class="fa fa-trash"> </i>
-                            </button>
-                          </td>
-                        </tr>
-                      `;
-                      $("tbody#dept_tbody").append(table_data);
+                      });
+                      //- $("#deptTable > tbody > tr").html(response);
+                      //- lastAdded += $(this).closest('tr');
+                     //- table.api().ajax.reload();
+                     table.row.add({"deptCode": $('deptCode'), "deptName": $('deptName')});
                     }
                   })
                 })
