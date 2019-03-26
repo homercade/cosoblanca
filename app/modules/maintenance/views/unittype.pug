@@ -16,19 +16,19 @@ block unique-content
         .panel.panel-default
           .panel-body
             .table-responsive
-              table.table.table-hover.datatables
+              table.table.table-hover.datatables#unitTable
                 thead
                   tr
                     th Unit Type
                     th Action
-                tbody
+                tbody#unit_tbody
                   each typ in types
                     tr
                       td #{typ.strUnitTypeDesc}
                       td
                         button.btn.btn-primary.btn-circle(type='button', title='Edit unit type', data-toggle="modal", data-target="#editModal", data-id=typ.intUnitTypeID, data-type=typ.strUnitTypeDesc)
                           i.fa.fa-wrench
-                        button.btn.btn-danger.btn-circle.myDelete(type='button', value=typ.intUnitTypeID)
+                        button.btn.btn-danger.btn-circle.deleteSwal(type='button', value=typ.intUnitTypeID)
                           i.fa.fa-trash
 
     #addModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
@@ -37,7 +37,7 @@ block unique-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
             h4#myModalLabel.modal-title Add Unit Type
-          form(action='/unittype', method='post')
+          form(action='/unittype', method='post' id='unitForm')
             .modal-body
               .container-fluid
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
@@ -49,7 +49,7 @@ block unique-content
                         input#unitType.form-control(type='text' name='unitType' placeholder="MacBook Pro" onkeypress='return restrictCharacters(this, event, alphaOnly)' required)
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
-              button.btn.btn-primary(type='submit') Save
+              button.btn.btn-primary.addSwal(type='submit') Save
 
     #editModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog
@@ -70,31 +70,11 @@ block unique-content
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save
-
-
-    // #deleteModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
-    //   .modal-dialog
-    //     .modal-content
-    //       .modal-header
-    //         button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-    //         h4#myModalLabel.modal-title Remove Unit Type
-    //       form(action='/unittype/delete', method='post')
-    //         .modal-body
-    //           .container-fluid
-    //             .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
-    //               input.hidden#id(type='text' name='id')
-    //               .row
-    //                 .col-md-12
-    //                   .form-group
-    //                     h4 Delete this unit type?
-    //         .modal-footer
-    //           button.btn.btn-default(type='button', data-dismiss='modal') Close
-    //           button.btn.btn-default(type='submit') Delete
  
 
     script.
       $(document).ready(function(){
-        $('.myDelete').click(function(){
+        $('.deleteSwal').click(function(){
           var idNow = $(this).val();
           var link = '/unittype/delete/';
           console.log('test');
@@ -137,7 +117,7 @@ block unique-content
               else{
                 swal({
                   title: "Canceled",
-                  text: "Your record is safe.",
+                  text: "This record is safe.",
                   icon: "success",
                   buttons: false,
                   timer: 1500,
@@ -156,3 +136,66 @@ block unique-content
       modal.find('.modal-body #id').val(`${id}`)
       modal.find('.modal-body .unitType').val(`${unitType}`)
       });
+
+    script.
+      $(document).ready(function(){
+        $('.addSwal').click(function(e){
+          e.preventDefault();
+          var idNow = $(this).val();
+          var link = '/unittype';
+          console.log(idNow);
+          swal({
+            title: 'Add Unit Type?',
+            text: 'This unit type will be added to the records.',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+            dangerMode: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/unittype';
+                var rowAdd = $(this).closest('tr');
+                var table =$('#unitTable').DataTable();
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : $('form#unitForm').serializeArray(),
+                  success:(function(response){
+                    if(response){
+                      swal({
+                        title: "Success!",
+                        text: "Unit type successfully added!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      })
+                      var table_data = '';
+                      table_data +=`
+                        <tr>
+                          <td> ${response[0].strUnitTypeDesc} </td>
+                          <td>
+                            Record added, please refresh the page.
+                          </td>
+                        </tr>
+                      `;
+                      $("tbody#unit_tbody").append(table_data);
+                      document.getElementById('unitType').value = '';
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled!",
+                  text: "Unit type adding canceled!",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })

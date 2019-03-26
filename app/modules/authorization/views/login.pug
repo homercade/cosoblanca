@@ -24,7 +24,7 @@ html(lang='en')
             form.login-form(action='/login', method='post')
               input.username(type='text', placeholder='Username' name='username' onsubmit="return checkForm(this);" required)
               input.password(type='password', placeholder='••••••••' name='password' required)
-              button Login
+              button.logindesign Login
               if hasIncorrect && incorrectCount>=1
                 p.err-text(style='font-size:12px;')
                   br

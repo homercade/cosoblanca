@@ -1,0 +1,460 @@
+extends ../../../templates/master.pug 
+block vars
+  - var title = 'Archive'
+
+block unique-content
+  .se-pre-con
+  #page-wrapper
+    .row
+      .col-lg-12
+      .row
+        .panel.panel-default
+          .panel-body
+            // Nav tabs
+            ul.nav.nav-tabs
+              li.active
+                a(href='#maintenance', data-toggle='tab') Maintenance
+              li
+                a(href='#transactions', data-toggle='tab') Transactions
+            // Tab panes
+            .tab-content
+              #maintenance.tab-pane.fade.in.active
+                .col-lg-12
+                  .panel-body
+                    // Nav tabs
+                    ul.nav.nav-pills
+                      li.active
+                        a(href='#pill-dept', data-toggle='tab') Department
+                      li
+                        a(href='#pill-unit', data-toggle='tab') Unit
+                      li
+                        a(href='#pill-stor', data-toggle='tab') Storage
+                      li
+                        a(href='#pill-lice', data-toggle='tab') Office Serial
+                      li
+                        a(href='#pill-empl', data-toggle='tab') Employee
+                      li
+                        a(href='#pill-accs', data-toggle='tab') Accounts Setup
+                    // Tab panes
+                    .tab-content
+                      #pill-dept.tab-pane.fade.in.active
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th Department Code
+                                th Department Name
+                                th Action
+                            tbody
+                              each re in resu
+                                tr
+                                  td #{re.strDeptCode}
+                                  td #{re.txtDeptName}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertDept(type='button', title='Revert this record', value=re.intDeptID)
+                                      i.fa.fa-share
+                      #pill-unit.tab-pane.fade
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th Unit Type
+                                th Action
+                            tbody
+                              each ch in typ
+                                tr
+                                  td #{ch.strUnitTypeDesc}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertUnit(type='button', title='Revert this record', value=ch.intUnitTypeID)
+                                      i.fa.fa-share
+                      #pill-stor.tab-pane.fade
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th Equipment
+                                th Quantity
+                                th Value per Unit
+                                th Action
+                            tbody
+                              each st in sto
+                                tr
+                                  td #{st.txtStorageEquip}
+                                  td #{st.intStorageQty}
+                                  td ₱#{st.fltPrice}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertEquip(type='button', title='Revert this record', value=st.intStorageID)
+                                      i.fa.fa-share
+                      #pill-lice.tab-pane.fade
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th License
+                                th Vacancy Left
+                                th Action
+                            tbody
+                              each li in lic
+                                tr
+                                  td #{li.strMSSerial}
+                                  td #{li.intVacancy}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertLice(type='button', title='Revert this record', value=li.intMSID)
+                                      i.fa.fa-share
+                      #pill-empl.tab-pane.fade
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th Employee Number
+                                th Employee Name
+                                th Department
+                                th Action
+                            tbody
+                              each emp in emplos
+                                tr
+                                  td #{emp.intZFEmpID}
+                                  td #{emp.strFirstName} #{emp.strLastName}
+                                  td #{emp.strEmpDept}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertEmp(type='button', title='Revert this record', value=emp.intZFEmpID)
+                                      i.fa.fa-share
+                      #pill-accs.tab-pane.fade
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th Device Owner
+                                th Device Name
+                                th Email Account
+                                th Email Password
+                                th Account ID
+                                th Account ID Password
+                                th Action
+                            tbody
+                              each ac in acco
+                                tr
+                                  td #{ac.strFirstName} #{ac.strLastName}
+                                  td #{ac.strDevice}
+                                  td #{ac.strEmailAccount}
+                                  td #{ac.strEmailPass}
+                                  td #{ac.strIDAccount}
+                                  td #{ac.strIDAccPassword}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertAcco(type='button', title='Revert this record', value=ac.intAccountID)
+                                      i.fa.fa-share
+              #transactions.tab-pane.fade
+                h4 Transaction
+
+    script.
+      $(document).ready(function(){
+        $('.revertDept').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/dept/';
+          swal({
+            title: 'Revert this record?',
+            text: 'This record will be returned to the Department table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/dept';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "Department successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+      
+      $(document).ready(function(){
+        $('.revertUnit').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/unit';
+          swal({
+            title: 'Revert unit type?',
+            text: 'This record will be returned to the Unit table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/unit';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "Unit type successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "The record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+      
+      $(document).ready(function(){
+        $('.revertEquip').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/storage';
+          swal({
+            title: 'Revert equipment?',
+            text: 'This record will be returned to the Equipment table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/storage';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "Equipment successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+      
+      $(document).ready(function(){
+        $('.revertLice').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/license';
+          swal({
+            title: 'Revert license?',
+            text: 'This record will be returned to the License table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/license';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "License successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+      
+      $(document).ready(function(){
+        $('.revertEmp').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/employee';
+          swal({
+            title: 'Revert employee?',
+            text: 'This record will be returned to the Employee table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/employee';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "Employee successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+      
+      $(document).ready(function(){
+        $('.revertAcco').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/accounts';
+          swal({
+            title: 'Revert account?',
+            text: 'This record will be returned to the Accounts Setup table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/accounts';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "Account successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })

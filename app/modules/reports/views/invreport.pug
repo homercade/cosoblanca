@@ -8,11 +8,13 @@ block unique-master
       .col-lg-12
         h1.page-header
           | Reports
+          button.btn.btn-primary.btn-danger.btn-lg.pull-right(type='button', title='Print this report', onclick="printContent('printThis')")
+            i.fa.fa-print.fa-fw
       .col-lg-12
         .panel.panel-default
           .panel-body
             .table-responsive
-              table.table.table-hover.datatable
+              table.table.table-hover.datatable#printThis
                 thead
                   tr
                     th Employee ID
@@ -34,3 +36,11 @@ block unique-master
                         td #{rep.MRDate}
                         td #{rep.strOwnerDept}
                         td ₱ #{rep.fltPrice}
+  script.
+    function printContent(pr){
+      let restorepage = $('body').html();
+      let printcontent = $('#' + pr).clone();
+      $('body').empty().html(printcontent);
+      window.print();
+      $('body').html(restorepage);
+    }

@@ -15,14 +15,16 @@ block unique-master
               table.table.table-hover.datatable
                 thead
                   tr
-                    th Employee Number
+                    th Employee Number 
                     th Owner
                     th Department
-                    th MS Office Serial
+                    th Device Name
+                    th License Number
                 tbody
                   each off in offer
                     tr
                       td #{off.intZFEmpID}
                       td #{off.strOAEmpName}
                       td #{off.strEmpDept}
+                      td #{off.strPCName}
                       td #{off.strMSSerial}

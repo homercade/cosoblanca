@@ -8,7 +8,7 @@ block unique-content
     .row
       .col-lg-12
         h1.page-header
-          | MS Office Serial
+          | MS Office License
           button.btn.btn-primary.btn-success.btn-lg.pull-right(type='button', data-toggle="modal", data-target="#addModal")
             i.fa.fa-plus-circle.fa-fw
             |  Add Serial
@@ -16,19 +16,19 @@ block unique-content
         .panel.panel-default
           .panel-body
             .table-responsive
-              table.table.table-hover.datatables
+              table.table.table-hover.datatables#officeTable
                 thead
                   tr
-                    th Serial Number
+                    th License
                     th Vacancy Left
                     th Action
-                tbody
+                tbody#office_tbody
                   each mso in office
                     tr
                       td #{mso.strMSSerial}
                       td #{mso.intVacancy}
                       td
-                        button.btn.btn-primary.btn-circle(type='button', title='Edit details', data-toggle="modal", data-target="#editModal", data-id=mso.intMSID, data-serial=mso.strMSSerial, data-vaca=mso.intVacancy)
+                        //- button.btn.btn-primary.btn-circle(type='button', title='Edit details', data-toggle="modal", data-target="#editModal", data-id=mso.intMSID, data-serial=mso.strMSSerial, data-vaca=mso.intVacancy)
                           i.fa.fa-wrench
                         button.btn.btn-danger.btn-circle.myDelete(type='button', value=mso.intMSID)
                           i.fa.fa-trash
@@ -39,18 +39,18 @@ block unique-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
             h4#myModalLabel.modal-title Add Serial
-          form(action='/office', method='post')
+          form(action='/office', method='post' id='officeForm')
             .modal-body
               .container-fluid
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
                   .row
                     .col-md-12
                       .form-group
-                        label.control-label Serial Number
-                        input.offSerial.form-control(type='text' name='offSerial' placeholder="ABC12345" onkeypress='return restrictCharacters(this, event, alphaNumOnly); firstLetter(this, s);' maxlength='8' required)      
+                        label.control-label License Number
+                        input.offSerial.form-control(type='text' name='offSerial' placeholder="ABC12345" onkeypress='return restrictCharacters(this, event, alphaNumOnly);' maxlength='8' required)      
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
-              button.btn.btn-primary(type='submit') Add
+              button.btn.btn-primary.addSwal(type='submit') Add
 
     #editModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog
@@ -66,7 +66,7 @@ block unique-content
                   .row
                     .col-md-9
                       .form-group
-                        label.control-label Serial Number
+                        label.control-label License Number
                         input.offSerial.form-control(type='text' name='offSerial' placeholder="ABC12345" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='8' required)         
                     .col-md-3
                       .form-group
@@ -96,7 +96,70 @@ block unique-content
       modal.find('.modal-body .offSerial').val(`${serial}`)
       modal.find('.modal-body .offVaca').val(`${vacant}`)
       });
-
+    
+    script.
+      $(document).ready(function(){
+        $('.addSwal').click(function(e){
+          e.preventDefault();
+          var idNow = $(this).val();
+          var link = '/office';
+          console.log(idNow);
+          swal({
+            title: 'Add this license?',
+            text: 'This Microsoft license will be added to this record.',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+            dangerMode: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/office';
+                var rowAdd = $(this).closest('tr');
+                var table =$('#officeTable').DataTable();
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : $('form#officeForm').serializeArray(),
+                  success:(function(response){
+                    if(response){
+                      swal({
+                        title: "Success!",
+                        text: "License successfully added!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      })
+                      var table_data = '';
+                      table_data +=`
+                        <tr>
+                          <td> ${response[0].strMSSerial} </td>
+                          <td> ${response[0].intVacancy} </td>
+                          <td>
+                            Record added, please refresh the page.
+                          </td>
+                        </tr>
+                      `;
+                      $("tbody#store_tbody").append(table_data); 
+                      document.getElementById('offSerial').value = '';
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled!",
+                  text: "License adding canceled!",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
     script.
       $(document).ready(function(){
         $('.myDelete').click(function(){

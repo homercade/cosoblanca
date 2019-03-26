@@ -16,14 +16,14 @@ block unique-content
         .panel.panel-default
           .panel-body
             .table-responsive
-              table.table.table-hover.datatables
+              table.table.table-hover.datatables#empTable
                 thead
                   tr
                     th Employee Number
                     th Employee Name
                     th Department
                     th Action
-                tbody
+                tbody#emp_tbody
                   each emp in employees
                     tr
                       td #{emp.intZFEmpID}
@@ -41,7 +41,7 @@ block unique-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
             h4#myModalLabel.modal-title Add Employee
-          form(action='/employee', method='post')
+          form(action='/employee', method='post' id='empForm')
             .modal-body
               .container-fluid
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
@@ -50,21 +50,21 @@ block unique-content
                     .col-md-6
                       .form-group
                         label.control-label Employee's First Name
-                        input.empFName.form-control(type='text' name='empFName' placeholder="Ralph" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input#empFName.form-control(type='text' name='empFName' placeholder="Ralph" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Employee's Last Name
-                        input.empLName.form-control(type='text' name='empLName' placeholder="Stilton" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
+                        input#empLName.form-control(type='text' name='empLName' placeholder="Stilton" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-12
                       .form-group
                         label.control-label Department
-                        select.empDept.form-control(name='empDept')
+                        select#empDept.form-control(name='empDept')
                           option.stoUnit(value='' selected) - Select Department -
                           each dep in deppy
                             option.empDept(value=dep.strDeptCode) #{dep.strDeptCode} - #{dep.txtDeptName}
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
-              button.btn.btn-primary(type='submit') Save
+              button.btn.btn-primary.addSwal(type='submit') Save
 
     #editModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog
@@ -106,6 +106,72 @@ block unique-content
         modal.find('.modal-body #id').val(` ${id}`)
       });
 
+    script.
+      $(document).ready(function(){
+        $('.addSwal').click(function(e){
+          e.preventDefault();
+          var idNow = $(this).val();
+          var link = '/employee';
+          console.log(idNow);
+          swal({
+            title: 'Add this employee?',
+            text: 'This employee will be added to this record.',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+            dangerMode: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/employee';
+                var rowAdd = $(this).closest('tr');
+                var table =$('#empTable').DataTable();
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : $('form#empForm').serializeArray(),
+                  success:(function(response){
+                    if(response){
+                      swal({
+                        title: "Success!",
+                        text: "Employee successfully added!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      })
+                      var table_data = '';
+                      table_data +=`
+                        <tr>
+                          <td> ${response[0].intZFEmpID} </td>
+                          <td> ${response[0].strFirstName} ${response[0].strLastName} </td>
+                          <td> ${response[0].strEmpDept} </td>
+                          <td>
+                            Record added, please refresh the page.
+                          </td>
+                        </tr>
+                      `;
+                      $("tbody#emp_tbody").append(table_data); 
+                      document.getElementById('empFName').value = '';
+                      document.getElementById('empLName').value = '';
+                      document.getElementById('empDept').value = '';
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled!",
+                  text: "License adding canceled!",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
 
     script.
       $(document).ready(function(){

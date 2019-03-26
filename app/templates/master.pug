@@ -8,7 +8,10 @@ html(lang='en')
     #wrapper
       nav.navbar.navbar-default.navbar-static-top(role='navigation', style='margin-bottom: 0')
         .navbar-header
-          a.navbar-brand(href='dashboard') COSOBLANCA 
+          a.navbar-brand(href='dashboard')
+            img.logImg(src="../../img/icon.png" title='Home page' alt="Home Icon" width="30" height="30" style='position: absolute; left: 15px; top: 10px;')
+          a.navbar-brand(href='dashboard' title='Home page' style='position: absolute; left: 35px; top: 3px;')
+            | COSOBLANCA
         a.nav.navbar-brand.navbar-top-links.navbar-right(href='/' title='Logout') 
           i.fa.fa-sign-out-alt.fa-fw
           | Logout
@@ -90,6 +93,10 @@ html(lang='en')
                     a(href='officereport' target='_blank')
                       i.fab.fa-microsoft.fa-fw
                       |  MS Office Distribution
+              li
+                a(href='archive')
+                  i.fa.fa-archive.fa-fw
+                  |  Archive
               li
                 a(href='contact')
                   i.fa.fa-mail-bulk.fa-fw

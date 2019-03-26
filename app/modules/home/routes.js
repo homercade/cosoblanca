@@ -91,29 +91,6 @@ router.get('/dashboard', auth, countEmp, countOwn, countDept, (req, res) => {
   });
 })
 
-// var transporter = nodemailer.createTransport({
-//   service: contact_service,
-//   auth: {
-//     user: contact_user,
-//     pass: contact_pass
-//   }
-// });
-
-// var mailOptions = {
-//   from: 'nha_cosdd@gov.ph',
-//   to: contact_user,
-//   subject: 'NHA Contact Page',
-//   text: 'Henlo'
-// };
-
-// transporter.sendMail(mailOptions, function(error, info){
-//   if(error)
-//     console.log(error);
-//   else
-//     console.log('Email sent: ' + info.response);
-// });
-
-
 //******************************************************* */
 //                      DEPARTMENT
 //******************************************************* */
@@ -131,7 +108,6 @@ router.post('/department', auth, (req, res) => {
             res.redirect('/error');
           }
           else{
-            console.log('henlo bby boi');
             res.send(results);
           }
         })
@@ -190,7 +166,15 @@ router.post('/office', auth, (req, res) => {
       res.redirect('/error');
     }
     else {
-        res.redirect('/office');
+        db.query('SELECT * FROM cosdd.tbloffice ORDER BY intMSID DESC LIMIT 1', function(err, results, fields){
+          if(err){
+            console.log(err);
+            res.redirect('/error');
+          }
+          else{
+            res.send(results);
+          }
+        })
     }
   });
 });
@@ -246,7 +230,15 @@ router.post('/unittype', auth, (req, res) => {
       res.redirect('/error');
     }
     else {
-        res.redirect('/unittype');
+        db.query('SELECT * FROM cosdd.tblunittype ORDER BY intUnitTypeID DESC LIMIT 1', function(err, results, fields){
+          if(err){
+            console.log(err);
+            res.redirect('/error');
+          }
+          else{
+            res.send(results);
+          }
+        })
     }
   });
 });
@@ -302,7 +294,15 @@ router.post('/employee', auth, (req, res) => {
       res.redirect('/error');
     }
     else {
-        res.redirect('/employee');
+        db.query('SELECT * FROM cosdd.tblemployee ORDER BY intZFEmpID DESC LIMIT 1', function(err, results, fields){
+          if(err){
+            console.log(err);
+            res.redirect('/error');
+          }
+          else{
+            res.send(results);
+          }
+        })
     }
   });
 });
@@ -353,13 +353,21 @@ router.post('/employee/delete', auth, (req, res) => {
 
 // CREATE STORAGE
 router.post('/storage', auth, (req, res) => {   
-  db.query(`INSERT INTO cosdd.tblstorage (txtStorageEquip, strBrand, strMod, strUnit, intStorageQty, fltPrice, intPresence) VALUES (?, ?, ?, ?, ?, ?, 1)`, [req.body.stoBrand + ' ' + req.body.stoModel + ' - ' + req.body.stoUnit, req.body.stoBrand, req.body.stoModel, req.body.stoUnit, req.body.strgQty, req.body.stoVal], (err, results, fields) => {
+  db.query(`INSERT INTO cosdd.tblstorage (txtStorageEquip, strBrand, strMod, strUnit, intStorageQty, fltPrice, intIsDevice, intPresence) VALUES (?, ?, ?, ?, ?, ?, ?, 1)`, [req.body.stoBrand + ' ' + req.body.stoModel + ' - ' + req.body.stoUnit, req.body.stoBrand, req.body.stoModel, req.body.stoUnit, req.body.strgQty, req.body.stoVal, req.body.stoBool], (err, results, fields) => {
     if (err){
       console.log(err);
       res.redirect('/error');
     }
     else {
-        res.redirect('/storage');
+        db.query('SELECT * FROM cosdd.tblstorage ORDER BY intStorageID DESC LIMIT 1', function(err, results, fields){
+          if(err){
+            console.log(err);
+            res.redirect('/error');
+          }
+          else{
+            res.send(results);
+          }
+        })
     }
   });
 });
@@ -623,7 +631,7 @@ router.post('/officeassign/create', auth, (req, res) => {
         db.query(`UPDATE cosdd.tbloffice, cosdd.tblofficeassign SET tbloffice.intVacancy=(tbloffice.intVacancy-1) WHERE tbloffice.intMSID=?`, [req.body.ofaSerial], (err, results, fields) => {
           if(err) throw(err)
           else{
-            res.send('/officeassign');
+            res.redirect('/officeassign');
           }
         });
       }
@@ -689,7 +697,6 @@ router.get('/slip/:maya', auth, (req, res) => {
                                                 maya: req.params.maya });
     }
   });
-
 });
 
 //******************************************************* */
@@ -730,7 +737,7 @@ router.get('/active', auth, (req, res) => {
 //******************************************************* */ 
 // READ INDIVIDUAL SLIP
 router.get('/officereport', auth, (req, res) => {
-  db.query('SELECT tblemployee.intZFEmpID, tblemployee.strEmpDept, tblofficeassign.strOAEmpName, tbloffice.strMSSerial FROM tblemployee INNER JOIN tblofficeassign ON tblemployee.intZFEmpID=tblofficeassign.intOAFKEmpID INNER JOIN tbloffice ON tblofficeassign.intOASerial=tbloffice.intMSID WHERE tblofficeassign.intPresence=1 AND tblemployee.intPresence=1 AND tbloffice.intPresence=1 GROUP BY intZFEmpID ASC', function(err, results, fields){
+  db.query('SELECT tblemployee.intZFEmpID, tblemployee.strEmpDept, tblofficeassign.strOAEmpName, tblofficeassign.strPCName, tblofficeassign.strPassword, tbloffice.strMSSerial FROM tblemployee INNER JOIN tblofficeassign ON tblemployee.intZFEmpID=tblofficeassign.intOAFKEmpID INNER JOIN tbloffice ON tblofficeassign.intOASerial=tbloffice.intMSID WHERE tblofficeassign.intPresence=1 AND tblemployee.intPresence=1 AND tbloffice.intPresence=1 GROUP BY intZFEmpID ASC', function(err, results, fields){
     if (err){
       console.log(err);
       res.redirect('/error');
@@ -741,6 +748,36 @@ router.get('/officereport', auth, (req, res) => {
   });
 });
 
+//******************************************************* */
+//                      ARCHIVE
+//******************************************************* */
+
+router.post('/contact', auth, (req, res) => {
+
+    var transporter = nodemailer.createTransport({
+      service: contact_service,
+      auth: {
+        user: contact_user,
+        pass: contact_pass
+      }
+    });
+
+    var mailOptions = {
+      from: req.body.fname + ' ' + req.body.lname,
+      to: contact_user,
+      subject: 'NHA Contact Page',
+      text: req.body.message
+    };
+
+    transporter.sendMail(mailOptions, function(error, info){
+      if(error)
+        console.log(error);
+      else
+        console.log('Email sent: ' + info.response);
+    });
+
+    res.redirect('/contact');
+})
 
 //******************************************************* */
 //                FUNCTIONS are NOT FUN
@@ -817,15 +854,6 @@ function accAll(req, res, next){
     if(err) throw(err)
     else
       req.accy = results;
-    return next();
-  });  
-}
-
-function uniDevEquipment(req, res, next){
-  db.query('SELECT strModelName FROM tblmodel WHERE intPresence=1 AND intCompBool=1', function(err, results, fields){
-    if(err) throw(err)
-    else
-      req.devvy = results;
     return next();
   });  
 }
@@ -912,6 +940,153 @@ function offEx(req, res, next){
     return next();
   });  
 }
+
+function uniDevEquipment(req, res, next){
+  db.query('SELECT strModelName FROM tblmodel WHERE intPresence=1 AND intCompBool=1', function(err, results, fields){
+    if(err) throw(err)
+    else
+      req.devvy = results;
+    return next();
+  });  
+}
+
+// ARCHIVE FUNCTIONS
+function zeroUnit(req, res, next){
+  db.query('SELECT * FROM cosdd.tblunittype WHERE intPresence=0', function(err, results, fields){
+    if (err) throw (err)
+    else
+      req.unitt = results;
+    return next();
+  })
+}
+
+function zeroSto(req, res, next){
+  db.query('SELECT * FROM cosdd.tblstorage WHERE intPresence=0', function(err, results, fields){
+    if (err) throw (err)
+    else
+      req.stoo = results;
+    return next();
+  })
+}
+
+function zeroLice(req, res, next){
+  db.query('SELECT * FROM cosdd.tbloffice WHERE intPresence=0', function(err, results, fields){
+    if (err) throw (err)
+    else
+      req.licee = results;
+    return next();
+  })
+}
+
+function zeroEmp(req, res, next){
+  db.query('SELECT * FROM cosdd.tblemployee WHERE intPresence=0', function(err, results, fields){
+    if (err) throw (err)
+    else
+      req.empoy = results;
+    return next();
+  })
+}
+
+function zeroAcco(req, res, next){
+  db.query('SELECT tblaccounts.*, tblemployee.strFirstName, tblemployee.strLastName FROM tblaccounts INNER JOIN tblemployee ON tblaccounts.intStoClaim=tblemployee.intZFEmpID WHERE tblaccounts.intPresence=0 AND tblemployee.intPresence=1;', function(err, results, fields){
+    if (err) throw (err)
+    else
+      req.accco = results;
+    return next();
+  })
+}
+//******************************************************* */
+//                    ARCHIVE ROUTES
+//******************************************************* */
+router.get('/archive', auth, zeroUnit, zeroSto, zeroLice, zeroEmp, zeroAcco, (req, res) => {
+  db.query('SELECT * FROM cosdd.tbldept WHERE intPresence=0', function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          console.log(results);
+          res.render('archive/views/archive', {  resu: results, 
+                                                 typ: req.unitt,
+                                                 sto: req.stoo,
+                                                 lic: req.licee,
+                                                 emplos: req.empoy,
+                                                 acco: req.accco });
+      }
+  });
+});
+
+router.post('/archive/revert/dept', auth, (req, res) => {
+  db.query('UPDATE cosdd.tbldept SET intPresence=1 WHERE intDeptID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
+
+router.post('/archive/revert/unit', auth, (req, res) => {
+  db.query('UPDATE cosdd.tblunittype SET intPresence=1 WHERE intUnitTypeID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
+
+router.post('/archive/revert/storage', auth, (req, res) => {
+  db.query('UPDATE cosdd.tblstorage SET intPresence=1 WHERE intStorageID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
+
+router.post('/archive/revert/license', auth, (req, res) => {
+  db.query('UPDATE cosdd.tbloffice SET intPresence=1 WHERE intMSID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
+
+router.post('/archive/revert/accounts', auth, (req, res) => {
+  db.query('UPDATE cosdd.tblaccounts SET intPresence=1 WHERE intAccountID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
+
+router.post('/archive/revert/employee', auth, (req, res) => {
+  db.query('UPDATE cosdd.tblemployee SET intPresence=1 WHERE intZFEmpID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
 //******************************************************* */
 //                     MAINTENANCE
 //******************************************************* */
@@ -987,6 +1162,9 @@ function sli(req, res){
 function offre(req, res){
     res.render('reports/views/officereport')
 }
+function arch(req, res){
+    res.render('archive/views/archive')
+}
 
 router.get('/reports', auth, rep);
 router.get('/slip', auth, sli);
@@ -996,6 +1174,7 @@ router.get('/officeassign', auth, ofa);
 router.get('/invreport', auth, invrepo);
 router.get('/active', auth, actacc);
 router.get('/officereport', auth, offre);
+router.get('/archive', auth, arch);
 
 function login(req, res){
   res.render('authorization/views/login', req.query);

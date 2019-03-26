@@ -66,11 +66,11 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label Network Address
-                        input.netAdd.form-control(type='text' name='netAdd' placeholder="A0:B1:C2:D3:E4:F5" onkeypress='return restrictCharacters(this, event, networkOnly)' maxlength='17' required)
+                        input.netAdd.form-control(type='text' name='netAdd' title='Please input the network address format: 00:00:00:00:00:00' placeholder="A0:B1:C2:D3:E4:F5" onkeypress='return restrictCharacters(this, event, networkOnly)' maxlength='17' pattern='^[A-E0-9]{2}[:]{1}[A-E0-9]{2}[:]{1}[A-E0-9]{2}[:]{1}[A-E0-9]{2}[:]{1}[A-E0-9]{2}[:]{1}[A-E0-9]{2}$')
                     .col-md-12
                       .form-group
                         label.control-label WiFi Address
-                        input.wifiAdd.form-control(type='text' name='wifiAdd' placeholder="00-14-22-01-23-45" onkeypress='return restrictCharacters(this, event, parPropOnly)' maxlength='17' required)
+                        input.wifiAdd.form-control(type='text' name='wifiAdd' title='Please input the WiFi address format: 00-00-00-00-00-00' placeholder="00-14-22-01-23-45" onkeypress='return restrictCharacters(this, event, parPropOnly)' maxlength='17' pattern='^[A-E0-9]{2}[-]{1}[A-E0-9]{2}[-]{1}[A-E0-9]{2}[-]{1}[A-E0-9]{2}[-]{1}[A-E0-9]{2}[-]{1}[A-E0-9]{2}$')
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
               button.btn.btn-primary(type='submit') Save

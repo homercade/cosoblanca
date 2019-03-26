@@ -50,7 +50,7 @@ block unique-content
                     .col-md-12
                       .form-group
                         label.control-label PC Name
-                        input.ofaName.form-control(type='text' name='ofaName' placeholder="PC-AAA" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' maxlength='6' required)
+                        input.ofaName.form-control(type='text' name='ofaName' placeholder="PC-AAA" onkeypress='return restrictCharacters(this, event, alphaNumOnly)' required)
                     .col-md-6
                       .form-group
                         label.control-label Serial
@@ -198,7 +198,7 @@ block unique-content
       });
       
     script.
-      var alphaNumOnly = /^[a-zA-Z0-9-]+$/i;
+      var alphaNumOnly = /^[a-zA-Z0-9- ]+$/i;
 
       function restrictCharacters(myfield, e, restrictionType) {
           if (!e) var e = window.event

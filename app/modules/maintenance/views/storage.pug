@@ -16,14 +16,14 @@ block unique-content
         .panel.panel-default
           .panel-body
             .table-responsive
-              table.table.table-hover.datatables
+              table.table.table-hover.datatables#storeTable
                 thead
                     tr
                         th Equipment
                         th Quantity
                         th Value per Unit
                         th Action
-                tbody
+                tbody#store_tbody
                     each sto in storeg
                         tr
                             td #{sto.txtStorageEquip}
@@ -41,7 +41,7 @@ block unique-content
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
             h4#myModalLabel.modal-title Add Stock
-          form(action='/storage', method='post')
+          form(action='/storage', method='post' id='storeForm')
             .modal-body
               .container-fluid
                 .container-fluid(style='padding:1rem 4rem 1rem 4rem;')
@@ -70,9 +70,18 @@ block unique-content
                       .form-group
                         label.control-label Value
                         input#stoVal.form-control(type='text' name='stoVal' placeholder="₱1000.00" onkeypress='return restrictCharacters(this, event, floatOnly)' required)
+                    .col-md-12
+                      .form-group
+                        label.control-label Computer Option
+                        br
+                        input#stoBool(type='radio', name='stoBool', value='1')
+                        |  Yes
+                        br
+                        input#stoBool(type='radio', name='stoBool', value='0')
+                        |  No
             .modal-footer
               button.btn.btn-default(type='button', data-dismiss='modal') Close
-              button.btn.btn-primary(type='submit') Save
+              button.btn.btn-primary.addSwal(type='submit') Save
 
     #editModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
       .modal-dialog
@@ -128,7 +137,75 @@ block unique-content
       modal.find('.modal-body .strgQty').val(`${qty}`)
       modal.find('.modal-body .stoVal').val(`${pri}`)
       });
-
+    
+    script.
+      $(document).ready(function(){
+        $('.addSwal').click(function(e){
+          e.preventDefault();
+          var idNow = $(this).val();
+          var link = '/storage';
+          console.log(idNow);
+          swal({
+            title: 'Add this unit?',
+            text: 'This unit will be added to the storage record.',
+            icon: 'warning',
+            buttons: ['No', 'Yes'],
+            dangerMode: true,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/storage';
+                var rowAdd = $(this).closest('tr');
+                var table =$('#storeTable').DataTable();
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : $('form#storeForm').serializeArray(),
+                  success:(function(response){
+                    if(response){
+                      swal({
+                        title: "Success!",
+                        text: "Record successfully added!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      })
+                      var table_data = '';
+                      table_data +=`
+                        <tr>
+                          <td> ${response[0].txtStorageEquip} </td>
+                          <td> ${response[0].intStorageQty} </td>
+                          <td> ₱${response[0].fltPrice} </td>                          
+                          <td>
+                            Record added, please refresh the page.
+                          </td>
+                        </tr>
+                      `;
+                      $("tbody#store_tbody").append(table_data); 
+                      document.getElementById('stoBrand').value = '';
+                      document.getElementById('stoModel').value = '';
+                      document.getElementById('stoUnit').value = '';
+                      document.getElementById('strgQty').value = '';
+                      document.getElementById('stoVal').value = '';
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled!",
+                  text: "Storage adding canceled!",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
 
     script.
       $(document).ready(function(){
