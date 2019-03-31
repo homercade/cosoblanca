@@ -105,6 +105,8 @@ block unique-content
                                   td
                                     button.btn.btn-primary.btn-circle.revertLice(type='button', title='Revert this record', value=li.intMSID)
                                       i.fa.fa-share
+                                    button.btn.btn-danger.btn-circle.deleteModal(type='button', title='Totally delete this record' value=li.intMSID)
+                                        i.fa.fa-trash 
                       #pill-empl.tab-pane.fade
                         br
                         .table-responsive
@@ -150,7 +152,82 @@ block unique-content
                                     button.btn.btn-primary.btn-circle.revertAcco(type='button', title='Revert this record', value=ac.intAccountID)
                                       i.fa.fa-share
               #transactions.tab-pane.fade
-                h4 Transaction
+                .col-lg-12
+                  .panel-body
+                    // Nav tabs
+                    ul.nav.nav-pills
+                      li.active
+                        a(href='#pill-eqa', data-toggle='tab') Equipment Assignment
+                      li
+                        a(href='#pill-off', data-toggle='tab') Office Assignment
+                      li
+                        a(href='#pill-net', data-toggle='tab') Network Assignment
+                    .tab-content
+                      #pill-eqa.tab-pane.fade.in.active
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th Owned By
+                                th Department/Project
+                                th Equipment
+                                th Property Number
+                                th PAR Number
+                                th Serial Number
+                                th Action
+                            tbody
+                              each eq in equips
+                                tr
+                                  td #{eq.strFirstName} #{eq.strLastName}
+                                  td #{eq.strOwnerDept}
+                                  td #{eq.txtActualEquipment}
+                                  td #{eq.txtPropertyNumber}
+                                  td #{eq.txtPARNumber}
+                                  td #{eq.txtSerialNumber}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertEqAss(type='button', title='Revert this record' value=eq.intOwnershipID)
+                                      i.fa.fa-share
+                      #pill-off.tab-pane.fade.in
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th PC Name
+                                th Serial Number
+                                th Assigned To
+                                th Action
+                            tbody
+                              each ofs in oof
+                                tr
+                                  td #{ofs.strPCName}
+                                  td #{ofs.strOASerial} 
+                                  td #{ofs.strOAEmpName}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertOFA(type='button', title='Revert this record' value=ofs.intOAID)
+                                      i.fa.fa-share
+                      #pill-net.tab-pane.fade.in
+                        br
+                        .table-responsive
+                          table.table.table-hover.datatables
+                            thead
+                              tr
+                                th Owner
+                                th Device
+                                th Network Address
+                                th WiFi Address
+                                th Action
+                            tbody
+                              each nets in netsy
+                                tr
+                                  td #{nets.strOwnerName} 
+                                  td #{nets.strDeviceName} 
+                                  td #{nets.strNetworkAddress}  
+                                  td #{nets.strWifiAddress}
+                                  td
+                                    button.btn.btn-primary.btn-circle.revertNet(type='button', title='Revert this record', value=nets.intNetworkID)
+                                      i.fa.fa-share
 
     script.
       $(document).ready(function(){
@@ -436,6 +513,159 @@ block unique-content
                       swal({
                         title: "Success!",
                         text: "Account successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+
+      $(document).ready(function(){
+        $('.revertOFA').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/officeassign';
+          swal({
+            title: 'Revert assignment?',
+            text: 'This record will be returned to the Office Assign table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/officeassign';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "Assignment successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+
+      $(document).ready(function(){
+        $('.revertNet').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/network';
+          swal({
+            title: 'Revert account?',
+            text: 'This record will be returned to the Network Assignment table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/network';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "Assignment successfully reverted!",
+                        icon: "success",
+                        buttons: false,
+                        closeOnConfirm: false,
+                        timer: 1500
+                      });
+                      rowDel.fadeOut();                    
+                    }
+                  })
+                })
+              }
+              else{
+                swal({
+                  title: "Canceled",
+                  text: "Your record is not reverted.",
+                  icon: "success",
+                  buttons: false,
+                  timer: 1500,
+                });
+              }
+          })
+        })
+      })
+
+      $(document).ready(function(){
+        $('.revertEqAss').click(function(){
+          var idNow = $(this).val();
+          var link = '/archive/revert/equipment';
+          swal({
+            title: 'Revert equipment?',
+            text: 'This record will be returned to the Equipment Assignment table.',
+            icon: 'info',
+            buttons: ['No', 'Yes'],
+            dangerMode: false,
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+          }).then((result) => {
+              if(result){
+                var idNow = $(this).val();
+                var link = '/archive/revert/equipment';
+                var rowDel = $(this).closest('tr');
+                $.ajax({
+                  method : 'POST',
+                  url : link,
+                  data : {
+                    id : idNow,
+                  },
+                  success:(function(response){
+                    if(response == "reverted"){
+                      swal({
+                        title: "Success!",
+                        text: "Assignment successfully reverted!",
                         icon: "success",
                         buttons: false,
                         closeOnConfirm: false,

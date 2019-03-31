@@ -995,10 +995,38 @@ function zeroAcco(req, res, next){
     return next();
   })
 }
+
+function zeroEqu(req, res, next){
+  db.query('SELECT tblownership.intOwnershipID, tblemployee.strFirstName, tblemployee.strLastName, tblownership.strOwnerDept, tblownership.txtActualEquipment, tblownership.txtPropertyNumber, tblownership.txtPARNumber, tblownership.txtSerialNumber FROM tblownership INNER JOIN tblemployee ON tblownership.intOwnedBy=tblemployee.intZFEmpID WHERE tblownership.intPresence=0', function(err, results, fields){
+    if (err) throw (err)
+    else
+      req.equs = results;
+    return next();
+  })
+}
+
+function zeroOff(req, res, next){
+  db.query('SELECT * FROM cosdd.tblofficeassign WHERE intPresence=0;', function(err, results, fields){
+    if (err) throw (err)
+    else
+      req.off = results;
+    return next();
+  })
+}
+
+function zeroNet(req, res, next){
+  db.query('SELECT * FROM cosdd.tblnetwork WHERE intPresence=0;', function(err, results, fields){
+    if (err) throw (err)
+    else
+      req.netsy = results;
+    return next();
+  })
+}
+
 //******************************************************* */
 //                    ARCHIVE ROUTES
 //******************************************************* */
-router.get('/archive', auth, zeroUnit, zeroSto, zeroLice, zeroEmp, zeroAcco, (req, res) => {
+router.get('/archive', auth, zeroUnit, zeroSto, zeroLice, zeroEmp, zeroAcco, zeroNet, zeroOff, zeroEqu, (req, res) => {
   db.query('SELECT * FROM cosdd.tbldept WHERE intPresence=0', function(err, results, fields){
       if (err){
         console.log(err);
@@ -1011,7 +1039,10 @@ router.get('/archive', auth, zeroUnit, zeroSto, zeroLice, zeroEmp, zeroAcco, (re
                                                  sto: req.stoo,
                                                  lic: req.licee,
                                                  emplos: req.empoy,
-                                                 acco: req.accco });
+                                                 acco: req.accco,
+                                                 equips: req.equs,
+                                                 oof: req.off,
+                                                 netsy: req.netsy});
       }
   });
 });
@@ -1087,6 +1118,43 @@ router.post('/archive/revert/employee', auth, (req, res) => {
       }
   });
 });
+
+router.post('/archive/revert/equipment', auth, (req, res) => {
+  db.query('UPDATE cosdd.tblownership SET intPresence=1 WHERE intOwnershipID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
+
+router.post('/archive/revert/officeassign', auth, (req, res) => {
+  db.query('UPDATE cosdd.tblofficeassign SET intPresence=1 WHERE intOAID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
+
+router.post('/archive/revert/network', auth, (req, res) => {
+  db.query('UPDATE cosdd.tblnetwork SET intPresence=1 WHERE intNetworkID=?', [req.body.id], function(err, results, fields){
+      if (err){
+        console.log(err);
+        res.redirect('/error');
+      }
+      else {
+          res.send('reverted');
+      }
+  });
+});
+
 //******************************************************* */
 //                     MAINTENANCE
 //******************************************************* */
